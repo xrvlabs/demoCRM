@@ -3,22 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>BizCRM - Library Dashboard</title>
+<title>BizCRM - Auth & Onboarding</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Iceland&family=JetBrains+Mono:wght@400;500;600;700&family=Play:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+/* Global Resets */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent !important;
 }
+
 *:focus { outline: none !important; }
 button::-moz-focus-inner { border: 0; }
 
 :root {
     --primary: #7c3aed;
-    --primary-dark: #6d28d9;
     --secondary: #a78bfa;
     --accent: #f472b6;
     --bg: #f0f4ff;
@@ -29,47 +30,40 @@ button::-moz-focus-inner { border: 0; }
     --error: #ef4444;
     --success: #10b981;
     --warning: #f59e0b;
-    --info: #3b82f6;
-    --radius: 5px;
-    --sidebar-width: 260px;
-    --header-height: 60px;
+    --radius: 5px; 
+    
     --font-display: 'Iceland', cursive;
     --font-mono: 'JetBrains Mono', monospace;
     --font-body: 'Space Grotesk', sans-serif;
     --font-ui: 'Play', sans-serif;
-    --sheet-width: 420px;
 }
 
-html, body { height: 100%; overflow: hidden; overscroll-behavior: none; margin: 0; }
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+html,body{height:100%;overflow:hidden;overscroll-behavior:none; margin:0;}
 
-/* Hide scrollbars entirely on touch devices (phones/tablets) */
-@media (hover: none) and (pointer: coarse) {
-    ::-webkit-scrollbar {
-        display: none;
-        width: 0 !important;
-        height: 0 !important;
-    }
-    * {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-}
+::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
 
 body, input, select, textarea {
     font-family: var(--font-body);
     text-transform: uppercase;
-    background: var(--bg);
+    background: linear-gradient(-45deg, #f0f4ff, #e8eeff, #fdf2f8, #f5f3ff);
+    background-size: 400% 400%;
+    animation: smoothBg 15s ease infinite;
     color: var(--text);
     line-height: 1.5;
 }
-button, label, .btn-text { font-family: var(--font-ui); text-transform: uppercase; }
-h1, h2, h3, .brand-text { font-family: var(--font-display); letter-spacing: 1px; }
-textarea { text-transform: none; }
 
+@keyframes smoothBg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+button, label, .btn-text { font-family: var(--font-ui); text-transform: uppercase; }
+h1, h2, h3, .form-title, .brand-text { font-family: var(--font-display); letter-spacing: 1px; }
+#loginPass, #signupPass, textarea { text-transform: none; }
+
+/* Utilities */
 .gradient-bg { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%); }
 .gradient-text {
     background: linear-gradient(135deg, #7c3aed, #f472b6);
@@ -88,2352 +82,621 @@ textarea { text-transform: none; }
     box-shadow: inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9);
 }
 
-@keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
-@keyframes slideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
-@keyframes slideInUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-@keyframes slideOutDown { from { transform: translateY(0); } to { transform: translateY(100%); } }
-@keyframes fadeOverlayIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes fadeOverlayOut { from { opacity: 1; } to { opacity: 0; } }
+/* ===== Views Management ===== */
+.view-container { display: flex; flex-direction: column; height: 100%; width: 100%; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 1; transition: opacity 0.4s ease, visibility 0.4s ease; }
+.view-container.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.view-wrapper { width: 100%; max-width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: 100%; overflow-y: hidden; padding: 1.5rem 1rem 1rem; position: relative; justify-content: flex-start; z-index: 2; }
 
-.app-container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-}
+/* Base Form Elements */
+.mobile-brand { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; flex-shrink: 0; }
+.mobile-brand h1, .brand-mini span { font-weight: 700; display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-display); }
+.mobile-brand h1 svg, .brand-mini svg { width: 28px; height: 28px; }
+.brand-mini { display: flex; align-items: center; gap: 0.5rem; }
+.brand-mini span { font-size: 1.25rem; }
 
-/* ===== SIDEBAR ===== */
-.sidebar {
-    width: var(--sidebar-width);
-    height: 100vh;
-    background: linear-gradient(180deg, #1e1b4b 0%, #312e81 50%, #3730a3 100%);
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    z-index: 100;
-    transition: transform 0.3s ease;
-    position: relative;
-}
+.form-header, .step-header { margin-bottom: 1.5rem; text-align: center; flex-shrink: 0; }
+.form-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+.form-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-right: 0; }
+.form-grid { display: grid; gap: 1rem; flex: 1; overflow-y: auto; min-height: 0; align-content: start; padding-right: 0.25rem; margin-bottom: 0.5rem; }
+.form-cols { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.form-label { font-size: 0.75rem; font-weight: 700; color: var(--text); letter-spacing: 0.5px; }
 
-.sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1.25rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    flex-shrink: 0;
-}
-.sidebar-brand svg { width: 32px; height: 32px; flex-shrink: 0; }
-.sidebar-brand span {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: white;
-    letter-spacing: 1px;
-}
+/* Inner scrolling hide scrollbars */
+.form-grid::-webkit-scrollbar, .summary-container::-webkit-scrollbar { display: none; }
+.form-grid, .summary-container { -ms-overflow-style: none; scrollbar-width: none; }
 
-.sidebar-nav {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1rem 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.nav-section-label {
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: rgba(255,255,255,0.35);
-    padding: 0.75rem 0.75rem 0.35rem;
-    letter-spacing: 1.5px;
-    font-family: var(--font-ui);
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.7rem 0.85rem;
-    border-radius: var(--radius);
-    color: rgba(255,255,255,0.65);
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-    background: transparent;
-    width: 100%;
-    text-align: left;
-    font-size: 0.8rem;
-    font-weight: 600;
-    font-family: var(--font-ui);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-}
-.nav-item:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); }
-.nav-item.active {
-    background: rgba(124, 58, 237, 0.4);
-    color: white;
-    box-shadow: inset 0 0 20px rgba(124,58,237,0.2);
-}
-.nav-item i { width: 20px; text-align: center; font-size: 0.9rem; flex-shrink: 0; }
-.nav-item .nav-badge {
-    margin-left: auto;
-    background: var(--accent);
-    color: white;
-    font-size: 0.6rem;
-    padding: 0.15rem 0.45rem;
-    border-radius: 10px;
-    font-weight: 700;
-    font-family: var(--font-mono);
-}
-
-.sidebar-footer {
-    padding: 1rem 1.25rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    flex-shrink: 0;
-}
-.sidebar-user {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-.user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #f472b6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-    font-size: 0.8rem;
-    font-family: var(--font-ui);
-    flex-shrink: 0;
-}
-.user-info { overflow: hidden; }
-.user-name { font-size: 0.8rem; font-weight: 700; color: white; font-family: var(--font-ui); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.user-role { font-size: 0.65rem; color: rgba(255,255,255,0.5); font-family: var(--font-ui); }
-
-/* ===== MAIN CONTENT ===== */
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    min-width: 0;
-}
-
-.main-header {
-    height: var(--header-height);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5rem;
-    flex-shrink: 0;
-    border-bottom: 1px solid rgba(166,180,200,0.3);
-    background: rgba(240, 244, 255, 0.8);
-    backdrop-filter: blur(10px);
-    z-index: 50;
-}
-
-.header-left { display: flex; align-items: center; gap: 1rem; flex: 1; }
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: 1.25rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: var(--radius);
-    transition: background 0.2s;
-}
-.menu-toggle:hover { background: rgba(124,58,237,0.1); }
-.page-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; text-align: right; }
-
-.header-right { display: flex; align-items: center; justify-content: flex-end; }
-
-.header-search {
-    position: relative;
-    width: 280px;
-}
-.header-search input {
-    width: 100%;
-    padding: 0.5rem 1rem 0.5rem 2.25rem;
-    background: linear-gradient(145deg, #dde4f6, #f5f8ff);
-    border-radius: var(--radius);
-    border: 2px solid transparent;
-    color: var(--text);
-    font-size: 0.8rem;
-    box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9);
-    transition: border-color 0.3s;
-}
-.header-search input:focus { border-color: var(--secondary); }
-.header-search input::placeholder { color: var(--text-muted); text-transform: none; }
-.header-search i { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.8rem; }
-
-
-.page-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.page { display: none; flex-direction: column; gap: 1.5rem; animation: fadeIn 0.3s ease; }
-.page.active { display: flex; }
-
-/* ===== STAT CARDS ===== */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-}
-.stat-card {
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    border-radius: var(--radius);
-    box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9);
-    padding: 1.25rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    transition: transform 0.2s;
-    cursor: default;
-}
-.stat-card:hover { transform: translateY(-2px); }
-.stat-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
-}
-.stat-icon.purple { background: linear-gradient(135deg, #7c3aed, #a78bfa); color: white; }
-.stat-icon.blue { background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; }
-.stat-icon.green { background: linear-gradient(135deg, #10b981, #34d399); color: white; }
-.stat-icon.pink { background: linear-gradient(135deg, #f472b6, #fb7185); color: white; }
-.stat-icon.orange { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: white; }
-.stat-icon.red { background: linear-gradient(135deg, #ef4444, #f87171); color: white; }
-.stat-icon.cyan { background: linear-gradient(135deg, #06b6d4, #22d3ee); color: white; }
-
-.stat-info { flex: 1; min-width: 0; }
-.stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 700; font-family: var(--font-ui); letter-spacing: 0.5px; margin-bottom: 0.25rem; }
-.stat-value { font-size: 1.5rem; font-weight: 700; font-family: var(--font-mono); color: var(--text); line-height: 1; }
-.stat-change { font-size: 0.65rem; font-family: var(--font-mono); margin-top: 0.35rem; display: flex; align-items: center; gap: 0.25rem; }
-.stat-change.up { color: var(--success); }
-.stat-change.down { color: var(--error); }
-
-/* ===== DATA TABLE ===== */
-.table-card {
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    border-radius: var(--radius);
-    box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-.table-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid rgba(166,180,200,0.3);
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-.table-title { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; }
-.table-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
-.table-search { position: relative; }
-.table-search input {
-    padding: 0.45rem 0.75rem 0.45rem 2rem;
-    background: linear-gradient(145deg, #dde4f6, #f5f8ff);
-    border-radius: var(--radius);
-    border: 2px solid transparent;
-    color: var(--text);
-    font-size: 0.75rem;
-    box-shadow: inset 2px 2px 6px rgba(166,180,200,0.4), inset -2px -2px 6px rgba(255,255,255,0.8);
-    width: 180px;
-    transition: border-color 0.3s, width 0.3s;
-}
-.table-search input:focus { border-color: var(--secondary); width: 220px; }
-.table-search input::placeholder { color: var(--text-muted); text-transform: none; }
-.table-search i { position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.7rem; }
-
-.table-container {
-    overflow-x: auto;
-    overflow-y: auto;
-    max-height: 450px;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.8rem;
-}
-thead { position: sticky; top: 0; z-index: 5; }
-thead th {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    font-size: 0.7rem;
-    font-weight: 700;
-    font-family: var(--font-ui);
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-    background: linear-gradient(145deg, #eef2ff, #e8eeff);
-    border-bottom: 1px solid rgba(166,180,200,0.3);
-    white-space: nowrap;
-}
-tbody tr {
-    border-bottom: 1px solid rgba(166,180,200,0.15);
-    transition: background 0.15s;
-}
-tbody tr:hover { background: rgba(124,58,237,0.03); }
-tbody td {
-    padding: 0.75rem 1rem;
-    white-space: nowrap;
-    font-size: 0.8rem;
-}
-.table-empty {
-    padding: 3rem;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-}
-.table-empty i { font-size: 2rem; margin-bottom: 0.75rem; display: block; color: var(--secondary); }
-
-/* ===== BADGES ===== */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: var(--radius);
-    font-size: 0.65rem;
-    font-weight: 700;
-    font-family: var(--font-ui);
-    letter-spacing: 0.3px;
-}
-.badge-active { background: rgba(16,185,129,0.15); color: var(--success); }
-.badge-expired { background: rgba(239,68,68,0.15); color: var(--error); }
-.badge-warning { background: rgba(245,158,11,0.15); color: var(--warning); }
-.badge-info { background: rgba(59,130,246,0.15); color: var(--info); }
-.badge-issued { background: rgba(124,58,237,0.15); color: var(--primary); }
-.badge-returned { background: rgba(16,185,129,0.15); color: var(--success); }
-.badge-overdue { background: rgba(239,68,68,0.15); color: var(--error); }
-.badge-available { background: rgba(16,185,129,0.15); color: var(--success); }
-.badge-present { background: rgba(16,185,129,0.15); color: var(--success); }
-.badge-absent { background: rgba(239,68,68,0.15); color: var(--error); }
-
-/* ===== BUTTONS ===== */
-.btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: var(--radius);
-    font-size: 0.8rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    min-height: 36px;
-    font-family: var(--font-ui);
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-.btn-primary {
-    background: linear-gradient(145deg, #8b5cf6, #6d28d9);
-    color: white;
-    box-shadow: 4px 4px 10px rgba(109,40,217,0.25), -4px -4px 10px rgba(255,255,255,0.9);
-}
-.btn-primary:active { box-shadow: inset 3px 3px 8px rgba(0,0,0,0.2), inset -3px -3px 8px rgba(255,255,255,0.2); }
-.btn-outline {
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    color: var(--text);
-    box-shadow: 4px 4px 10px rgba(166,180,200,0.4), -4px -4px 10px rgba(255,255,255,0.8);
-}
-.btn-outline:active { box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9); }
-.btn-sm { padding: 0.35rem 0.65rem; font-size: 0.7rem; min-height: 30px; }
-.btn-icon {
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border-radius: var(--radius);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    box-shadow: 2px 2px 6px rgba(166,180,200,0.4), -2px -2px 6px rgba(255,255,255,0.8);
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-}
-.btn-icon:hover { color: var(--primary); }
-.btn-icon:active { box-shadow: inset 2px 2px 4px rgba(166,180,200,0.5), inset -2px -2px 4px rgba(255,255,255,0.9); }
-.btn-icon.danger:hover { color: var(--error); }
-.btn-icon.success:hover { color: var(--success); }
-.btn-success-solid { background: linear-gradient(145deg, #10b981, #059669); color: white; box-shadow: 4px 4px 10px rgba(16,185,129,0.25), -4px -4px 10px rgba(255,255,255,0.9); }
-.btn-error-solid { background: linear-gradient(145deg, #ef4444, #dc2626); color: white; box-shadow: 4px 4px 10px rgba(239,68,68,0.25), -4px -4px 10px rgba(255,255,255,0.9); }
-
-/* ===== SHEET OVERLAY ===== */
-.sheet-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(30, 27, 75, 0.5);
-    backdrop-filter: blur(4px);
-    z-index: 1000;
-    display: none;
-    opacity: 0;
-}
-.sheet-overlay.active {
-    display: block;
-    animation: fadeOverlayIn 0.3s ease forwards;
-}
-.sheet-overlay.closing {
-    animation: fadeOverlayOut 0.3s ease forwards;
-}
-
-/* ===== SIDE SHEET (Desktop) ===== */
-.side-sheet {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: var(--sheet-width);
-    max-width: 100vw;
-    height: 100vh;
-    background: linear-gradient(145deg, #f5f8ff, #e8eeff);
-    box-shadow: -8px 0 32px rgba(166,180,200,0.6);
-    z-index: 1001;
-    display: flex;
-    flex-direction: column;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
-}
-.side-sheet.active {
-    transform: translateX(0);
-}
-
-/* ===== BOTTOM SHEET (Mobile) ===== */
-.bottom-sheet {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    max-height: 92vh;
-    background: linear-gradient(145deg, #f5f8ff, #e8eeff);
-    border-radius: 16px 16px 0 0;
-    box-shadow: 0 -8px 32px rgba(166,180,200,0.6);
-    z-index: 1001;
-    display: none;
-    flex-direction: column;
-    transform: translateY(100%);
-}
-.bottom-sheet.active {
-    display: flex;
-    animation: slideInUp 0.35s cubic-bezier(0.32, 0.72, 0, 1) forwards;
-}
-.bottom-sheet.closing {
-    animation: slideOutDown 0.3s ease forwards;
-}
-
-.sheet-handle {
-    width: 40px;
-    height: 4px;
-    background: var(--text-muted);
-    border-radius: 2px;
-    margin: 10px auto 6px;
-    opacity: 0.4;
-    flex-shrink: 0;
-    display: none;
-}
-
-.sheet-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid rgba(166,180,200,0.3);
-    flex-shrink: 0;
-}
-.sheet-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; }
-.sheet-close {
-    width: 32px; height: 32px;
-    border-radius: var(--radius);
-    display: flex; align-items: center; justify-content: center;
-    border: none; cursor: pointer;
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    box-shadow: 3px 3px 8px rgba(166,180,200,0.4), -3px -3px 8px rgba(255,255,255,0.8);
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    transition: color 0.2s;
-}
-.sheet-close:hover { color: var(--error); }
-.sheet-body {
-    padding: 1.5rem;
-    overflow-y: auto;
-    flex: 1;
-}
-.sheet-footer {
-    display: flex;
-    gap: 0.75rem;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid rgba(166,180,200,0.3);
-    justify-content: flex-end;
-    flex-shrink: 0;
-}
-
-/* Form elements */
-.form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
-.form-group:last-child { margin-bottom: 0; }
-.form-label { font-size: 0.7rem; font-weight: 700; color: var(--text); letter-spacing: 0.5px; font-family: var(--font-ui); }
-.form-input {
-    width: 100%;
-    padding: 0.6rem 0.85rem;
-    background: linear-gradient(145deg, #dde4f6, #f5f8ff);
-    border-radius: var(--radius);
-    border: 2px solid transparent;
-    color: var(--text);
-    font-size: 0.8rem;
-    transition: all 0.3s;
-    outline: none;
-    box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9);
-}
+.input-wrapper { position: relative; }
+.form-input { width: 100%; padding: calc(0.75rem - 0.5px) 1rem; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); border: 2px solid transparent; color: var(--text); font-size: 0.875rem; transition: all 0.3s; outline: none; box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9); }
 .form-input:focus { border-color: var(--secondary); }
-.form-input::placeholder { color: var(--text-muted); text-transform: none; }
-select.form-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2rem; }
-textarea.form-input { min-height: 70px; resize: none; text-transform: none; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.form-input.input-error { border-color: var(--error); }
+.form-input.input-error { border-color: var(--error); box-shadow: inset 3px 3px 8px rgba(239,68,68,0.2), inset -3px -3px 8px rgba(255,255,255,0.9); }
+.form-input::placeholder { color: var(--text-muted); font-family: var(--font-body); text-transform: none; }
+textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
+.input-icon { position: absolute; left: 0.75rem; top: 0; bottom: 0; display: flex; align-items: center; color: var(--text-secondary); pointer-events: none; }
+.input-icon svg { width: 16px; height: 16px; }
+.input-wrapper .form-input { padding-left: 2.5rem; }
 
-/* ===== TOAST NOTIFICATIONS ===== */
-.toast-container {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 2000;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    pointer-events: none;
-}
-.toast {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.85rem 1.25rem;
-    border-radius: var(--radius);
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9);
-    font-size: 0.8rem;
-    font-weight: 600;
-    font-family: var(--font-ui);
-    animation: slideInRight 0.3s ease;
-    pointer-events: auto;
-    max-width: 360px;
-}
-.toast.removing { animation: slideOutRight 0.3s ease forwards; }
-.toast i { font-size: 1rem; flex-shrink: 0; }
-.toast.toast-success i { color: var(--success); }
-.toast.toast-error i { color: var(--error); }
-.toast.toast-warning i { color: var(--warning); }
-.toast.toast-info i { color: var(--info); }
+/* Hide Password Toggle when empty */
+.form-input:placeholder-shown + .password-toggle { display: none; }
 
-/* ===== SEATS GRID ===== */
-.seats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 0.75rem;
-}
-.seat-card {
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    border-radius: var(--radius);
-    box-shadow: 4px 4px 12px rgba(166,180,200,0.5), -4px -4px 12px rgba(255,255,255,0.9);
-    padding: 1rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: 2px solid transparent;
-}
-.seat-card:hover { transform: translateY(-2px); }
-.seat-card.occupied {
-    border-color: var(--warning);
-    background: linear-gradient(145deg, #fffbeb, #fef3c7);
-}
-.seat-number {
-    font-size: 1.25rem;
-    font-weight: 700;
-    font-family: var(--font-mono);
-    color: var(--text);
-    margin-bottom: 0.25rem;
-}
-.seat-status {
-    font-size: 0.6rem;
-    font-weight: 700;
-    font-family: var(--font-ui);
-    letter-spacing: 0.5px;
-}
-.seat-card.occupied .seat-status { color: var(--warning); }
-.seat-card:not(.occupied) .seat-status { color: var(--success); }
-.seat-member {
-    font-size: 0.6rem;
-    color: var(--text-secondary);
-    margin-top: 0.25rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+/* Password Strength Meter */
+.password-strength { display: none; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem; padding: 0 0.25rem; }
+.password-strength.active { display: flex; animation: fadeIn 0.3s ease; }
+.strength-bar-bg { height: 4px; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); overflow: hidden; box-shadow: inset 1px 1px 3px rgba(166,180,200,0.4); }
+.strength-bar-fill { height: 100%; width: 0%; border-radius: var(--radius); transition: width 0.4s ease, background-color 0.4s ease; }
+.strength-text { font-size: 0.65rem; font-weight: 700; font-family: var(--font-ui); text-align: right; transition: color 0.4s ease; }
 
-/* ===== TAB SYSTEM ===== */
-.tab-bar {
-    display: flex;
-    gap: 0;
-    border-bottom: 2px solid rgba(166,180,200,0.3);
-    padding: 0 1.25rem;
-    overflow-x: auto;
-    flex-shrink: 0;
-}
-.tab-btn {
-    padding: 0.75rem 1.25rem;
-    background: none;
-    border: none;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    font-family: var(--font-ui);
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.tab-btn:hover { color: var(--text-secondary); }
-.tab-btn.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-}
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+.strength-weak { background-color: var(--error); }
+.strength-medium { background-color: var(--warning); }
+.strength-strong { background-color: var(--success); }
+.text-weak { color: var(--error); }
+.text-medium { color: var(--warning); }
+.text-strong { color: var(--success); }
 
-/* ===== ATTENDANCE SPECIFIC ===== */
-.attendance-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-}
-.attendance-row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.65rem 1rem;
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    border-radius: var(--radius);
-    box-shadow: 3px 3px 8px rgba(166,180,200,0.35), -3px -3px 8px rgba(255,255,255,0.8);
-    transition: all 0.2s;
-}
-.attendance-row.marked-present {
-    border-left: 3px solid var(--success);
-}
-.attendance-row.marked-absent {
-    border-left: 3px solid var(--error);
-}
-.att-member-info { flex: 1; min-width: 0; }
-.att-member-name { font-size: 0.8rem; font-weight: 700; }
-.att-member-sid { font-size: 0.65rem; color: var(--text-muted); font-family: var(--font-mono); }
-.att-actions { display: flex; gap: 0.35rem; flex-shrink: 0; }
-.att-btn {
-    width: 34px; height: 34px;
-    border-radius: var(--radius);
-    border: 2px solid transparent;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.8rem;
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    box-shadow: 2px 2px 6px rgba(166,180,200,0.4), -2px -2px 6px rgba(255,255,255,0.8);
-    color: var(--text-muted);
-}
-.att-btn:active { box-shadow: inset 2px 2px 4px rgba(166,180,200,0.5), inset -2px -2px 4px rgba(255,255,255,0.9); }
-.att-btn.present-active {
-    background: linear-gradient(145deg, #d1fae5, #a7f3d0);
-    color: var(--success);
-    border-color: var(--success);
-}
-.att-btn.absent-active {
-    background: linear-gradient(145deg, #fee2e2, #fecaca);
-    color: var(--error);
-    border-color: var(--error);
+/* Buttons */
+.btn { width: 100%; padding: 0.75rem 1rem; border: none; border-radius: var(--radius); font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; font-family: var(--font-ui); }
+.btn-primary { background: linear-gradient(145deg, #8b5cf6, #6d28d9); color: white; box-shadow: 5px 5px 12px rgba(109,40,217,0.3), -5px -5px 12px rgba(255,255,255,0.9); }
+.btn-primary:active:not(:disabled) { box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2), inset -4px -4px 10px rgba(255,255,255,0.2); }
+.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+.btn-outline { background: linear-gradient(145deg, #ffffff, #e8eeff); color: var(--text); box-shadow: 5px 5px 12px rgba(166,180,200,0.5), -5px -5px 12px rgba(255,255,255,0.9); }
+.btn-outline:active:not(:disabled) { box-shadow: inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9); }
+.btn-outline:disabled { opacity: 0.7; cursor: not-allowed; }
+.btn-success { background: linear-gradient(145deg, #10b981, #059669)!important; color: #fff!important; box-shadow: 5px 5px 12px rgba(16,185,129,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important; }
+.btn-error { background: linear-gradient(145deg, #ef4444, #dc2626)!important; color: #fff!important; box-shadow: 5px 5px 12px rgba(239,68,68,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important; }
+.btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-4px)}20%,40%,60%,80%{transform:translateX(4px)}}
+.btn-shake{animation:shake 0.5s ease-in-out}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:inline-block}
+
+/* Large Spinner for Loading Screen */
+.large-spinner { width: 56px; height: 56px; border: 4px solid rgba(124, 58, 237, 0.2); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s ease-in-out infinite; margin-bottom: 1.5rem; }
+
+/* ===== Auth Specific ===== */
+.slider-tabs { display: flex; position: relative; border-radius: var(--radius); padding: 0.3rem; margin-bottom: 1.5rem; flex-shrink: 0; }
+.slider-tab { flex: 1; padding: 0.6rem 1rem; border: none; background: transparent; color: var(--text-secondary); font-size: 0.875rem; font-weight: 700; cursor: pointer; border-radius: calc(var(--radius) - 2px); transition: color 0.3s ease; font-family: var(--font-ui); position: relative; z-index: 2; }
+.slider-tab.active { color: var(--primary); background: linear-gradient(145deg, #ffffff, #e8eeff); box-shadow: 2px 2px 6px rgba(166,180,200,0.4), -2px -2px 6px rgba(255,255,255,0.8); animation: fadeTab 0.3s ease-out forwards; }
+@keyframes fadeTab { 0% { opacity: 0; transform: scale(0.96); } 100% { opacity: 1; transform: scale(1); } }
+
+.form-section { display: none; flex: 1; }
+.form-section.active { display: flex; flex-direction: column; animation: fadeIn 0.3s ease; overflow: hidden; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+
+.password-transition { transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease; max-height: 150px; opacity: 1; overflow: hidden; margin-top: 0; }
+.password-transition.collapsed { max-height: 0; opacity: 0; margin-top: -1rem; pointer-events: none; }
+.password-toggle { position: absolute; right: 0.25rem; top: 0; bottom: 0; display: flex; align-items: center; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.5rem; }
+.password-toggle svg { width: 16px; height: 16px; display: block; }
+.form-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem; margin-top: 0.25rem; }
+.checkbox-wrapper { display: flex; align-items: center; gap: 0.4rem; }
+.checkbox-wrapper input { width: 14px; height: 14px; accent-color: var(--primary); cursor: pointer; }
+.checkbox-wrapper label { font-size: 0.75rem; color: var(--text-secondary); cursor: pointer; font-weight: 600; }
+.forgot-link { font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: 700; font-family: var(--font-ui); }
+.divider { display: flex; align-items: center; margin: 0.75rem 0; gap: 0.75rem; flex-shrink: 0; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 2px; background: var(--card-bg); box-shadow: inset 1px 1px 2px rgba(166,180,200,0.3); }
+.divider span { color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); }
+
+/* ===== Onboarding Specific ===== */
+.onboarding-header { order: 1; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-shrink: 0; }
+.skip-btn { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); cursor: pointer; padding: 0.5rem; transition: color 0.3s; visibility: hidden; pointer-events: none; } 
+
+/* Progress Bar Ordered Flex Logic */
+.progress-container { order: 3; flex-shrink: 0; }
+.progress-steps { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.progress-step { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); transition: all 0.4s ease; background: linear-gradient(145deg, #dde4f6, #f5f8ff); box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9); color: var(--text-muted); }
+.progress-step.active { background: linear-gradient(145deg, #8b5cf6, #6d28d9); box-shadow: 3px 3px 8px rgba(109,40,217,0.3), -3px -3px 8px rgba(255,255,255,0.9); color: white; }
+.progress-step.completed { background: linear-gradient(145deg, #10b981, #059669); box-shadow: 3px 3px 8px rgba(16,185,129,0.3), -3px -3px 8px rgba(255,255,255,0.9); color: white; }
+.progress-step svg { width: 14px; height: 14px; }
+
+/* Smooth Progress Fill Animation */
+.progress-line { flex: 1; max-width: 60px; height: 4px; background: linear-gradient(145deg, #dde4f6, #f5f8ff); box-shadow: inset 1px 1px 3px rgba(166,180,200,0.4); border-radius: var(--radius); position: relative; overflow: hidden; }
+.progress-line::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: linear-gradient(135deg, #7c3aed, #a78bfa); transition: width 0.5s ease-in-out; }
+.progress-line.active::after { width: 100%; }
+.progress-text { text-align: center; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 0.75rem; }
+
+.steps-container { order: 2; flex: 1; overflow: hidden; position: relative; min-height: 0; display: flex; flex-direction: column; }
+
+/* FADE ANIMATION ONLY (No sliding) */
+.step { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; overflow: hidden; padding: 0; z-index: 1; }
+.step.active { opacity: 1; visibility: visible; z-index: 5; }
+
+/* Uniform Static Sized Icons for all steps */
+.step-icon, .completion-icon { width: 56px; height: 56px; margin: 0 auto 0.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-icon { background: linear-gradient(145deg, #ffffff, #e8eeff); box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9); }
+.step-icon.gradient-icon { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%); box-shadow: 6px 6px 16px rgba(124,58,237,0.3), -6px -6px 16px rgba(255,255,255,0.9); }
+.completion-icon { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 6px 6px 16px rgba(16,185,129,0.3), -6px -6px 16px rgba(255,255,255,0.9); }
+
+.step-icon svg { width: 28px; height: 28px; color: var(--primary); }
+.step-icon.gradient-icon svg, .completion-icon svg { width: 28px; height: 28px; color: white; }
+.step-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; text-align: center; }
+
+/* Sticky Mobile Nav Action Buttons */
+.nav-buttons { display: flex; gap: 0.75rem; margin-top: auto; padding-top: 0.5rem; flex-shrink: 0; position: relative; z-index: 10; }
+.nav-buttons .btn { flex: 1; }
+
+/* Plan Cards */
+.plans-container { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 0.25rem; }
+.plan-card { background: linear-gradient(145deg, #ffffff, #e8eeff); border-radius: var(--radius); box-shadow: 4px 4px 12px rgba(166,180,200,0.5), -4px -4px 12px rgba(255,255,255,0.9); padding: 1rem; border: 2px solid transparent; transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; gap: 0.5rem; }
+.plan-card:hover { transform: translateY(-2px); }
+.plan-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #f5f3ff, #ede9fe); }
+.plan-header { display: flex; justify-content: space-between; align-items: center; }
+.plan-name { font-size: 0.875rem; font-weight: 700; font-family: var(--font-ui); }
+.plan-price { font-size: 1rem; font-weight: 700; color: var(--primary); font-family: var(--font-mono); }
+.plan-features { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.plan-feature { font-size: 0.65rem; padding: 0.25rem 0.5rem; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); color: var(--text-secondary); }
+
+/* Summary Grid */
+.summary-container { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem; margin-bottom: 0.5rem; text-align: left; flex: 1; overflow-y: auto; min-height: 0; }
+.summary-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid rgba(166,180,200,0.4); padding-bottom: 0.5rem; flex-shrink: 0; }
+.summary-row:last-child { border-bottom: none; padding-bottom: 0; }
+.summary-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; white-space: nowrap; }
+.summary-val { font-size: 0.875rem; color: var(--text); font-weight: 600; text-align: right; word-break: break-word; text-transform: uppercase; }
+
+/* Mobile / Tablet precise margins */
+@media(max-width: 1023px) {
+    .progress-container { margin: 3px 0 !important; padding: 0 !important; }
+    .progress-steps { margin: 0 !important; }
+    .nav-buttons { padding-top: 0.5rem; padding-bottom: 3px; margin-bottom: 1.5rem; }
 }
 
-.quick-action-card {
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    border-radius: var(--radius);
-    box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9);
-    padding: 1.25rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    text-align: center;
-}
-.quick-action-card:hover { transform: translateY(-3px); }
-.quick-action-card i { font-size: 1.5rem; color: var(--primary); }
-.quick-action-card span { font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); }
-
-/* Calendar picker area */
-.date-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    padding: 0.75rem;
-}
-.date-nav-btn {
-    width: 32px; height: 32px;
-    border-radius: var(--radius);
-    border: none; cursor: pointer;
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    box-shadow: 3px 3px 8px rgba(166,180,200,0.4), -3px -3px 8px rgba(255,255,255,0.8);
-    color: var(--text-secondary);
-    font-size: 0.8rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: color 0.2s;
-}
-.date-nav-btn:hover { color: var(--primary); }
-.date-nav-label {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    font-weight: 700;
-    min-width: 130px;
-    text-align: center;
-}
-
-.sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(30,27,75,0.4);
-    z-index: 99;
-}
-.sidebar-overlay.active { display: block; }
-
-/* ===== RESPONSIVE ===== */
-@media (min-width: 1024px) {
-    .sheet-handle { display: none !important; }
-}
-
-@media (max-width: 1023px) {
-    .sidebar {
-        position: fixed;
-        left: 0; top: 0;
-        transform: translateX(-100%);
-        z-index: 100;
+@media(max-width: 767px) {
+    .nav-buttons::before {
+        content: ''; position: absolute; top: 0; left: -1rem; right: -1rem; bottom: -1.5rem;
+        background: linear-gradient(to bottom, transparent, rgba(240, 244, 255, 0.95) 30%, rgba(240, 244, 255, 1));
+        backdrop-filter: blur(5px); z-index: -1; pointer-events: none;
     }
-    .sidebar.open { transform: translateX(0); }
-    .menu-toggle { display: flex; }
-    .header-search { width: 180px; }
-
-    /* Convert side sheets to bottom sheets on mobile */
-    .side-sheet {
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100% !important;
-        max-width: 100vw !important;
-        height: auto;
-        max-height: 92vh;
-        border-radius: 16px 16px 0 0;
-        transform: translateY(100%);
-        box-shadow: 0 -8px 32px rgba(166,180,200,0.6);
-    }
-    .side-sheet.active {
-        transform: translateY(0);
-        animation: slideInUp 0.35s cubic-bezier(0.32, 0.72, 0, 1) forwards;
-    }
-    .sheet-handle { display: block !important; }
+    .progress-text { display: none; }
 }
 
-@media (max-width: 639px) {
-    .page-content { padding: 1rem; gap: 1rem; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.75rem; }
-    .stat-card { padding: 1rem; gap: 0.75rem; flex-direction: column; align-items: center; text-align: center; }
-    .stat-icon { width: 36px; height: 36px; font-size: 0.9rem; margin-bottom: 0.25rem; }
-    .stat-value { font-size: 1.25rem; }
-    .stat-change { justify-content: center; }
-    .header-search { display: none; }
-    .table-search input { width: 140px; }
-    .table-search input:focus { width: 170px; }
-    .table-header { padding: 0.85rem 1rem; }
-    .form-row { grid-template-columns: 1fr; }
-    .sheet-body { padding: 1.25rem; }
-    .seats-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.5rem; }
-    .seat-card { padding: 0.75rem; }
-    .quick-action-card { padding: 1rem; }
-    .quick-action-card i { font-size: 1.25rem; }
-    .page-title { font-size: 1.25rem; }
-    .toast { max-width: 280px; font-size: 0.75rem; padding: 0.75rem 1rem; }
-    .tab-btn { padding: 0.65rem 0.85rem; font-size: 0.7rem; }
+/* Desktop Responsiveness */
+@media(min-width:480px){ 
+    .form-cols{grid-template-columns:1fr 1fr} 
+    .plans-container { grid-template-columns: 1fr 1fr; }
+}
+@media(min-width:768px){
+    .view-wrapper { width: 100%; max-width: 680px; padding: 2.5rem 3.5rem; background: transparent; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; }
+    
+    .progress-container { order: 2; margin: 3px 0 1.5rem !important; }
+    .steps-container { order: 3; min-height: 420px; }
+    .nav-buttons { position: relative; bottom: auto; background: none; margin-bottom: 0; }
+    .nav-buttons::before { display: none; }
+
+    .mobile-brand { margin-bottom: 2rem; }
+    .mobile-brand h1 { font-size: 2.25rem; }
+    .mobile-brand h1 svg { width: 36px; height: 36px; }
+    .slider-tabs { margin-bottom: 2rem; }
+    .form-title { font-size: 2rem; }
+    
+    .step-icon, .completion-icon { width: 64px; height: 64px; }
+    .step-icon svg, .completion-icon svg, .step-icon.gradient-icon svg { width: 32px; height: 32px; }
+    
+    .step-title { font-size: 1.75rem; }
+    .progress-step { width: 40px; height: 40px; font-size: 0.875rem; }
+    .progress-line { max-width: 80px; }
 }
 
-@media (max-width: 374px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+@media(min-width:1024px){
+    .view-wrapper { padding: 3rem 4rem; max-width: 760px; }
+    .mobile-brand h1 { font-size: 2.5rem; }
+    .mobile-brand h1 svg { width: 40px; height: 40px; }
+}
+
+@media(max-height:700px){
+    .form-header, .step-header { margin-bottom: 1rem; }
+    .form-grid { gap: 0.75rem; }
+    .divider { margin: 1rem 0; }
+    .slider-tabs { margin-bottom: 1rem; }
+    .step-icon, .completion-icon { width: 48px; height: 48px; }
+    .step-icon svg, .completion-icon svg, .step-icon.gradient-icon svg { width: 24px; height: 24px; }
 }
 </style>
 </head>
 <body>
 
-<div class="app-container">
-
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-brand">
-            <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>
-            <span>BIZCRM</span>
+<div class="view-container" id="authView">
+    <div class="view-wrapper">
+        <div class="mobile-brand">
+            <h1 class="gradient-text">
+                <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>
+                BIZCRM
+            </h1>
         </div>
-        <nav class="sidebar-nav">
-            <div class="nav-section-label">MAIN</div>
-            <button class="nav-item active" onclick="navigateTo('dashboard')" data-page="dashboard">
-                <i class="fas fa-th-large"></i> DASHBOARD
-            </button>
-            <button class="nav-item" onclick="navigateTo('members')" data-page="members">
-                <i class="fas fa-users"></i> MEMBERS & SEATS
-                <span class="nav-badge" id="memberCount">0</span>
-            </button>
-            <button class="nav-item" onclick="navigateTo('books')" data-page="books">
-                <i class="fas fa-book"></i> BOOKS & ISSUE
-                <span class="nav-badge" id="bookCount">0</span>
-            </button>
-            <div class="nav-section-label">OPERATIONS</div>
-            <button class="nav-item" onclick="navigateTo('attendance')" data-page="attendance">
-                <i class="fas fa-clipboard-check"></i> ATTENDANCE
-            </button>
-            <button class="nav-item" onclick="navigateTo('history')" data-page="history">
-                <i class="fas fa-history"></i> HISTORY
-            </button>
-        </nav>
-        <div class="sidebar-footer">
-            <div class="sidebar-user">
-                <div class="user-avatar">JD</div>
-                <div class="user-info">
-                    <div class="user-name">JOHN DOE</div>
-                    <div class="user-role">LIBRARY ADMIN</div>
-                </div>
-            </div>
+        
+        <div class="slider-tabs clay-inset">
+            <button type="button" class="slider-tab active" onclick="switchTab('login')">LOGIN</button>
+            <button type="button" class="slider-tab" onclick="switchTab('signup')">SIGN UP</button>
         </div>
-    </aside>
 
-    <div class="main-content">
-        <header class="main-header">
-            <div class="header-left">
-                <button class="menu-toggle" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="header-search">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search members, books..." id="globalSearch" oninput="handleGlobalSearch(this.value)">
+        <div id="loginForm" class="form-section active">
+            <div class="form-header"><h2 class="form-title gradient-text" id="loginHeaderTitle">WELCOME BACK</h2></div>
+            <form class="form-body" onsubmit="handleLogin(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="loginEmail" placeholder="Name@business.com" required></div></div>
+                    
+                    <div id="passwordGroup" class="password-transition">
+                        <div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="loginPass" placeholder="••••••••" required><button type="button" class="password-toggle" onclick="togglePassword('loginPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
+                    </div>
+                    
+                    <div class="form-row"><div class="checkbox-wrapper"><input type="checkbox" id="remember"><label for="remember">REMEMBER ME</label></div><a href="#" class="forgot-link" id="forgotLink" onclick="handleForgotClick();return false">FORGOT PASSWORD?</a></div>
+                    <button type="submit" class="btn btn-primary btn-text" id="loginBtn"><span>SIGN IN</span></button>
                 </div>
-            </div>
-            <div class="header-right">
-                <h1 class="page-title gradient-text" id="pageTitle">DASHBOARD</h1>
-            </div>
-        </header>
-
-        <div class="page-content" id="pageContent">
-
-            <div class="page active" id="page-dashboard">
-                <div class="stats-grid" id="dashboardStats"></div>
-                <div class="stats-grid">
-                    <div class="quick-action-card" onclick="navigateTo('members'); setTimeout(()=>openSheet('memberSheet'),150)">
-                        <i class="fas fa-user-plus"></i>
-                        <span>ADD MEMBER</span>
-                    </div>
-                    <div class="quick-action-card" onclick="navigateTo('books'); setTimeout(()=>openSheet('bookSheet'),150)">
-                        <i class="fas fa-book-medical"></i>
-                        <span>ADD BOOK</span>
-                    </div>
-                    <div class="quick-action-card" onclick="navigateTo('books'); setTimeout(()=>switchBooksTab('issue'),150)">
-                        <i class="fas fa-hand-holding"></i>
-                        <span>ISSUE BOOK</span>
-                    </div>
-                    <div class="quick-action-card" onclick="navigateTo('attendance')">
-                        <i class="fas fa-clipboard-check"></i>
-                        <span>ATTENDANCE</span>
-                    </div>
-                    <div class="quick-action-card" onclick="navigateTo('members'); setTimeout(()=>switchMembersTab('seats'),150)">
-                        <i class="fas fa-chair"></i>
-                        <span>MANAGE SEATS</span>
-                    </div>
+                
+                <div class="divider"><span>OR</span></div>
+                
+                <div class="nav-buttons" style="margin-top: 0; padding-top: 0;">
+                    <button type="button" class="btn btn-outline btn-text" id="googleLoginBtn" onclick="handleGoogleAuth('login')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
                 </div>
-            </div>
+            </form>
+        </div>
 
-            <div class="page" id="page-members">
-                <div class="table-card">
-                    <div class="tab-bar">
-                        <button class="tab-btn active" onclick="switchMembersTab('list')" data-mtab="list">
-                            <i class="fas fa-users" style="margin-right:0.3rem"></i> MEMBERS
-                        </button>
-                        <button class="tab-btn" onclick="switchMembersTab('seats')" data-mtab="seats">
-                            <i class="fas fa-chair" style="margin-right:0.3rem"></i> SEATS
-                        </button>
-                    </div>
-
-                    <div class="tab-content active" id="mtab-list">
-                        <div class="table-header">
-                            <span class="table-title gradient-text">ALL MEMBERS</span>
-                            <div class="table-actions">
-                                <div class="table-search">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" placeholder="Search members..." id="memberSearch" oninput="renderMembers()">
-                                </div>
-                                <button class="btn btn-primary btn-sm" onclick="openSheet('memberSheet')">
-                                    <i class="fas fa-plus"></i> ADD
-                                </button>
-                            </div>
+        <div id="signupForm" class="form-section">
+            <div class="form-header"><h2 class="form-title gradient-text">CREATE AN ACCOUNT</h2></div>
+            <form class="form-body" onsubmit="handleSignup(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="signupEmail" placeholder="Name@business.com" required></div></div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">PASSWORD</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span>
+                            <input type="password" class="form-input" id="signupPass" placeholder="Min 8 characters" required minlength="8">
+                            <button type="button" class="password-toggle" onclick="togglePassword('signupPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button>
                         </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>SID</th>
-                                        <th>NAME</th>
-                                        <th>PHONE</th>
-                                        <th>PLAN</th>
-                                        <th>EXPIRY</th>
-                                        <th>STATUS</th>
-                                        <th>SEAT</th>
-                                        <th>ACTIONS</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="membersTableBody"></tbody>
-                            </table>
+                        <div class="password-strength" id="strengthContainer">
+                            <div class="strength-bar-bg"><div class="strength-bar-fill" id="strengthBar"></div></div>
+                            <span class="strength-text" id="strengthText"></span>
                         </div>
                     </div>
-
-                    <div class="tab-content" id="mtab-seats">
-                        <div style="padding:1.25rem;">
-                            <div class="stats-grid" style="margin-bottom:1.25rem;">
-                                <div class="stat-card" style="padding:1rem;">
-                                    <div class="stat-icon green" style="width:36px;height:36px;font-size:0.9rem;"><i class="fas fa-chair"></i></div>
-                                    <div class="stat-info">
-                                        <div class="stat-label">TOTAL</div>
-                                        <div class="stat-value" id="totalSeatsCount" style="font-size:1.25rem;">20</div>
-                                    </div>
-                                </div>
-                                <div class="stat-card" style="padding:1rem;">
-                                    <div class="stat-icon orange" style="width:36px;height:36px;font-size:0.9rem;"><i class="fas fa-user-check"></i></div>
-                                    <div class="stat-info">
-                                        <div class="stat-label">OCCUPIED</div>
-                                        <div class="stat-value" id="occupiedSeatsCount" style="font-size:1.25rem;">0</div>
-                                    </div>
-                                </div>
-                                <div class="stat-card" style="padding:1rem;">
-                                    <div class="stat-icon blue" style="width:36px;height:36px;font-size:0.9rem;"><i class="fas fa-couch"></i></div>
-                                    <div class="stat-info">
-                                        <div class="stat-label">FREE</div>
-                                        <div class="stat-value" id="availableSeatsCount" style="font-size:1.25rem;">20</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
-                                <button class="btn btn-primary btn-sm" onclick="openSheet('seatAssignSheet')">
-                                    <i class="fas fa-plus"></i> ASSIGN SEAT
-                                </button>
-                            </div>
-                            <div class="seats-grid" id="seatsGrid"></div>
-                        </div>
-                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-text" id="signupBtn"><span>CREATE ACCOUNT</span></button>
                 </div>
-            </div>
-
-            <div class="page" id="page-books">
-                <div class="table-card">
-                    <div class="tab-bar">
-                        <button class="tab-btn active" onclick="switchBooksTab('catalog')" data-btab="catalog">
-                            <i class="fas fa-book" style="margin-right:0.3rem"></i> CATALOG
-                        </button>
-                        <button class="tab-btn" onclick="switchBooksTab('issue')" data-btab="issue">
-                            <i class="fas fa-hand-holding" style="margin-right:0.3rem"></i> ISSUE / RETURN
-                        </button>
-                        <button class="tab-btn" onclick="switchBooksTab('issued')" data-btab="issued">
-                            <i class="fas fa-clipboard-list" style="margin-right:0.3rem"></i> CURRENTLY ISSUED
-                        </button>
-                    </div>
-
-                    <div class="tab-content active" id="btab-catalog">
-                        <div class="table-header">
-                            <span class="table-title gradient-text">ALL BOOKS</span>
-                            <div class="table-actions">
-                                <div class="table-search">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" placeholder="Search books..." id="bookSearch" oninput="renderBooks()">
-                                </div>
-                                <button class="btn btn-primary btn-sm" onclick="openSheet('bookSheet')">
-                                    <i class="fas fa-plus"></i> ADD
-                                </button>
-                            </div>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>TITLE</th>
-                                        <th>AUTHOR</th>
-                                        <th>ISBN</th>
-                                        <th>CATEGORY</th>
-                                        <th>TOTAL</th>
-                                        <th>AVAILABLE</th>
-                                        <th>ACTIONS</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="booksTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="btab-issue">
-                        <div style="padding:1.25rem;">
-                            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:1.25rem;">
-                                <div class="clay-inset" style="padding:1.25rem;">
-                                    <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:1rem;" class="gradient-text"><i class="fas fa-hand-holding" style="margin-right:0.4rem"></i>ISSUE BOOK</div>
-                                    <div class="form-group">
-                                        <label class="form-label">SELECT MEMBER</label>
-                                        <select class="form-input" id="issueMember"></select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">SELECT BOOK</label>
-                                        <select class="form-input" id="issueBook"></select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">DUE DATE</label>
-                                        <input type="date" class="form-input" id="issueDueDate">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="issueBook()" style="width:100%;margin-top:0.5rem">
-                                        <i class="fas fa-paper-plane"></i> ISSUE BOOK
-                                    </button>
-                                </div>
-                                <div class="clay-inset" style="padding:1.25rem;">
-                                    <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;margin-bottom:1rem;" class="gradient-text"><i class="fas fa-undo" style="margin-right:0.4rem"></i>RETURN BOOK</div>
-                                    <div class="form-group">
-                                        <label class="form-label">SELECT ISSUED RECORD</label>
-                                        <select class="form-input" id="returnRecord"></select>
-                                    </div>
-                                    <div id="returnDetails" style="display:none; margin-bottom:1rem;">
-                                        <div style="margin-top:0.5rem; padding:0.75rem; background:rgba(124,58,237,0.05); border-radius:var(--radius); display:flex; flex-direction:column; gap:0.35rem;">
-                                            <div style="font-size:0.75rem;"><strong>MEMBER:</strong> <span id="retMember"></span></div>
-                                            <div style="font-size:0.75rem;"><strong>BOOK:</strong> <span id="retBook"></span></div>
-                                            <div style="font-size:0.75rem;"><strong>DUE:</strong> <span id="retDue"></span></div>
-                                            <div style="font-size:0.75rem;" id="retFineRow"><strong>FINE:</strong> <span id="retFine" style="color:var(--error);font-weight:700;"></span></div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-success-solid" onclick="returnBook()" style="width:100%;margin-top:0.5rem">
-                                        <i class="fas fa-check"></i> RETURN BOOK
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="btab-issued">
-                        <div class="table-header">
-                            <span class="table-title gradient-text">CURRENTLY ISSUED BOOKS</span>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>MEMBER</th>
-                                        <th>BOOK</th>
-                                        <th>ISSUE DATE</th>
-                                        <th>DUE DATE</th>
-                                        <th>STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="issuedTableBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
+                
+                <div class="divider"><span>OR</span></div>
+                
+                <div class="nav-buttons" style="margin-top: 0; padding-top: 0;">
+                    <button type="button" class="btn btn-outline btn-text" id="googleSignupBtn" onclick="handleGoogleAuth('signup')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
                 </div>
-            </div>
-
-            <div class="page" id="page-attendance">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon cyan"><i class="fas fa-clipboard-check"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-label">TODAY PRESENT</div>
-                            <div class="stat-value" id="todayPresent">0</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon red"><i class="fas fa-user-times"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-label">TODAY ABSENT</div>
-                            <div class="stat-value" id="todayAbsent">0</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"><i class="fas fa-percentage"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-label">ATTENDANCE %</div>
-                            <div class="stat-value" id="todayPercent">0%</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="table-card">
-                    <div class="tab-bar">
-                        <button class="tab-btn active" onclick="switchAttTab('mark')" data-atab="mark">
-                            <i class="fas fa-check-double" style="margin-right:0.3rem"></i> MARK ATTENDANCE
-                        </button>
-                        <button class="tab-btn" onclick="switchAttTab('records')" data-atab="records">
-                            <i class="fas fa-calendar-alt" style="margin-right:0.3rem"></i> RECORDS
-                        </button>
-                    </div>
-
-                    <div class="tab-content active" id="atab-mark">
-                        <div style="padding:1.25rem;">
-                            <div class="date-nav">
-                                <button class="date-nav-btn" onclick="changeAttDate(-1)"><i class="fas fa-chevron-left"></i></button>
-                                <span class="date-nav-label" id="attDateLabel"></span>
-                                <button class="date-nav-btn" onclick="changeAttDate(1)"><i class="fas fa-chevron-right"></i></button>
-                            </div>
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
-                                <div style="display:flex;gap:0.5rem;">
-                                    <button class="btn btn-sm btn-success-solid" onclick="markAllAttendance('present')"><i class="fas fa-check-double"></i> ALL PRESENT</button>
-                                    <button class="btn btn-sm btn-error-solid" onclick="markAllAttendance('absent')"><i class="fas fa-times"></i> ALL ABSENT</button>
-                                </div>
-                                <button class="btn btn-sm btn-primary" onclick="saveAttendance()"><i class="fas fa-save"></i> SAVE</button>
-                            </div>
-                            <div class="attendance-grid" id="attendanceGrid"></div>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="atab-records">
-                        <div class="table-header">
-                            <span class="table-title gradient-text">ATTENDANCE HISTORY</span>
-                            <div class="table-actions">
-                                <div class="table-search">
-                                    <i class="fas fa-search"></i>
-                                    <input type="text" placeholder="Search by name or SID..." id="attSearch" oninput="renderAttRecords()">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>SID</th>
-                                        <th>NAME</th>
-                                        <th>DATE</th>
-                                        <th>STATUS</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="attRecordsBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="page" id="page-history">
-                <div class="table-card">
-                    <div class="table-header">
-                        <span class="table-title gradient-text">ISSUE & RETURN HISTORY</span>
-                        <div class="table-actions">
-                            <div class="table-search">
-                                <i class="fas fa-search"></i>
-                                <input type="text" placeholder="Search history..." id="historySearch" oninput="renderHistory()">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>MEMBER</th>
-                                    <th>BOOK</th>
-                                    <th>ISSUED</th>
-                                    <th>DUE</th>
-                                    <th>RETURNED</th>
-                                    <th>FINE</th>
-                                    <th>STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody id="historyTableBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            </form>
         </div>
     </div>
 </div>
 
-<div class="sheet-overlay" id="memberSheetOverlay" onclick="closeSheet('memberSheet')"></div>
-<div class="side-sheet" id="memberSheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-header">
-        <span class="sheet-title gradient-text" id="memberSheetTitle">ADD MEMBER</span>
-        <button class="sheet-close" onclick="closeSheet('memberSheet')"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="sheet-body">
-        <input type="hidden" id="editMemberId">
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">FIRST NAME *</label>
-                <input type="text" class="form-input" id="mFirstName" placeholder="John">
-            </div>
-            <div class="form-group">
-                <label class="form-label">LAST NAME *</label>
-                <input type="text" class="form-input" id="mLastName" placeholder="Doe">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="form-label">EMAIL</label>
-            <input type="email" class="form-input" id="mEmail" placeholder="john@example.com">
-        </div>
-        <div class="form-group">
-            <label class="form-label">PHONE *</label>
-            <input type="tel" class="form-input" id="mPhone" placeholder="+91 9876543210">
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">PLAN</label>
-                <select class="form-input" id="mPlan">
-                    <option value="MONTHLY">MONTHLY - ₹999</option>
-                    <option value="QUARTERLY">QUARTERLY - ₹2499</option>
-                    <option value="YEARLY">YEARLY - ₹8999</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">MEMBERSHIP EXPIRY *</label>
-                <input type="date" class="form-input" id="mExpiry">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="form-label">ADDRESS</label>
-            <textarea class="form-input" id="mAddress" placeholder="Full address..."></textarea>
-        </div>
-    </div>
-    <div class="sheet-footer">
-        <button class="btn btn-outline" onclick="closeSheet('memberSheet')">CANCEL</button>
-        <button class="btn btn-primary" onclick="saveMember()">SAVE MEMBER</button>
-    </div>
+<div class="view-container hidden" id="loadingView">
+    <div class="large-spinner"></div>
+    <h2 class="gradient-text" style="font-family: var(--font-display); letter-spacing: 1px; font-size: 1.5rem;">PREPARING WORKSPACE...</h2>
 </div>
 
-<div class="sheet-overlay" id="viewMemberSheetOverlay" onclick="closeSheet('viewMemberSheet')"></div>
-<div class="side-sheet" id="viewMemberSheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-header">
-        <span class="sheet-title gradient-text">MEMBER DETAILS</span>
-        <button class="sheet-close" onclick="closeSheet('viewMemberSheet')"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="sheet-body" id="viewMemberBody"></div>
-    <div class="sheet-footer">
-        <button class="btn btn-outline" onclick="closeSheet('viewMemberSheet')">CLOSE</button>
+<div class="view-container hidden" id="onboardingView">
+    <div class="view-wrapper">
+        <div class="onboarding-header">
+            <div class="brand-mini">
+                <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>
+                <span class="gradient-text">BIZCRM</span>
+            </div>
+            <button type="button" class="skip-btn" id="skipBtn">SKIP</button>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-step active" data-step="1">1</div>
+                <div class="progress-line" data-line="1"></div>
+                <div class="progress-step" data-step="2">2</div>
+                <div class="progress-line" data-line="2"></div>
+                <div class="progress-step" data-step="3">3</div>
+            </div>
+            <div class="progress-text" id="progressText">STEP 1 OF 3 • PROFILE</div>
+        </div>
+
+        <div class="steps-container" id="stepsContainer">
+
+            <div class="step active" data-step="1">
+                <div class="step-header">
+                    <div class="step-icon gradient-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+                    <h2 class="step-title gradient-text">BUSINESS DETAILS</h2>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">BUSINESS CATEGORY</label>
+                        <div class="slider-tabs clay-inset" id="categoryTabs" style="margin-bottom:0;">
+                            <button type="button" class="slider-tab active" data-cat="gym">GYM</button>
+                            <button type="button" class="slider-tab" data-cat="library">LIBRARY</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BUSINESS NAME</label>
+                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></span>
+                        <input type="text" class="form-input" id="bizName" placeholder="E.G. FITPRO GYM"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BUSINESS PHONE</label>
+                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
+                        <input type="tel" class="form-input" id="bizPhone" placeholder="+91 9876543210"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BUSINESS ADDRESS</label>
+                        <textarea class="form-input" id="bizAddress" placeholder="123 MAIN STREET, CITY"></textarea>
+                    </div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-primary" id="step1Next">CONTINUE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+
+            <div class="step" data-step="2">
+                <div class="step-header">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <h2 class="step-title gradient-text">LEGAL & PLAN</h2>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">OWNER NAME</label>
+                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+                        <input type="text" class="form-input" id="ownerName" placeholder="JOHN DOE"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">GST NUMBER</label>
+                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+                        <input type="text" class="form-input" id="gstNumber" placeholder="22AAAAA0000A1Z5"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CHOOSE A DEFAULT PLAN (OPTIONAL)</label>
+                        <div class="plans-container" id="plansContainer">
+                            <div class="plan-card" data-plan="MONTHLY (₹999)">
+                                <div class="plan-header"><span class="plan-name">MONTHLY</span><span class="plan-price">₹999</span></div>
+                                <div class="plan-features"><span class="plan-feature">30 DAYS</span></div>
+                            </div>
+                            <div class="plan-card" data-plan="YEARLY (₹8999)">
+                                <div class="plan-header"><span class="plan-name">YEARLY</span><span class="plan-price">₹8,999</span></div>
+                                <div class="plan-features"><span class="plan-feature">365 DAYS</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-outline" id="step2Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                    <button type="button" class="btn btn-outline" id="step2Skip" style="flex: 2;">SKIP PLAN</button>
+                    <button type="button" class="btn btn-primary" id="step2Next" style="flex: 2;">CONTINUE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+
+            <div class="step" data-step="3">
+                <div class="step-header">
+                    <div class="completion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <h2 class="step-title gradient-text">REVIEW & CONFIRM</h2>
+                </div>
+                
+                <div class="summary-container clay-inset">
+                    <div class="summary-row"><span class="summary-label">CATEGORY:</span> <span id="sumCategory" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">NAME:</span> <span id="sumName" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">PHONE:</span> <span id="sumPhone" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">ADDRESS:</span> <span id="sumAddress" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">OWNER:</span> <span id="sumOwner" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">GST:</span> <span id="sumGst" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">PLAN:</span> <span id="sumPlan" class="summary-val"></span></div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-outline" id="step3Back" style="flex: 0.5;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                    <button type="button" class="btn btn-success" id="completeBtn" style="flex: 2;">CONFIRM</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-<div class="sheet-overlay" id="bookSheetOverlay" onclick="closeSheet('bookSheet')"></div>
-<div class="side-sheet" id="bookSheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-header">
-        <span class="sheet-title gradient-text" id="bookSheetTitle">ADD BOOK</span>
-        <button class="sheet-close" onclick="closeSheet('bookSheet')"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="sheet-body">
-        <input type="hidden" id="editBookId">
-        <div class="form-group">
-            <label class="form-label">TITLE *</label>
-            <input type="text" class="form-input" id="bTitle" placeholder="Book title">
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">AUTHOR *</label>
-                <input type="text" class="form-input" id="bAuthor" placeholder="Author name">
-            </div>
-            <div class="form-group">
-                <label class="form-label">ISBN</label>
-                <input type="text" class="form-input" id="bIsbn" placeholder="978-0-00-000000-0">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label class="form-label">CATEGORY</label>
-                <select class="form-input" id="bCategory">
-                    <option value="FICTION">FICTION</option>
-                    <option value="NON-FICTION">NON-FICTION</option>
-                    <option value="SCIENCE">SCIENCE</option>
-                    <option value="TECHNOLOGY">TECHNOLOGY</option>
-                    <option value="HISTORY">HISTORY</option>
-                    <option value="BIOGRAPHY">BIOGRAPHY</option>
-                    <option value="SELF-HELP">SELF-HELP</option>
-                    <option value="ACADEMIC">ACADEMIC</option>
-                    <option value="OTHER">OTHER</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">TOTAL COPIES *</label>
-                <input type="number" class="form-input" id="bTotal" placeholder="5" min="1">
-            </div>
-        </div>
-    </div>
-    <div class="sheet-footer">
-        <button class="btn btn-outline" onclick="closeSheet('bookSheet')">CANCEL</button>
-        <button class="btn btn-primary" onclick="saveBook()">SAVE BOOK</button>
-    </div>
-</div>
-
-<div class="sheet-overlay" id="seatAssignSheetOverlay" onclick="closeSheet('seatAssignSheet')"></div>
-<div class="side-sheet" id="seatAssignSheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-header">
-        <span class="sheet-title gradient-text">ASSIGN SEAT</span>
-        <button class="sheet-close" onclick="closeSheet('seatAssignSheet')"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="sheet-body">
-        <div class="form-group">
-            <label class="form-label">SELECT MEMBER</label>
-            <select class="form-input" id="seatMember"></select>
-        </div>
-        <div class="form-group">
-            <label class="form-label">SELECT SEAT</label>
-            <select class="form-input" id="seatSelect"></select>
-        </div>
-    </div>
-    <div class="sheet-footer">
-        <button class="btn btn-outline" onclick="closeSheet('seatAssignSheet')">CANCEL</button>
-        <button class="btn btn-primary" onclick="assignSeat()">ASSIGN</button>
-    </div>
-</div>
-
-<div class="sheet-overlay" id="confirmSheetOverlay" onclick="closeSheet('confirmSheet')"></div>
-<div class="side-sheet" id="confirmSheet" style="--sheet-width:380px;">
-    <div class="sheet-handle"></div>
-    <div class="sheet-header">
-        <span class="sheet-title" style="color:var(--error);">CONFIRM DELETE</span>
-        <button class="sheet-close" onclick="closeSheet('confirmSheet')"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="sheet-body">
-        <p id="confirmMessage" style="font-size:0.85rem; text-align:center; color:var(--text-secondary); padding:1rem 0;"></p>
-    </div>
-    <div class="sheet-footer">
-        <button class="btn btn-outline" onclick="closeSheet('confirmSheet')">CANCEL</button>
-        <button class="btn btn-error-solid" id="confirmDeleteBtn">DELETE</button>
-    </div>
-</div>
-
-<div class="toast-container" id="toastContainer"></div>
 
 <script>
-// ============================================================
-//                    DATA STORE
-// ============================================================
-const FINE_PER_DAY = 5;
-const TOTAL_SEATS = 20;
+// ================= Shared Utils =================
+const icons={spinner:'<div class="spinner"></div>',check:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',error:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',google:'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>'};
 
-let data = {
-    members: [],
-    books: [],
-    records: [],
-    seats: Array.from({ length: TOTAL_SEATS }, (_, i) => ({
-        number: i + 1,
-        occupied: false,
-        memberId: null
-    })),
-    attendance: {},
-    nextMemberId: 1,
-    nextBookId: 1,
-    nextRecordId: 1
-};
+// ================= AUTH LOGIC =================
+let isResetMode = false;
 
-let currentAttDate = new Date();
-let tempAttendance = {};
-
-function loadData() {
-    const saved = localStorage.getItem('libraryCRM_v2');
-    if (saved) {
-        try {
-            data = JSON.parse(saved);
-            if (!data.attendance) data.attendance = {};
-        } catch (e) { seedData(); }
-    } else {
-        seedData();
-    }
-}
-
-function saveData() {
-    localStorage.setItem('libraryCRM_v2', JSON.stringify(data));
-}
-
-function generateSID(id) {
-    return 'SID' + String(id).padStart(4, '0');
-}
-
-function seedData() {
-    const today = new Date();
-    const fmtDate = (d) => d.toISOString().split('T')[0];
-
-    const memberSeeds = [
-        { first: 'AARAV', last: 'SHARMA', email: 'aarav@mail.com', phone: '+91 9876543210', plan: 'YEARLY', expiry: fmtDate(new Date(today.getFullYear(), today.getMonth() + 6, 1)), address: '12 MG Road, Delhi' },
-        { first: 'PRIYA', last: 'PATEL', email: 'priya@mail.com', phone: '+91 9876543211', plan: 'MONTHLY', expiry: fmtDate(new Date(today.getFullYear(), today.getMonth() + 1, 15)), address: '34 Lake View, Mumbai' },
-        { first: 'ROHAN', last: 'GUPTA', email: 'rohan@mail.com', phone: '+91 9876543212', plan: 'QUARTERLY', expiry: fmtDate(new Date(today.getFullYear(), today.getMonth() - 1, 10)), address: '56 Park Street, Kolkata' },
-        { first: 'SNEHA', last: 'REDDY', email: 'sneha@mail.com', phone: '+91 9876543213', plan: 'YEARLY', expiry: fmtDate(new Date(today.getFullYear() + 1, 0, 1)), address: '78 Jubilee Hills, Hyderabad' },
-        { first: 'VIKRAM', last: 'SINGH', email: 'vikram@mail.com', phone: '+91 9876543214', plan: 'MONTHLY', expiry: fmtDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 5)), address: '90 Civil Lines, Jaipur' },
-    ];
-    memberSeeds.forEach(m => {
-        data.members.push({
-            id: data.nextMemberId++,
-            firstName: m.first, lastName: m.last, email: m.email, phone: m.phone,
-            plan: m.plan, expiry: m.expiry, address: m.address,
-            joinDate: fmtDate(new Date(today.getFullYear(), today.getMonth() - Math.floor(Math.random()*6), Math.floor(Math.random()*28)+1))
-        });
-    });
-
-    const bookSeeds = [
-        { title: 'THE ALCHEMIST', author: 'PAULO COELHO', isbn: '978-0-06-112008-4', category: 'FICTION', total: 5 },
-        { title: 'SAPIENS', author: 'YUVAL NOAH HARARI', isbn: '978-0-06-231609-7', category: 'NON-FICTION', total: 3 },
-        { title: 'ATOMIC HABITS', author: 'JAMES CLEAR', isbn: '978-0-7352-1129-2', category: 'SELF-HELP', total: 4 },
-        { title: 'A BRIEF HISTORY OF TIME', author: 'STEPHEN HAWKING', isbn: '978-0-553-10953-5', category: 'SCIENCE', total: 2 },
-        { title: 'CLEAN CODE', author: 'ROBERT C. MARTIN', isbn: '978-0-13-235088-4', category: 'TECHNOLOGY', total: 3 },
-        { title: 'THE ART OF WAR', author: 'SUN TZU', isbn: '978-1-59030-225-1', category: 'HISTORY', total: 2 },
-        { title: 'WINGS OF FIRE', author: 'APJ ABDUL KALAM', isbn: '978-81-7371-146-6', category: 'BIOGRAPHY', total: 4 },
-        { title: 'IKIGAI', author: 'HÉCTOR GARCÍA', isbn: '978-0-14-313016-5', category: 'SELF-HELP', total: 3 },
-    ];
-    bookSeeds.forEach(b => {
-        data.books.push({
-            id: data.nextBookId++, title: b.title, author: b.author, isbn: b.isbn,
-            category: b.category, totalCopies: b.total, issuedCopies: 0
-        });
-    });
-
-    const issueSeeds = [
-        { memberId: 1, bookId: 1, issueDate: fmtDate(new Date(today.getTime() - 20*86400000)), dueDate: fmtDate(new Date(today.getTime() - 6*86400000)), returnDate: fmtDate(new Date(today.getTime() - 4*86400000)), fine: 10, status: 'RETURNED' },
-        { memberId: 2, bookId: 3, issueDate: fmtDate(new Date(today.getTime() - 10*86400000)), dueDate: fmtDate(new Date(today.getTime() + 4*86400000)), returnDate: null, fine: 0, status: 'ISSUED' },
-        { memberId: 4, bookId: 5, issueDate: fmtDate(new Date(today.getTime() - 15*86400000)), dueDate: fmtDate(new Date(today.getTime() - 1*86400000)), returnDate: null, fine: 0, status: 'ISSUED' },
-        { memberId: 1, bookId: 2, issueDate: fmtDate(new Date(today.getTime() - 5*86400000)), dueDate: fmtDate(new Date(today.getTime() + 9*86400000)), returnDate: null, fine: 0, status: 'ISSUED' },
-    ];
-    issueSeeds.forEach(r => {
-        data.records.push({ id: data.nextRecordId++, ...r });
-    });
-
-    data.records.filter(r => r.status === 'ISSUED').forEach(r => {
-        const book = data.books.find(b => b.id === r.bookId);
-        if (book) book.issuedCopies++;
-    });
-
-    data.seats[0].occupied = true; data.seats[0].memberId = 1;
-    data.seats[4].occupied = true; data.seats[4].memberId = 2;
-    data.seats[9].occupied = true; data.seats[9].memberId = 4;
-
-    // Seed some attendance
-    const yesterday = fmtDate(new Date(today.getTime() - 86400000));
-    data.attendance[yesterday] = { 1: 'present', 2: 'present', 3: 'absent', 4: 'present', 5: 'absent' };
-
-    saveData();
-}
-
-// ============================================================
-//                    NAVIGATION
-// ============================================================
-function navigateTo(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-    const pageEl = document.getElementById('page-' + page);
-    if (pageEl) pageEl.classList.add('active');
-
-    const navEl = document.querySelector(`.nav-item[data-page="${page}"]`);
-    if (navEl) navEl.classList.add('active');
-
-    const titles = {
-        'dashboard': 'DASHBOARD',
-        'members': 'MEMBERS & SEATS',
-        'books': 'BOOKS & ISSUE',
-        'attendance': 'ATTENDANCE',
-        'history': 'HISTORY'
-    };
-    document.getElementById('pageTitle').textContent = titles[page] || page.toUpperCase();
-
-    if (page === 'dashboard') renderDashboard();
-    if (page === 'members') { renderMembers(); renderSeats(); }
-    if (page === 'books') { renderBooks(); populateIssueDropdowns(); renderIssuedTable(); }
-    if (page === 'attendance') { renderAttendance(); renderAttRecords(); }
-    if (page === 'history') renderHistory();
-
-    if (window.innerWidth < 1024) toggleSidebar(false);
-}
-
-function toggleSidebar(forceState) {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    const shouldOpen = forceState !== undefined ? forceState : !sidebar.classList.contains('open');
-    if (shouldOpen) { sidebar.classList.add('open'); overlay.classList.add('active'); }
-    else { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
-}
-
-// ============================================================
-//                    SHEET MANAGEMENT
-// ============================================================
-function openSheet(id) {
-    const sheet = document.getElementById(id);
-    const overlay = document.getElementById(id + 'Overlay');
-    if (overlay) { overlay.classList.add('active'); overlay.classList.remove('closing'); }
-    if (sheet) { sheet.classList.add('active'); }
-
-    if (id === 'memberSheet' && !document.getElementById('editMemberId').value) {
-        document.getElementById('memberSheetTitle').textContent = 'ADD MEMBER';
-        clearMemberForm();
-    }
-    if (id === 'bookSheet' && !document.getElementById('editBookId').value) {
-        document.getElementById('bookSheetTitle').textContent = 'ADD BOOK';
-        clearBookForm();
-    }
-    if (id === 'seatAssignSheet') populateSeatAssignDropdowns();
-}
-
-function closeSheet(id) {
-    const sheet = document.getElementById(id);
-    const overlay = document.getElementById(id + 'Overlay');
-
-    if (sheet) sheet.classList.remove('active');
-    if (overlay) {
-        overlay.classList.add('closing');
-        setTimeout(() => {
-            overlay.classList.remove('active', 'closing');
-        }, 300);
-    }
-
-    if (id === 'memberSheet') { document.getElementById('editMemberId').value = ''; clearMemberForm(); }
-    if (id === 'bookSheet') { document.getElementById('editBookId').value = ''; clearBookForm(); }
-}
-
-// ============================================================
-//                    TAB SWITCHING
-// ============================================================
-function switchMembersTab(tab) {
-    document.querySelectorAll('[data-mtab]').forEach(b => b.classList.remove('active'));
-    document.querySelector(`[data-mtab="${tab}"]`).classList.add('active');
-    document.querySelectorAll('[id^="mtab-"]').forEach(c => c.classList.remove('active'));
-    document.getElementById('mtab-' + tab).classList.add('active');
-    if (tab === 'seats') renderSeats();
-}
-
-function switchBooksTab(tab) {
-    document.querySelectorAll('[data-btab]').forEach(b => b.classList.remove('active'));
-    document.querySelector(`[data-btab="${tab}"]`).classList.add('active');
-    document.querySelectorAll('[id^="btab-"]').forEach(c => c.classList.remove('active'));
-    document.getElementById('btab-' + tab).classList.add('active');
-    if (tab === 'issue') populateIssueDropdowns();
-    if (tab === 'issued') renderIssuedTable();
-}
-
-function switchAttTab(tab) {
-    document.querySelectorAll('[data-atab]').forEach(b => b.classList.remove('active'));
-    document.querySelector(`[data-atab="${tab}"]`).classList.add('active');
-    document.querySelectorAll('[id^="atab-"]').forEach(c => c.classList.remove('active'));
-    document.getElementById('atab-' + tab).classList.add('active');
-    if (tab === 'records') renderAttRecords();
-}
-
-// ============================================================
-//                    TOAST NOTIFICATIONS
-// ============================================================
-function showToast(message, type = 'success') {
-    const container = document.getElementById('toastContainer');
-    const iconMap = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `<i class="fas ${iconMap[type]}"></i><span>${message}</span>`;
-    container.appendChild(toast);
-    setTimeout(() => { toast.classList.add('removing'); setTimeout(() => toast.remove(), 300); }, 3000);
-}
-
-// ============================================================
-//                    DASHBOARD
-// ============================================================
-function renderDashboard() {
-    const totalMembers = data.members.length;
-    const activeMembers = data.members.filter(m => new Date(m.expiry) >= new Date()).length;
-    
-    const totalBooks = data.books.reduce((s, b) => s + b.totalCopies, 0);
-    const issuedBooks = data.records.filter(r => r.status === 'ISSUED').length;
-    
-    const occupiedSeats = data.seats.filter(s => s.occupied).length;
-
-    const todayKey = new Date().toISOString().split('T')[0];
-    const todayAtt = data.attendance[todayKey] || {};
-    const todayPresentCount = Object.values(todayAtt).filter(v => v === 'present').length;
-    const todayAbsentCount = Object.values(todayAtt).filter(v => v === 'absent').length;
-
-    document.getElementById('dashboardStats').innerHTML = `
-        <div class="stat-card">
-            <div class="stat-icon purple"><i class="fas fa-users"></i></div>
-            <div class="stat-info">
-                <div class="stat-label">TOTAL MEMBERS</div>
-                <div class="stat-value">${totalMembers}</div>
-                <div class="stat-change up">${activeMembers} ACTIVE</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon blue"><i class="fas fa-book"></i></div>
-            <div class="stat-info">
-                <div class="stat-label">TOTAL BOOKS</div>
-                <div class="stat-value">${totalBooks}</div>
-                <div class="stat-change up">${issuedBooks} ISSUED</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon orange"><i class="fas fa-chair"></i></div>
-            <div class="stat-info">
-                <div class="stat-label">TOTAL SEATS</div>
-                <div class="stat-value">${TOTAL_SEATS}</div>
-                <div class="stat-change up">${occupiedSeats} ALLOTTED</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon cyan"><i class="fas fa-clipboard-check"></i></div>
-            <div class="stat-info">
-                <div class="stat-label">TODAY PRESENT</div>
-                <div class="stat-value">${todayPresentCount}</div>
-                <div class="stat-change down">${todayAbsentCount} ABSENT</div>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('memberCount').textContent = totalMembers;
-    document.getElementById('bookCount').textContent = data.books.length;
-}
-
-// ============================================================
-//                    MEMBERS CRUD
-// ============================================================
-function clearMemberForm() {
-    ['mFirstName','mLastName','mEmail','mPhone','mAddress'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('mPlan').value = 'MONTHLY';
-    document.getElementById('mExpiry').value = '';
-}
-
-function getMemberStatus(expiry) {
-    const exp = new Date(expiry);
-    const today = new Date();
-    const diff = Math.ceil((exp - today) / 86400000);
-    if (diff < 0) return { label: 'EXPIRED', class: 'badge-expired' };
-    if (diff <= 7) return { label: 'EXPIRING SOON', class: 'badge-warning' };
-    return { label: 'ACTIVE', class: 'badge-active' };
-}
-
-function getMemberName(id) {
-    const m = data.members.find(m => m.id === id);
-    return m ? `${m.firstName} ${m.lastName}` : 'UNKNOWN';
-}
-
-function getMemberSeat(memberId) {
-    const seat = data.seats.find(s => s.memberId === memberId);
-    return seat ? `#${seat.number}` : '-';
-}
-
-function renderMembers() {
-    const search = (document.getElementById('memberSearch')?.value || '').toUpperCase();
-    let filtered = data.members;
-    if (search) {
-        filtered = filtered.filter(m =>
-            `${m.firstName} ${m.lastName} ${m.email} ${m.phone} ${m.plan} ${generateSID(m.id)}`.toUpperCase().includes(search)
-        );
-    }
-
-    const tbody = document.getElementById('membersTableBody');
-    if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8"><div class="table-empty"><i class="fas fa-users"></i>NO MEMBERS FOUND</div></td></tr>`;
-        return;
-    }
-    tbody.innerHTML = filtered.map(m => {
-        const status = getMemberStatus(m.expiry);
-        const seat = getMemberSeat(m.id);
-        return `<tr>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--primary);font-weight:700;">${generateSID(m.id)}</td>
-            <td><strong>${m.firstName} ${m.lastName}</strong></td>
-            <td>${m.phone}</td>
-            <td><span class="badge badge-info">${m.plan}</span></td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;">${m.expiry}</td>
-            <td><span class="badge ${status.class}">${status.label}</span></td>
-            <td>${seat}</td>
-            <td>
-                <button class="btn-icon" title="View" onclick="viewMember(${m.id})"><i class="fas fa-eye"></i></button>
-                <button class="btn-icon" title="Edit" onclick="editMember(${m.id})"><i class="fas fa-pen"></i></button>
-                <button class="btn-icon danger" title="Delete" onclick="confirmDelete('member',${m.id})"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>`;
-    }).join('');
-}
-
-function saveMember() {
-    const id = document.getElementById('editMemberId').value;
-    const firstName = document.getElementById('mFirstName').value.trim().toUpperCase();
-    const lastName = document.getElementById('mLastName').value.trim().toUpperCase();
-    const phone = document.getElementById('mPhone').value.trim();
-    const expiry = document.getElementById('mExpiry').value;
-
-    if (!firstName || !lastName || !phone || !expiry) {
-        showToast('PLEASE FILL ALL REQUIRED FIELDS', 'error');
-        if (!firstName) document.getElementById('mFirstName').classList.add('input-error');
-        if (!lastName) document.getElementById('mLastName').classList.add('input-error');
-        if (!phone) document.getElementById('mPhone').classList.add('input-error');
-        if (!expiry) document.getElementById('mExpiry').classList.add('input-error');
-        document.querySelectorAll('.input-error').forEach(el => el.addEventListener('input', function() { this.classList.remove('input-error'); }, { once: true }));
-        return;
-    }
-
-    const memberData = {
-        firstName, lastName,
-        email: document.getElementById('mEmail').value.trim().toUpperCase(),
-        phone,
-        plan: document.getElementById('mPlan').value,
-        expiry,
-        address: document.getElementById('mAddress').value.trim().toUpperCase()
-    };
-
-    if (id) {
-        const idx = data.members.findIndex(m => m.id === parseInt(id));
-        if (idx > -1) Object.assign(data.members[idx], memberData);
-        showToast('MEMBER UPDATED SUCCESSFULLY', 'success');
-    } else {
-        memberData.id = data.nextMemberId++;
-        memberData.joinDate = new Date().toISOString().split('T')[0];
-        data.members.push(memberData);
-        showToast(`MEMBER ADDED — ${generateSID(memberData.id)}`, 'success');
-    }
-
-    saveData();
-    closeSheet('memberSheet');
-    renderMembers();
-    renderDashboard();
-}
-
-function editMember(id) {
-    const m = data.members.find(m => m.id === id);
-    if (!m) return;
-    document.getElementById('editMemberId').value = id;
-    document.getElementById('memberSheetTitle').textContent = 'EDIT MEMBER';
-    document.getElementById('mFirstName').value = m.firstName;
-    document.getElementById('mLastName').value = m.lastName;
-    document.getElementById('mEmail').value = m.email;
-    document.getElementById('mPhone').value = m.phone;
-    document.getElementById('mPlan').value = m.plan;
-    document.getElementById('mExpiry').value = m.expiry;
-    document.getElementById('mAddress').value = m.address;
-    openSheet('memberSheet');
-}
-
-function viewMember(id) {
-    const m = data.members.find(m => m.id === id);
-    if (!m) return;
-    const status = getMemberStatus(m.expiry);
-    const seat = getMemberSeat(m.id);
-    const issuedBooks = data.records.filter(r => r.memberId === id && r.status === 'ISSUED');
-    const returnedBooks = data.records.filter(r => r.memberId === id && r.status === 'RETURNED');
-    const totalFines = data.records.filter(r => r.memberId === id).reduce((s, r) => s + (r.fine || 0), 0);
-
-    // Attendance stats
-    let presentDays = 0, totalDays = 0;
-    Object.values(data.attendance).forEach(dayData => {
-        if (dayData[id]) { totalDays++; if (dayData[id] === 'present') presentDays++; }
-    });
-
-    let booksHtml = '';
-    if (issuedBooks.length > 0) {
-        booksHtml = `<div style="margin-top:1rem;"><div class="form-label" style="margin-bottom:0.5rem;">CURRENTLY ISSUED BOOKS</div>` +
-            issuedBooks.map(r => {
-                const book = data.books.find(b => b.id === r.bookId);
-                const overdue = new Date(r.dueDate) < new Date();
-                return `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;background:rgba(124,58,237,0.05);border-radius:var(--radius);margin-bottom:0.35rem;">
-                    <i class="fas fa-book" style="color:${overdue ? 'var(--error)' : 'var(--primary)'};font-size:0.8rem;"></i>
-                    <div style="flex:1;min-width:0;">
-                        <div style="font-size:0.8rem;font-weight:700;">${book ? book.title : 'UNKNOWN'}</div>
-                        <div style="font-size:0.65rem;color:var(--text-muted);">DUE: ${r.dueDate}</div>
-                    </div>
-                    ${overdue ? '<span class="badge badge-overdue">OVERDUE</span>' : '<span class="badge badge-issued">ISSUED</span>'}
-                </div>`;
-            }).join('') + '</div>';
-    }
-
-    document.getElementById('viewMemberBody').innerHTML = `
-        <div style="text-align:center;margin-bottom:1.25rem;">
-            <div class="user-avatar" style="width:56px;height:56px;font-size:1.25rem;margin:0 auto 0.75rem;">${m.firstName[0]}${m.lastName[0]}</div>
-            <h3 style="font-family:var(--font-display);font-size:1.25rem;">${m.firstName} ${m.lastName}</h3>
-            <div style="font-family:var(--font-mono);font-size:0.8rem;color:var(--primary);font-weight:700;margin:0.25rem 0;">${generateSID(m.id)}</div>
-            <span class="badge ${status.class}" style="margin-top:0.25rem;">${status.label}</span>
-        </div>
-        <div class="clay-inset" style="padding:1rem;display:flex;flex-direction:column;gap:0.5rem;">
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">EMAIL:</span><span>${m.email || '-'}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">PHONE:</span><span>${m.phone}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">PLAN:</span><span class="badge badge-info">${m.plan}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">EXPIRY:</span><span style="font-family:var(--font-mono);">${m.expiry}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">SEAT:</span><span>${seat}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">JOINED:</span><span style="font-family:var(--font-mono);">${m.joinDate}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">BOOKS ISSUED:</span><span style="font-family:var(--font-mono);">${issuedBooks.length}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">TOTAL FINES:</span><span style="font-family:var(--font-mono);color:${totalFines > 0 ? 'var(--error)' : 'var(--success)'};">₹${totalFines}</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.8rem;"><span style="color:var(--text-muted);">ATTENDANCE:</span><span style="font-family:var(--font-mono);">${presentDays}/${totalDays} DAYS (${totalDays > 0 ? Math.round(presentDays/totalDays*100) : 0}%)</span></div>
-            ${m.address ? `<div style="font-size:0.8rem;margin-top:0.25rem;"><span style="color:var(--text-muted);">ADDRESS:</span><br><span style="text-transform:none;">${m.address}</span></div>` : ''}
-        </div>
-        ${booksHtml}
-    `;
-    openSheet('viewMemberSheet');
-}
-
-function deleteMember(id) {
-    const hasIssued = data.records.some(r => r.memberId === id && r.status === 'ISSUED');
-    if (hasIssued) { showToast('CANNOT DELETE: MEMBER HAS ISSUED BOOKS', 'error'); return; }
-    data.seats.forEach(s => { if (s.memberId === id) { s.occupied = false; s.memberId = null; } });
-    data.members = data.members.filter(m => m.id !== id);
-    saveData();
-    renderMembers();
-    renderDashboard();
-    showToast('MEMBER DELETED', 'success');
-}
-
-// ============================================================
-//                    BOOKS CRUD
-// ============================================================
-function clearBookForm() {
-    ['bTitle','bAuthor','bIsbn'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('bCategory').value = 'FICTION';
-    document.getElementById('bTotal').value = '';
-}
-
-function renderBooks() {
-    const search = (document.getElementById('bookSearch')?.value || '').toUpperCase();
-    let filtered = data.books;
-    if (search) {
-        filtered = filtered.filter(b =>
-            `${b.title} ${b.author} ${b.isbn} ${b.category}`.toUpperCase().includes(search)
-        );
-    }
-
-    const tbody = document.getElementById('booksTableBody');
-    if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8"><div class="table-empty"><i class="fas fa-book"></i>NO BOOKS FOUND</div></td></tr>`;
-        return;
-    }
-    tbody.innerHTML = filtered.map(b => {
-        const available = b.totalCopies - b.issuedCopies;
-        return `<tr>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);">B${String(b.id).padStart(3,'0')}</td>
-            <td><strong>${b.title}</strong></td>
-            <td>${b.author}</td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;">${b.isbn || '-'}</td>
-            <td><span class="badge badge-info">${b.category}</span></td>
-            <td style="font-family:var(--font-mono);">${b.totalCopies}</td>
-            <td><span class="badge ${available > 0 ? 'badge-available' : 'badge-expired'}" style="font-family:var(--font-mono);">${available}</span></td>
-            <td>
-                <button class="btn-icon" title="Edit" onclick="editBook(${b.id})"><i class="fas fa-pen"></i></button>
-                <button class="btn-icon danger" title="Delete" onclick="confirmDelete('book',${b.id})"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>`;
-    }).join('');
-}
-
-function saveBook() {
-    const id = document.getElementById('editBookId').value;
-    const title = document.getElementById('bTitle').value.trim().toUpperCase();
-    const author = document.getElementById('bAuthor').value.trim().toUpperCase();
-    const total = parseInt(document.getElementById('bTotal').value);
-
-    if (!title || !author || !total || total < 1) {
-        showToast('PLEASE FILL ALL REQUIRED FIELDS', 'error');
-        if (!title) document.getElementById('bTitle').classList.add('input-error');
-        if (!author) document.getElementById('bAuthor').classList.add('input-error');
-        if (!total) document.getElementById('bTotal').classList.add('input-error');
-        document.querySelectorAll('.input-error').forEach(el => el.addEventListener('input', function() { this.classList.remove('input-error'); }, { once: true }));
-        return;
-    }
-
-    const bookData = {
-        title, author,
-        isbn: document.getElementById('bIsbn').value.trim().toUpperCase(),
-        category: document.getElementById('bCategory').value,
-        totalCopies: total
-    };
-
-    if (id) {
-        const idx = data.books.findIndex(b => b.id === parseInt(id));
-        if (idx > -1) {
-            if (bookData.totalCopies < data.books[idx].issuedCopies) {
-                showToast(`CANNOT SET TOTAL BELOW ISSUED (${data.books[idx].issuedCopies})`, 'error');
-                return;
-            }
-            Object.assign(data.books[idx], bookData);
-        }
-        showToast('BOOK UPDATED SUCCESSFULLY', 'success');
-    } else {
-        bookData.id = data.nextBookId++;
-        bookData.issuedCopies = 0;
-        data.books.push(bookData);
-        showToast('BOOK ADDED SUCCESSFULLY', 'success');
-    }
-
-    saveData();
-    closeSheet('bookSheet');
-    renderBooks();
-    renderDashboard();
-}
-
-function editBook(id) {
-    const b = data.books.find(b => b.id === id);
-    if (!b) return;
-    document.getElementById('editBookId').value = id;
-    document.getElementById('bookSheetTitle').textContent = 'EDIT BOOK';
-    document.getElementById('bTitle').value = b.title;
-    document.getElementById('bAuthor').value = b.author;
-    document.getElementById('bIsbn').value = b.isbn;
-    document.getElementById('bCategory').value = b.category;
-    document.getElementById('bTotal').value = b.totalCopies;
-    openSheet('bookSheet');
-}
-
-function deleteBook(id) {
-    const hasIssued = data.records.some(r => r.bookId === id && r.status === 'ISSUED');
-    if (hasIssued) { showToast('CANNOT DELETE: BOOK IS CURRENTLY ISSUED', 'error'); return; }
-    data.books = data.books.filter(b => b.id !== id);
-    saveData();
-    renderBooks();
-    renderDashboard();
-    showToast('BOOK DELETED', 'success');
-}
-
-// ============================================================
-//                    CONFIRM DELETE
-// ============================================================
-function confirmDelete(type, id) {
-    const msg = type === 'member'
-        ? `ARE YOU SURE YOU WANT TO DELETE <strong>${getMemberName(id)}</strong> (${generateSID(id)})?`
-        : `ARE YOU SURE YOU WANT TO DELETE THIS BOOK?`;
-    document.getElementById('confirmMessage').innerHTML = msg;
-    const btn = document.getElementById('confirmDeleteBtn');
-    btn.onclick = () => {
-        if (type === 'member') deleteMember(id);
-        else deleteBook(id);
-        closeSheet('confirmSheet');
-    };
-    openSheet('confirmSheet');
-}
-
-// ============================================================
-//                    ISSUE / RETURN
-// ============================================================
-function populateIssueDropdowns() {
-    const memberSel = document.getElementById('issueMember');
-    const bookSel = document.getElementById('issueBook');
-    const returnSel = document.getElementById('returnRecord');
-
-    const activeMembers = data.members.filter(m => new Date(m.expiry) >= new Date());
-    memberSel.innerHTML = '<option value="">-- SELECT MEMBER --</option>' +
-        activeMembers.map(m => `<option value="${m.id}">${m.firstName} ${m.lastName} (${generateSID(m.id)})</option>`).join('');
-
-    const availableBooks = data.books.filter(b => (b.totalCopies - b.issuedCopies) > 0);
-    bookSel.innerHTML = '<option value="">-- SELECT BOOK --</option>' +
-        availableBooks.map(b => `<option value="${b.id}">${b.title} (${b.totalCopies - b.issuedCopies} avail)</option>`).join('');
-
-    const dueDefault = new Date();
-    dueDefault.setDate(dueDefault.getDate() + 14);
-    document.getElementById('issueDueDate').value = dueDefault.toISOString().split('T')[0];
-
-    const issued = data.records.filter(r => r.status === 'ISSUED');
-    returnSel.innerHTML = '<option value="">-- SELECT RECORD --</option>' +
-        issued.map(r => {
-            const m = data.members.find(m => m.id === r.memberId);
-            const b = data.books.find(b => b.id === r.bookId);
-            return `<option value="${r.id}">${m ? m.firstName + ' ' + m.lastName : 'UNKNOWN'} → ${b ? b.title : 'UNKNOWN'}</option>`;
-        }).join('');
-
-    returnSel.onchange = function() {
-        const rid = parseInt(this.value);
-        const details = document.getElementById('returnDetails');
-        if (!rid) { details.style.display = 'none'; return; }
-        const record = data.records.find(r => r.id === rid);
-        if (!record) { details.style.display = 'none'; return; }
-        const m = data.members.find(m => m.id === record.memberId);
-        const b = data.books.find(b => b.id === record.bookId);
-        document.getElementById('retMember').textContent = m ? `${m.firstName} ${m.lastName}` : 'UNKNOWN';
-        document.getElementById('retBook').textContent = b ? b.title : 'UNKNOWN';
-        document.getElementById('retDue').textContent = record.dueDate;
-        const fine = calculateFine(record.dueDate);
-        document.getElementById('retFine').textContent = fine > 0 ? `₹${fine} (${Math.ceil((new Date() - new Date(record.dueDate)) / 86400000)} DAYS LATE)` : '₹0';
-        document.getElementById('retFineRow').style.display = '';
-        details.style.display = '';
-    };
-}
-
-function calculateFine(dueDate) {
-    const due = new Date(dueDate); due.setHours(0,0,0,0);
-    const today = new Date(); today.setHours(0,0,0,0);
-    const daysLate = Math.ceil((today - due) / 86400000);
-    return daysLate > 0 ? daysLate * FINE_PER_DAY : 0;
-}
-
-function issueBook() {
-    const memberId = parseInt(document.getElementById('issueMember').value);
-    const bookId = parseInt(document.getElementById('issueBook').value);
-    const dueDate = document.getElementById('issueDueDate').value;
-
-    if (!memberId || !bookId || !dueDate) { showToast('PLEASE FILL ALL FIELDS', 'error'); return; }
-
-    if (data.records.some(r => r.memberId === memberId && r.bookId === bookId && r.status === 'ISSUED')) {
-        showToast('THIS BOOK IS ALREADY ISSUED TO THIS MEMBER', 'warning'); return;
-    }
-
-    const book = data.books.find(b => b.id === bookId);
-    if (!book || (book.totalCopies - book.issuedCopies) <= 0) { showToast('BOOK NOT AVAILABLE', 'error'); return; }
-
-    data.records.push({
-        id: data.nextRecordId++, memberId, bookId,
-        issueDate: new Date().toISOString().split('T')[0],
-        dueDate, returnDate: null, fine: 0, status: 'ISSUED'
-    });
-    book.issuedCopies++;
-
-    saveData();
-    populateIssueDropdowns();
-    renderIssuedTable();
-    renderDashboard();
-    showToast('BOOK ISSUED SUCCESSFULLY', 'success');
-}
-
-function returnBook() {
-    const recordId = parseInt(document.getElementById('returnRecord').value);
-    if (!recordId) { showToast('PLEASE SELECT A RECORD', 'error'); return; }
-
-    const record = data.records.find(r => r.id === recordId);
-    if (!record) return;
-
-    const fine = calculateFine(record.dueDate);
-    record.returnDate = new Date().toISOString().split('T')[0];
-    record.fine = fine;
-    record.status = 'RETURNED';
-
-    const book = data.books.find(b => b.id === record.bookId);
-    if (book) book.issuedCopies = Math.max(0, book.issuedCopies - 1);
-
-    saveData();
-    document.getElementById('returnDetails').style.display = 'none';
-    populateIssueDropdowns();
-    renderIssuedTable();
-    renderDashboard();
-    showToast(fine > 0 ? `BOOK RETURNED. FINE: ₹${fine}` : 'BOOK RETURNED SUCCESSFULLY', fine > 0 ? 'warning' : 'success');
-}
-
-function renderIssuedTable() {
-    const issued = data.records.filter(r => r.status === 'ISSUED');
-    const tbody = document.getElementById('issuedTableBody');
-    if (issued.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5"><div class="table-empty"><i class="fas fa-hand-holding"></i>NO BOOKS CURRENTLY ISSUED</div></td></tr>`;
-        return;
-    }
-    tbody.innerHTML = issued.map(r => {
-        const m = data.members.find(m => m.id === r.memberId);
-        const b = data.books.find(b => b.id === r.bookId);
-        const overdue = new Date(r.dueDate) < new Date();
-        return `<tr>
-            <td>${m ? m.firstName + ' ' + m.lastName : 'UNKNOWN'}</td>
-            <td>${b ? b.title : 'UNKNOWN'}</td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;">${r.issueDate}</td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;">${r.dueDate}</td>
-            <td><span class="badge ${overdue ? 'badge-overdue' : 'badge-issued'}">${overdue ? 'OVERDUE' : 'ON TIME'}</span></td>
-        </tr>`;
-    }).join('');
-}
-
-// ============================================================
-//                    SEATS MANAGEMENT
-// ============================================================
-function renderSeats() {
-    const grid = document.getElementById('seatsGrid');
-    const occupied = data.seats.filter(s => s.occupied).length;
-    document.getElementById('totalSeatsCount').textContent = TOTAL_SEATS;
-    document.getElementById('occupiedSeatsCount').textContent = occupied;
-    document.getElementById('availableSeatsCount').textContent = TOTAL_SEATS - occupied;
-
-    grid.innerHTML = data.seats.map(s => {
-        const memberName = s.memberId ? getMemberName(s.memberId) : '';
-        return `<div class="seat-card ${s.occupied ? 'occupied' : ''}" onclick="handleSeatClick(${s.number})" title="${s.occupied ? 'Click to vacate' : 'Click to assign'}">
-            <div class="seat-number">${String(s.number).padStart(2, '0')}</div>
-            <div class="seat-status">${s.occupied ? 'OCCUPIED' : 'AVAILABLE'}</div>
-            ${s.occupied ? `<div class="seat-member">${memberName}</div>` : ''}
-        </div>`;
-    }).join('');
-}
-
-function handleSeatClick(seatNum) {
-    const seat = data.seats.find(s => s.number === seatNum);
-    if (!seat) return;
-    if (seat.occupied) {
-        const memberName = getMemberName(seat.memberId);
-        seat.occupied = false;
-        seat.memberId = null;
-        saveData();
-        renderSeats();
-        showToast(`SEAT #${seatNum} VACATED (${memberName})`, 'info');
-    } else {
-        openSheet('seatAssignSheet');
-        setTimeout(() => { document.getElementById('seatSelect').value = seatNum; }, 50);
-    }
-}
-
-function populateSeatAssignDropdowns() {
-    const memberSel = document.getElementById('seatMember');
-    const seatSel = document.getElementById('seatSelect');
-
-    const membersWithSeats = new Set(data.seats.filter(s => s.occupied).map(s => s.memberId));
-    const availableMembers = data.members.filter(m => !membersWithSeats.has(m.id));
-    memberSel.innerHTML = '<option value="">-- SELECT MEMBER --</option>' +
-        availableMembers.map(m => `<option value="${m.id}">${m.firstName} ${m.lastName} (${generateSID(m.id)})</option>`).join('');
-
-    const availableSeats = data.seats.filter(s => !s.occupied);
-    seatSel.innerHTML = '<option value="">-- SELECT SEAT --</option>' +
-        availableSeats.map(s => `<option value="${s.number}">SEAT #${String(s.number).padStart(2,'0')}</option>`).join('');
-}
-
-function assignSeat() {
-    const memberId = parseInt(document.getElementById('seatMember').value);
-    const seatNum = parseInt(document.getElementById('seatSelect').value);
-
-    if (!memberId || !seatNum) { showToast('PLEASE SELECT BOTH MEMBER AND SEAT', 'error'); return; }
-
-    const seat = data.seats.find(s => s.number === seatNum);
-    if (!seat || seat.occupied) { showToast('SEAT IS NOT AVAILABLE', 'error'); return; }
-
-    seat.occupied = true;
-    seat.memberId = memberId;
-
-    saveData();
-    closeSheet('seatAssignSheet');
-    renderSeats();
-    renderDashboard();
-    showToast(`SEAT #${seatNum} ASSIGNED TO ${getMemberName(memberId)}`, 'success');
-}
-
-// ============================================================
-//                    ATTENDANCE
-// ============================================================
-function getAttDateKey() {
-    return currentAttDate.toISOString().split('T')[0];
-}
-
-function formatAttDate(d) {
-    const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-function changeAttDate(offset) {
-    currentAttDate.setDate(currentAttDate.getDate() + offset);
-    renderAttendance();
-}
-
-function renderAttendance() {
-    const dateKey = getAttDateKey();
-    document.getElementById('attDateLabel').textContent = formatAttDate(currentAttDate);
-
-    const saved = data.attendance[dateKey] || {};
-    tempAttendance = { ...saved };
-
-    const grid = document.getElementById('attendanceGrid');
-    if (data.members.length === 0) {
-        grid.innerHTML = '<div class="table-empty"><i class="fas fa-users"></i>NO MEMBERS TO TRACK</div>';
-        updateAttStats();
-        return;
-    }
-
-    grid.innerHTML = data.members.map(m => {
-        const status = tempAttendance[m.id] || '';
-        const isPresent = status === 'present';
-        const isAbsent = status === 'absent';
-        return `<div class="attendance-row ${isPresent ? 'marked-present' : ''} ${isAbsent ? 'marked-absent' : ''}" id="att-row-${m.id}">
-            <div class="att-member-info">
-                <div class="att-member-name">${m.firstName} ${m.lastName}</div>
-                <div class="att-member-sid">${generateSID(m.id)}</div>
-            </div>
-            <div class="att-actions">
-                <button class="att-btn ${isPresent ? 'present-active' : ''}" onclick="markAttendance(${m.id},'present')" title="Present" id="att-p-${m.id}">
-                    <i class="fas fa-check"></i>
-                </button>
-                <button class="att-btn ${isAbsent ? 'absent-active' : ''}" onclick="markAttendance(${m.id},'absent')" title="Absent" id="att-a-${m.id}">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>`;
-    }).join('');
-
-    updateAttStats();
-}
-
-function markAttendance(memberId, status) {
-    tempAttendance[memberId] = status;
-    const row = document.getElementById('att-row-' + memberId);
-    const pBtn = document.getElementById('att-p-' + memberId);
-    const aBtn = document.getElementById('att-a-' + memberId);
-
-    row.classList.remove('marked-present', 'marked-absent');
-    pBtn.classList.remove('present-active');
-    aBtn.classList.remove('absent-active');
-
-    if (status === 'present') {
-        row.classList.add('marked-present');
-        pBtn.classList.add('present-active');
-    } else {
-        row.classList.add('marked-absent');
-        aBtn.classList.add('absent-active');
-    }
-    updateAttStats();
-}
-
-function markAllAttendance(status) {
-    data.members.forEach(m => markAttendance(m.id, status));
-}
-
-function saveAttendance() {
-    const dateKey = getAttDateKey();
-    data.attendance[dateKey] = { ...tempAttendance };
-    saveData();
-    updateAttStats();
-    renderDashboard();
-    showToast(`ATTENDANCE SAVED FOR ${formatAttDate(currentAttDate)}`, 'success');
-}
-
-function updateAttStats() {
-    const presentCount = Object.values(tempAttendance).filter(v => v === 'present').length;
-    const absentCount = Object.values(tempAttendance).filter(v => v === 'absent').length;
-    const total = data.members.length;
-    const pct = total > 0 ? Math.round(presentCount / total * 100) : 0;
-
-    document.getElementById('todayPresent').textContent = presentCount;
-    document.getElementById('todayAbsent').textContent = absentCount;
-    document.getElementById('todayPercent').textContent = pct + '%';
-}
-
-function renderAttRecords() {
-    const search = (document.getElementById('attSearch')?.value || '').toUpperCase();
-    const tbody = document.getElementById('attRecordsBody');
-
-    let rows = [];
-    const dates = Object.keys(data.attendance).sort().reverse();
-    dates.forEach(date => {
-        const dayData = data.attendance[date];
-        Object.keys(dayData).forEach(memberId => {
-            const m = data.members.find(m => m.id === parseInt(memberId));
-            if (!m) return;
-            const name = `${m.firstName} ${m.lastName}`;
-            const sid = generateSID(m.id);
-            if (search && !`${name} ${sid}`.toUpperCase().includes(search)) return;
-            rows.push({ sid, name, date, status: dayData[memberId] });
-        });
-    });
-
-    if (rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4"><div class="table-empty"><i class="fas fa-calendar-alt"></i>NO ATTENDANCE RECORDS FOUND</div></td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = rows.slice(0, 200).map(r => `
-        <tr>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--primary);font-weight:700;">${r.sid}</td>
-            <td><strong>${r.name}</strong></td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;">${r.date}</td>
-            <td><span class="badge ${r.status === 'present' ? 'badge-present' : 'badge-absent'}">${r.status.toUpperCase()}</span></td>
-        </tr>
-    `).join('');
-}
-
-// ============================================================
-//                    HISTORY
-// ============================================================
-function renderHistory() {
-    const search = (document.getElementById('historySearch')?.value || '').toUpperCase();
-    let records = [...data.records].reverse();
-
-    if (search) {
-        records = records.filter(r => {
-            const m = data.members.find(m => m.id === r.memberId);
-            const b = data.books.find(b => b.id === r.bookId);
-            return `${m ? m.firstName + ' ' + m.lastName : ''} ${b ? b.title : ''} ${r.status}`.toUpperCase().includes(search);
-        });
-    }
-
-    const tbody = document.getElementById('historyTableBody');
-    if (records.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8"><div class="table-empty"><i class="fas fa-history"></i>NO RECORDS FOUND</div></td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = records.map(r => {
-        const m = data.members.find(m => m.id === r.memberId);
-        const b = data.books.find(b => b.id === r.bookId);
-        const badgeClass = r.status === 'ISSUED' ? (new Date(r.dueDate) < new Date() ? 'badge-overdue' : 'badge-issued') : 'badge-returned';
-        const statusText = r.status === 'ISSUED' ? (new Date(r.dueDate) < new Date() ? 'OVERDUE' : 'ISSUED') : 'RETURNED';
-        return `<tr>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-muted);">R${String(r.id).padStart(3,'0')}</td>
-            <td>${m ? m.firstName + ' ' + m.lastName : 'UNKNOWN'}</td>
-            <td>${b ? b.title : 'UNKNOWN'}</td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;">${r.issueDate}</td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;">${r.dueDate}</td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;">${r.returnDate || '-'}</td>
-            <td style="font-family:var(--font-mono);font-size:0.75rem;color:${r.fine > 0 ? 'var(--error)' : 'var(--text-muted)'};">₹${r.fine || 0}</td>
-            <td><span class="badge ${badgeClass}">${statusText}</span></td>
-        </tr>`;
-    }).join('');
-}
-
-// ============================================================
-//                    GLOBAL SEARCH
-// ============================================================
-function handleGlobalSearch(query) {
-    if (!query.trim()) return;
-    query = query.toUpperCase();
-
-    const memberMatch = data.members.some(m => `${m.firstName} ${m.lastName} ${m.phone} ${m.email} ${generateSID(m.id)}`.toUpperCase().includes(query));
-    if (memberMatch) {
-        navigateTo('members');
-        document.getElementById('memberSearch').value = query;
-        renderMembers();
-        return;
-    }
-
-    const bookMatch = data.books.some(b => `${b.title} ${b.author} ${b.isbn}`.toUpperCase().includes(query));
-    if (bookMatch) {
-        navigateTo('books');
-        document.getElementById('bookSearch').value = query;
-        renderBooks();
-        return;
-    }
-}
-
-// ============================================================
-//                    INITIALIZATION
-// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-    loadData();
-    currentAttDate = new Date();
-    renderDashboard();
+    const signupPassInput = document.getElementById('signupPass');
+    if (signupPassInput) {
+        signupPassInput.addEventListener('input', checkPasswordStrength);
+    }
 });
-</script>
 
+function checkPasswordStrength(e) {
+    const val = e.target.value;
+    const container = document.getElementById('strengthContainer');
+    const bar = document.getElementById('strengthBar');
+    const text = document.getElementById('strengthText');
+    
+    if (!val) {
+        container.classList.remove('active');
+        return;
+    }
+    container.classList.add('active');
+    
+    let strength = 0;
+    if (val.length >= 8) strength += 1;
+    if (val.match(/[A-Z]/) && val.match(/[a-z]/)) strength += 1;
+    if (val.match(/[0-9]/)) strength += 1;
+    if (val.match(/[^A-Za-z0-9]/)) strength += 1;
+    
+    bar.className = 'strength-bar-fill';
+    text.className = 'strength-text';
+    
+    if (strength <= 1 || val.length < 6) {
+        bar.style.width = '33%';
+        bar.classList.add('strength-weak');
+        text.textContent = 'WEAK';
+        text.classList.add('text-weak');
+    } else if (strength === 2 || strength === 3) {
+        bar.style.width = '66%';
+        bar.classList.add('strength-medium');
+        text.textContent = 'MEDIUM';
+        text.classList.add('text-medium');
+    } else if (strength === 4) {
+        bar.style.width = '100%';
+        bar.classList.add('strength-strong');
+        text.textContent = 'STRONG';
+        text.classList.add('text-strong');
+    }
+}
+
+function toggleResetMode() {
+    isResetMode = !isResetMode;
+    const passGroup = document.getElementById('passwordGroup'), loginBtn = document.getElementById('loginBtn'), forgotLink = document.getElementById('forgotLink'), formTitle = document.getElementById('loginHeaderTitle'), loginPass = document.getElementById('loginPass');
+    if (isResetMode) { passGroup.classList.add('collapsed'); setButtonState(loginBtn, 'idle', 'RESET'); forgotLink.textContent = 'BACK TO LOGIN'; formTitle.textContent = 'RESET PASSWORD'; loginPass.removeAttribute('required'); } 
+    else { passGroup.classList.remove('collapsed'); setButtonState(loginBtn, 'idle', 'SIGN IN'); forgotLink.textContent = 'FORGOT PASSWORD?'; formTitle.textContent = 'WELCOME BACK'; loginPass.setAttribute('required', 'true'); }
+}
+function handleForgotClick() { toggleResetMode(); }
+function switchTab(tab){
+    let index = tab === 'login' ? 0 : 1;
+    if(isResetMode && tab === 'signup') { toggleResetMode(); }
+    const authTabs = document.querySelectorAll('#authView .slider-tab');
+    authTabs.forEach(t=>t.classList.remove('active')); authTabs[index].classList.add('active');
+    document.querySelectorAll('.form-section').forEach(f=>f.classList.remove('active'));
+    document.getElementById(tab+'Form').classList.add('active'); resetButtons();
+}
+function togglePassword(id){ const input=document.getElementById(id); input.type=input.type==='password'?'text':'password'; }
+function setButtonState(btn,state,text,isGoogle=false){
+    btn.disabled=state!=='idle'; btn.classList.remove('btn-success','btn-error','btn-shake'); const innerWrap = `<span>${text}</span>`;
+    if(state==='loading') btn.innerHTML=icons.spinner+innerWrap; else if(state==='success') { btn.classList.add('btn-success'); btn.innerHTML=icons.check+innerWrap; } else if(state==='error') { btn.classList.add('btn-error','btn-shake'); btn.innerHTML=icons.error+innerWrap; } else btn.innerHTML=(isGoogle?icons.google:'')+innerWrap;
+}
+function resetButtons(){ setButtonState(document.getElementById('loginBtn'), 'idle', isResetMode ? 'RESET' : 'SIGN IN'); setButtonState(document.getElementById('signupBtn'),'idle','CREATE ACCOUNT'); setButtonState(document.getElementById('googleLoginBtn'),'idle','CONTINUE WITH GOOGLE',true); setButtonState(document.getElementById('googleSignupBtn'),'idle','CONTINUE WITH GOOGLE',true); }
+function markInputError(ids){ ids.forEach(id=>{ const el=document.getElementById(id); if(el){ el.classList.add('input-error'); el.addEventListener('input',()=>el.classList.remove('input-error'),{once:true}) } }) }
+
+function handleLogin(e){
+    e.preventDefault(); const btn=document.getElementById('loginBtn'), email=document.getElementById('loginEmail').value;
+    if (isResetMode) { if(!email){ setButtonState(btn,'error','ENTER EMAIL'); markInputError(['loginEmail']); setTimeout(()=>setButtonState(btn,'idle','RESET'),2000); return; } setButtonState(btn,'loading','SENDING...'); setTimeout(()=>{ setButtonState(btn,'success','LINK SENT!'); setTimeout(() => { toggleResetMode(); document.getElementById('loginEmail').value = ''; }, 1500); },1200); return; }
+    const pass=document.getElementById('loginPass').value; setButtonState(btn,'loading','SIGNING IN...');
+    setTimeout(()=>{ setButtonState(btn,'success','LOGIN SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1000); },1000)
+}
+function handleSignup(e){ e.preventDefault(); const btn=document.getElementById('signupBtn'); setButtonState(btn,'loading','CREATING ACCOUNT...'); setTimeout(()=>{ setButtonState(btn,'success','ACCOUNT CREATED!'); setTimeout(()=>transitionToOnboarding(),1000); },1000) }
+function handleGoogleAuth(type){ const btn=document.getElementById(type==='login'?'googleLoginBtn':'googleSignupBtn'); setButtonState(btn,'loading','CONNECTING...'); setTimeout(()=>{ setButtonState(btn,'success','AUTH SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1000); },1000) }
+
+function transitionToOnboarding() {
+    const authView = document.getElementById('authView');
+    const loadingView = document.getElementById('loadingView');
+    const onbView = document.getElementById('onboardingView');
+    
+    // Fade out Auth View
+    authView.style.opacity = '0';
+    
+    setTimeout(() => {
+        authView.classList.add('hidden');
+        
+        // Fade in Loading View
+        loadingView.classList.remove('hidden');
+        setTimeout(() => loadingView.style.opacity = '1', 50);
+        
+        // Show Loading Screen for exactly 2 seconds
+        setTimeout(() => {
+            // Fade out Loading View
+            loadingView.style.opacity = '0';
+            
+            setTimeout(() => {
+                loadingView.classList.add('hidden');
+                
+                // Fade in Onboarding View
+                onbView.classList.remove('hidden');
+                setTimeout(() => onbView.style.opacity = '1', 50);
+                goToStep(1); // Ensure it starts on step 1
+            }, 400); // Wait for Loading view to fade out
+        }, 2000);
+        
+    }, 400); // Wait for Auth view to fade out
+}
+
+// ================= ONBOARDING LOGIC =================
+let currentStep = 1;
+const totalSteps = 3;
+const stepNames = ['PROFILE', 'LEGAL & PLAN', 'CONFIRM'];
+const progressText = document.getElementById('progressText'), skipBtn = document.getElementById('skipBtn');
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Nav Listeners
+    document.getElementById('step1Next').addEventListener('click', () => goToStep(2));
+    
+    document.getElementById('step2Back').addEventListener('click', () => goToStep(1));
+    document.getElementById('step2Next').addEventListener('click', () => goToStep(3));
+    document.getElementById('step2Skip').addEventListener('click', () => { 
+        document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+        goToStep(3);
+    });
+    
+    document.getElementById('step3Back').addEventListener('click', () => goToStep(2));
+    document.getElementById('completeBtn').addEventListener('click', () => alert('Demo: Redirecting to Dashboard...'));
+    
+    // UI Interactions
+    document.getElementById('categoryTabs').addEventListener('click', e => { 
+        if (e.target.classList.contains('slider-tab')) { 
+            document.querySelectorAll('#categoryTabs .slider-tab').forEach(t => t.classList.remove('active')); 
+            e.target.classList.add('active'); 
+        }
+    });
+    
+    document.getElementById('plansContainer').addEventListener('click', e => { 
+        const card = e.target.closest('.plan-card'); 
+        if (card) { 
+            if(card.classList.contains('selected')) {
+                card.classList.remove('selected');
+            } else {
+                document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected')); 
+                card.classList.add('selected'); 
+            }
+        } 
+    });
+});
+
+function goToStep(stepNum) {
+    if (stepNum < 1 || stepNum > totalSteps) return;
+    
+    if (stepNum === 3) populateSummary();
+    
+    const currentStepEl = document.querySelector('.step.active');
+    const newStepEl = document.querySelector(`.step[data-step="${stepNum}"]`);
+    if (!currentStepEl || !newStepEl) return;
+    
+    // Smooth Fade Transition
+    currentStepEl.classList.remove('active');
+    currentStep = stepNum;
+    
+    setTimeout(() => { 
+        newStepEl.classList.add('active'); 
+        updateProgress(); 
+    }, 50); // Slight delay for smoother DOM paint during opacity transition
+}
+
+function updateProgress() {
+    const steps = document.querySelectorAll('.progress-step'), lines = document.querySelectorAll('.progress-line');
+    steps.forEach((step, i) => {
+        const stepNum = i + 1; step.classList.remove('active', 'completed');
+        if (stepNum < currentStep) { step.classList.add('completed'); step.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'; }
+        else if (stepNum === currentStep) { step.classList.add('active'); step.textContent = stepNum; }
+        else { step.textContent = stepNum; }
+    });
+    
+    lines.forEach((line, i) => { if (i < currentStep - 1) line.classList.add('active'); else line.classList.remove('active'); });
+    progressText.textContent = 'STEP ' + currentStep + ' OF ' + totalSteps + ' • ' + stepNames[currentStep - 1];
+}
+
+function populateSummary() {
+    const activeCategory = document.querySelector('#categoryTabs .slider-tab.active');
+    document.getElementById('sumCategory').textContent = activeCategory ? activeCategory.textContent : 'N/A';
+    document.getElementById('sumName').textContent = document.getElementById('bizName').value || 'NOT PROVIDED';
+    document.getElementById('sumPhone').textContent = document.getElementById('bizPhone').value || 'NOT PROVIDED';
+    document.getElementById('sumAddress').textContent = document.getElementById('bizAddress').value || 'NOT PROVIDED';
+    document.getElementById('sumOwner').textContent = document.getElementById('ownerName').value || 'NOT PROVIDED';
+    document.getElementById('sumGst').textContent = document.getElementById('gstNumber').value || 'NOT PROVIDED';
+    
+    const selectedPlan = document.querySelector('.plan-card.selected');
+    document.getElementById('sumPlan').textContent = selectedPlan ? selectedPlan.dataset.plan : 'NONE SELECTED';
+}
+</script>
 </body>
 </html>
