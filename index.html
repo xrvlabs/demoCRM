@@ -1,317 +1,878 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>GymFlow - Indian Gym CRM</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<title>BizCRM - Authentication</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Iceland&family=JetBrains+Mono:wght@400;500;600;700&family=Play:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}:root{--bg:#09090b;--card:#18181b;--border:#27272a;--text:#fafafa;--muted:#a1a1aa;--primary:#8b5cf6;--primary-hover:#7c3aed;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--info:#3b82f6;--whatsapp:#25d366;--sidebar-width:200px;--sheet-width:400px;--transition-theme:.3s}[data-theme="light"]{--bg:#f8fafc;--card:#ffffff;--border:#e2e8f0;--text:#0f172a;--muted:#64748b}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;font-size:13px;transition:background var(--transition-theme),color var(--transition-theme)}@media(max-width:480px){body{font-size:12px}}@media(pointer:coarse){*::-webkit-scrollbar{display:none}*{scrollbar-width:none}}.app{display:flex;min-height:100vh}.sidebar{width:var(--sidebar-width);background:var(--card);border-right:1px solid var(--border);padding:.8rem;position:fixed;height:100vh;transition:transform .3s ease,background var(--transition-theme);z-index:100;overflow-y:auto}.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;opacity:0;transition:opacity .3s ease}.sidebar-overlay.show{display:block;opacity:1}@media(max-width:1024px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}}.logo{display:flex;align-items:center;gap:.4rem;font-size:1.1rem;font-weight:700;margin-bottom:1.2rem;color:var(--primary)}.logo i{font-size:1.3rem}.nav-section{margin-bottom:.8rem}.nav-title{font-size:.6rem;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;letter-spacing:.05em}.nav-item{display:flex;align-items:center;gap:.5rem;padding:.5rem .6rem;border-radius:.4rem;color:var(--muted);cursor:pointer;transition:all .2s ease;margin-bottom:.15rem;font-size:.8rem}.nav-item:hover,.nav-item.active{background:var(--primary);color:#fff;transform:translateX(2px)}.nav-item i{width:14px;font-size:.8rem}.nav-badge{background:var(--danger);color:#fff;font-size:.55rem;padding:.1rem .3rem;border-radius:9999px;margin-left:auto}.main{flex:1;margin-left:var(--sidebar-width);padding:.8rem;transition:margin .3s ease;min-height:100vh}@media(max-width:1024px){.main{margin-left:0}}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;gap:.4rem;flex-wrap:wrap;padding:.4rem 0}.header-left{display:flex;align-items:center;gap:.4rem;flex:1;min-width:0}.menu-btn{display:none;background:var(--card);border:1px solid var(--border);color:var(--text);padding:.35rem .5rem;border-radius:.4rem;cursor:pointer;font-size:.85rem}@media(max-width:1024px){.menu-btn{display:flex}}.page-title{font-size:1.1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}@media(max-width:480px){.page-title{font-size:.95rem}}.header-right{display:flex;align-items:center;gap:.4rem}.search-box{position:relative}@media(max-width:640px){.search-box{position:absolute;top:100%;left:0;right:0;display:none;padding:.4rem;background:var(--bg);z-index:10}.search-box.show{display:block}.search-box input{width:100%}}.search-box input{background:var(--card);border:1px solid var(--border);color:var(--text);padding:.4rem .6rem .4rem 1.8rem;border-radius:.4rem;width:160px;font-size:.75rem;transition:all .2s ease}.search-box input:focus{outline:none;border-color:var(--primary)}.search-box i{position:absolute;left:.5rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.7rem}.icon-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:.35rem .5rem;border-radius:.4rem;cursor:pointer;position:relative;transition:all .2s ease;font-size:.8rem}.icon-btn:hover{background:var(--border)}.icon-btn .badge{position:absolute;top:-2px;right:-2px;background:var(--danger);color:#fff;font-size:.5rem;padding:.1rem .25rem;border-radius:9999px}.profile-btn{display:flex;align-items:center;gap:.3rem;font-size:.75rem}.profile-btn img{width:22px;height:22px;border-radius:50%;object-fit:cover}@media(max-width:480px){.profile-btn span{display:none}}.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:.8rem}@media(max-width:1024px){.stats-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.stats-grid{grid-template-columns:1fr;gap:.5rem}}.stat-card{background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:.7rem;transition:all .3s ease;animation:fadeInUp .5s ease forwards;opacity:0;cursor:pointer}.stat-card:hover{transform:translateY(-2px);border-color:var(--primary)}.stat-card:nth-child(1){animation-delay:.1s}.stat-card:nth-child(2){animation-delay:.15s}.stat-card:nth-child(3){animation-delay:.2s}.stat-card:nth-child(4){animation-delay:.25s}@keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.stat-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.4rem}.stat-icon{width:32px;height:32px;border-radius:.4rem;display:flex;align-items:center;justify-content:center;font-size:.9rem}.stat-icon.purple{background:rgba(139,92,246,.15);color:var(--primary)}.stat-icon.green{background:rgba(34,197,94,.15);color:var(--success)}.stat-icon.blue{background:rgba(59,130,246,.15);color:var(--info)}.stat-icon.orange{background:rgba(245,158,11,.15);color:var(--warning)}.stat-icon.red{background:rgba(239,68,68,.15);color:var(--danger)}.stat-change{font-size:.55rem;padding:.1rem .3rem;border-radius:9999px}.stat-change.up{background:rgba(34,197,94,.15);color:var(--success)}.stat-change.down{background:rgba(239,68,68,.15);color:var(--danger)}.stat-value{font-size:1.2rem;font-weight:700;margin-bottom:.1rem}@media(max-width:480px){.stat-value{font-size:1.1rem}}.stat-label{color:var(--muted);font-size:.65rem}.content-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:.6rem;margin-bottom:.8rem}@media(max-width:900px){.content-grid{grid-template-columns:1fr}}.card{background:var(--card);border:1px solid var(--border);border-radius:.5rem;overflow:hidden;transition:background var(--transition-theme),border var(--transition-theme)}.card-header{display:flex;justify-content:space-between;align-items:center;padding:.6rem;border-bottom:1px solid var(--border);gap:.4rem;flex-wrap:wrap}.card-title{font-weight:600;font-size:.8rem}.btn{padding:.3rem .6rem;border-radius:.4rem;font-size:.7rem;font-weight:500;cursor:pointer;transition:all .2s ease;border:none;display:inline-flex;align-items:center;gap:.25rem;white-space:nowrap}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-hover)}.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}.btn-outline:hover{background:var(--border)}.btn-sm{padding:.2rem .4rem;font-size:.6rem}.btn-success{background:var(--success);color:#fff}.btn-danger{background:var(--danger);color:#fff}.btn-warning{background:var(--warning);color:#fff}.btn-whatsapp{background:var(--whatsapp);color:#fff}.btn-whatsapp:hover{background:#128c7e}.table-wrapper{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:400px}th,td{padding:.5rem .6rem;text-align:left;font-size:.7rem}th{font-weight:500;color:var(--muted);font-size:.6rem;text-transform:uppercase;border-bottom:1px solid var(--border)}tbody tr:hover{background:rgba(139,92,246,.05)}.member-info{display:flex;align-items:center;gap:.4rem}.member-avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0}.member-name{font-weight:500;white-space:nowrap}.member-phone{font-size:.6rem;color:var(--muted)}.status-badge{padding:.12rem .4rem;border-radius:9999px;font-size:.55rem;font-weight:500;white-space:nowrap}.status-badge.active{background:rgba(34,197,94,.15);color:var(--success)}.status-badge.expired{background:rgba(239,68,68,.15);color:var(--danger)}.status-badge.pending{background:rgba(245,158,11,.15);color:var(--warning)}.status-badge.due{background:rgba(239,68,68,.15);color:var(--danger)}.status-badge.trial{background:rgba(59,130,246,.15);color:var(--info)}.actions{display:flex;gap:.2rem}.action-btn{background:transparent;border:none;color:var(--muted);padding:.2rem;border-radius:.2rem;cursor:pointer;transition:all .2s ease;font-size:.7rem}.action-btn:hover{color:var(--text);background:var(--border)}.action-btn.whatsapp:hover{color:var(--whatsapp)}.action-btn.danger:hover{color:var(--danger)}.due-list{padding:.4rem;max-height:250px;overflow-y:auto}.due-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem;border-radius:.4rem;margin-bottom:.3rem;background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.1)}.due-info{flex:1}.due-name{font-weight:500;font-size:.75rem}.due-amount{font-size:.65rem;color:var(--danger);font-weight:600}.due-date{font-size:.55rem;color:var(--muted)}.enquiry-list{padding:.4rem;max-height:250px;overflow-y:auto}.enquiry-item{display:flex;gap:.5rem;padding:.5rem;border-radius:.4rem;margin-bottom:.3rem;background:var(--bg);border:1px solid var(--border)}.enquiry-info{flex:1}.enquiry-name{font-weight:500;font-size:.75rem}.enquiry-phone{font-size:.6rem;color:var(--muted)}.enquiry-source{font-size:.55rem;color:var(--info)}.activity-list{padding:.4rem;max-height:220px;overflow-y:auto}.activity-item{display:flex;gap:.5rem;padding:.5rem;border-radius:.4rem}.activity-item:hover{background:rgba(139,92,246,.05)}.activity-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.7rem}.activity-icon.checkin{background:rgba(34,197,94,.15);color:var(--success)}.activity-icon.payment{background:rgba(59,130,246,.15);color:var(--info)}.activity-icon.signup{background:rgba(139,92,246,.15);color:var(--primary)}.activity-icon.renewal{background:rgba(245,158,11,.15);color:var(--warning)}.activity-content{flex:1;min-width:0}.activity-text{font-size:.7rem;margin-bottom:.05rem}.activity-time{font-size:.55rem;color:var(--muted)}.section{display:none}.section.active{display:block;animation:fadeIn .3s ease}@keyframes fadeIn{from{opacity:0}to{opacity:1}}.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;opacity:0;visibility:hidden;transition:all .3s ease}.sheet-overlay.active{opacity:1;visibility:visible}.sheet{position:fixed;background:var(--card);z-index:201;transition:transform .35s cubic-bezier(.4,0,.2,1);overflow:hidden;display:flex;flex-direction:column}@media(min-width:641px){.sheet{right:0;top:0;bottom:0;width:var(--sheet-width);max-width:90vw;border-left:1px solid var(--border);border-radius:.5rem 0 0 .5rem;transform:translateX(100%)}.sheet.active{transform:translateX(0)}}@media(max-width:640px){.sheet{left:0;right:0;bottom:0;max-height:90vh;border-radius:.75rem .75rem 0 0;transform:translateY(100%)}.sheet.active{transform:translateY(0)}}.sheet-header{display:flex;justify-content:space-between;align-items:center;padding:.8rem;border-bottom:1px solid var(--border);flex-shrink:0}.sheet-handle{display:none;width:32px;height:3px;background:var(--border);border-radius:2px;margin:0 auto .8rem}@media(max-width:640px){.sheet-handle{display:block}}.sheet-title{font-weight:600;font-size:.85rem}.sheet-close{background:transparent;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%}.sheet-close:hover{color:var(--text);background:var(--border)}.sheet-body{padding:.8rem;flex:1;overflow-y:auto}.form-group{margin-bottom:.7rem}.form-label{display:block;font-size:.7rem;font-weight:500;margin-bottom:.3rem}.form-input,.form-select,.form-textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.5rem .6rem;border-radius:.4rem;font-size:.75rem;transition:all .2s ease}.form-textarea{resize:vertical;min-height:60px}.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--primary)}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}@media(max-width:400px){.form-row{grid-template-columns:1fr}}.sheet-footer{display:flex;justify-content:flex-end;gap:.4rem;padding:.8rem;border-top:1px solid var(--border);flex-shrink:0}.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.6rem;padding:.6rem}.plan-card{background:var(--bg);border:1px solid var(--border);border-radius:.5rem;padding:.8rem;text-align:center;transition:all .3s ease;position:relative;overflow:hidden}.plan-card:hover{border-color:var(--primary);transform:translateY(-2px)}.plan-card.popular{border-color:var(--primary)}.plan-card.popular::before{content:'Popular';position:absolute;top:.5rem;right:-1.5rem;background:var(--primary);color:#fff;padding:.1rem 1.5rem;font-size:.45rem;font-weight:600;transform:rotate(45deg)}.plan-name{font-size:.9rem;font-weight:600;margin-bottom:.2rem}.plan-duration{font-size:.6rem;color:var(--muted);margin-bottom:.3rem}.plan-price{font-size:1.5rem;font-weight:700;color:var(--primary);margin-bottom:.4rem}.plan-price span{font-size:.65rem;color:var(--muted);font-weight:400}.plan-features{list-style:none;margin-bottom:.8rem;text-align:left}.plan-features li{padding:.2rem 0;color:var(--muted);font-size:.65rem;display:flex;align-items:center;gap:.3rem}.plan-features li i{color:var(--success);font-size:.55rem}.plan-actions{display:flex;gap:.3rem;justify-content:center}.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;padding:.5rem}@media(max-width:480px){.quick-actions{grid-template-columns:repeat(2,1fr)}}.quick-action{display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:.6rem;background:var(--bg);border:1px solid var(--border);border-radius:.4rem;cursor:pointer;transition:all .2s ease;font-size:.6rem;color:var(--muted)}.quick-action:hover{border-color:var(--primary);color:var(--primary)}.quick-action i{font-size:1rem}.attendance-list{max-height:280px;overflow-y:auto;padding:.4rem}.attendance-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem;border-bottom:1px solid var(--border);gap:.4rem}.attendance-info{display:flex;align-items:center;gap:.4rem;flex:1;min-width:0}.attendance-time{font-size:.55rem;color:var(--muted)}.trainer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem;padding:.6rem}.trainer-card{background:var(--bg);border:1px solid var(--border);border-radius:.5rem;padding:.8rem;text-align:center;transition:all .3s ease;cursor:pointer}.trainer-card:hover{transform:translateY(-2px);border-color:var(--primary)}.trainer-avatar{width:50px;height:50px;border-radius:50%;margin:0 auto .5rem;object-fit:cover;border:2px solid var(--primary)}.trainer-name{font-weight:600;font-size:.8rem;margin-bottom:.1rem}.trainer-specialty{font-size:.65rem;color:var(--muted);margin-bottom:.4rem}.trainer-stats{display:flex;justify-content:center;gap:.8rem;font-size:.55rem;color:var(--muted)}.trainer-stats span{display:flex;align-items:center;gap:.2rem}.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;gap:.4rem;flex-wrap:wrap}.filter-tabs{display:flex;gap:.2rem;flex-wrap:wrap}.filter-tab{padding:.3rem .5rem;border-radius:.3rem;font-size:.65rem;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .2s ease}.filter-tab:hover,.filter-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}.empty-state{text-align:center;padding:2rem;color:var(--muted)}.empty-state i{font-size:2rem;margin-bottom:.5rem;opacity:.5}.empty-state p{font-size:.75rem}.form-hint{font-size:.6rem;color:var(--muted);margin-top:.2rem}.chip{display:inline-flex;align-items:center;gap:.3rem;background:var(--bg);border:1px solid var(--border);padding:.2rem .5rem;border-radius:9999px;font-size:.6rem;margin:.1rem}.chip-remove{cursor:pointer;color:var(--muted)}.chip-remove:hover{color:var(--danger)}.feature-input{display:flex;gap:.3rem;margin-bottom:.3rem}.feature-input input{flex:1}.features-list{display:flex;flex-wrap:wrap;gap:.2rem;margin-top:.3rem}.toggle-group{display:flex;align-items:center;gap:.5rem}.toggle{width:36px;height:20px;background:var(--border);border-radius:10px;position:relative;cursor:pointer;transition:all .2s ease}.toggle.active{background:var(--primary)}.toggle::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;left:2px;transition:all .2s ease}.toggle.active::after{left:18px}.plan-type-tabs{display:flex;gap:.3rem;margin-bottom:.8rem;flex-wrap:wrap}.plan-type-tab{flex:1;min-width:70px;padding:.5rem;text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:.4rem;cursor:pointer;font-size:.7rem;transition:all .2s ease}.plan-type-tab:hover,.plan-type-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}.confirm-dialog{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:400;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;visibility:hidden;transition:all .2s ease}.confirm-dialog.active{opacity:1;visibility:visible}.confirm-box{background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1.2rem;max-width:320px;width:100%;text-align:center}.confirm-title{font-weight:600;margin-bottom:.5rem}.confirm-text{font-size:.75rem;color:var(--muted);margin-bottom:1rem}.confirm-actions{display:flex;gap:.5rem;justify-content:center}.settings-section{background:var(--card);border:1px solid var(--border);border-radius:.5rem;margin-bottom:.8rem;overflow:hidden}.settings-header{padding:.6rem .8rem;border-bottom:1px solid var(--border);font-weight:600;font-size:.8rem;display:flex;align-items:center;gap:.4rem}.settings-header i{color:var(--primary)}.settings-body{padding:.8rem}.settings-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)}.settings-row:last-child{border-bottom:none}.settings-info{flex:1}.settings-title{font-size:.8rem;font-weight:500;margin-bottom:.1rem}.settings-desc{font-size:.65rem;color:var(--muted)}.trainer-profile-header{text-align:center;padding:1rem;border-bottom:1px solid var(--border)}.trainer-profile-avatar{width:80px;height:80px;border-radius:50%;margin:0 auto .6rem;object-fit:cover;border:3px solid var(--primary)}.trainer-profile-name{font-size:1.1rem;font-weight:600;margin-bottom:.2rem}.trainer-profile-role{font-size:.75rem;color:var(--muted);margin-bottom:.5rem}.trainer-profile-stats{display:flex;justify-content:center;gap:1.5rem}.trainer-profile-stat{text-align:center}.trainer-profile-stat-value{font-size:1rem;font-weight:700;color:var(--primary)}.trainer-profile-stat-label{font-size:.6rem;color:var(--muted)}.trainer-profile-details{padding:.8rem}.trainer-detail-row{display:flex;align-items:center;gap:.6rem;padding:.6rem 0;border-bottom:1px solid var(--border)}.trainer-detail-row:last-child{border-bottom:none}.trainer-detail-icon{width:32px;height:32px;border-radius:.4rem;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--primary);font-size:.8rem}.trainer-detail-info{flex:1}.trainer-detail-label{font-size:.6rem;color:var(--muted)}.trainer-detail-value{font-size:.8rem;font-weight:500}.toast{position:fixed;bottom:.8rem;right:.8rem;left:.8rem;background:var(--card);border:1px solid var(--border);border-radius:.4rem;padding:.6rem .8rem;display:flex;align-items:center;gap:.5rem;transform:translateY(150%);opacity:0;transition:all .3s ease;z-index:300}@media(min-width:480px){.toast{left:auto;width:auto;min-width:220px}}.toast.show{transform:translateY(0);opacity:1}.toast-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0}.toast-icon.success{background:rgba(34,197,94,.15);color:var(--success)}.toast-icon.error{background:rgba(239,68,68,.15);color:var(--danger)}.toast-message{font-size:.75rem;flex:1}.summary-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.8rem}.summary-card{background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:.8rem;text-align:center}.summary-card.income{border-left:3px solid var(--success)}.summary-card.expense{border-left:3px solid var(--danger)}.summary-card.profit{border-left:3px solid var(--primary)}.summary-value{font-size:1.1rem;font-weight:700;margin-bottom:.2rem}.summary-value.green{color:var(--success)}.summary-value.red{color:var(--danger)}.summary-value.purple{color:var(--primary)}.summary-label{font-size:.65rem;color:var(--muted)}@media(max-width:600px){.summary-cards{grid-template-columns:1fr}.summary-card{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:.6rem .8rem}.summary-value{font-size:1rem;margin-bottom:0;order:2}.summary-label{font-size:.7rem;order:1}}.data-card{background:var(--card);border:1px solid var(--border);border-radius:.5rem;margin-bottom:.5rem;overflow:hidden;transition:all .2s ease}.data-card:active{transform:scale(.99)}.data-card-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem .8rem;border-bottom:1px solid var(--border)}.data-card-title{font-weight:600;font-size:.85rem}.data-card-badge{padding:.15rem .5rem;border-radius:9999px;font-size:.6rem;font-weight:500}.data-card-body{padding:.6rem .8rem}.data-card-row{display:flex;justify-content:space-between;align-items:center;padding:.3rem 0;font-size:.75rem}.data-card-row .label{color:var(--muted)}.data-card-row .value{font-weight:500;text-align:right}.data-card-footer{display:flex;gap:.4rem;padding:.6rem .8rem;border-top:1px solid var(--border);background:var(--bg)}.data-card-footer .btn{flex:1;justify-content:center}.payment-card .data-card-header{background:linear-gradient(135deg,rgba(59,130,246,.1),rgba(139,92,246,.1))}.payment-card .amount{font-size:1.1rem;font-weight:700;color:var(--success)}.due-card{border-left:3px solid var(--danger)}.due-card .data-card-header{background:rgba(239,68,68,.05)}.due-card .amount{font-size:1.1rem;font-weight:700;color:var(--danger)}.expense-card{border-left:3px solid var(--warning)}.expense-card .data-card-header{background:rgba(245,158,11,.05)}.expense-card .amount{font-size:1rem;font-weight:700;color:var(--danger)}.expense-card.income-type{border-left-color:var(--success)}.expense-card.income-type .data-card-header{background:rgba(34,197,94,.05)}.expense-card.income-type .amount{color:var(--success)}.mobile-list{display:none}.desktop-table{display:block}@media(max-width:700px){.mobile-list{display:block}.desktop-table{display:none}}.list-header{display:flex;justify-content:space-between;align-items:center;padding:.6rem;background:var(--card);border:1px solid var(--border);border-radius:.5rem;margin-bottom:.5rem}.list-header-title{font-weight:600;font-size:.85rem}.list-count{font-size:.7rem;color:var(--muted)}.empty-list{text-align:center;padding:2rem;color:var(--muted)}.empty-list i{font-size:2.5rem;margin-bottom:.8rem;opacity:.3}.empty-list p{font-size:.8rem}
+/* Global Resets */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+*:focus {
+    outline: none !important;
+}
+
+button::-moz-focus-inner {
+    border: 0;
+}
+
+:root {
+    --primary: #7c3aed;
+    --secondary: #a78bfa;
+    --accent: #f472b6;
+    --bg: #f0f4ff;
+    --card-bg: #e8eeff;
+    --text: #1e1b4b;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --error: #ef4444;
+    --success: #10b981;
+    --radius: 5px; 
+    
+    --font-display: 'Iceland', cursive;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-ui: 'Play', sans-serif;
+}
+
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+
+::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+
+body, input, select, textarea {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    background: linear-gradient(-45deg, #f0f4ff, #e8eeff, #fdf2f8, #f5f3ff);
+    background-size: 400% 400%;
+    animation: smoothBg 15s ease infinite;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+@keyframes smoothBg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+button, label, .btn-text {
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+}
+h1, h2, h3, .form-title, .brand-text {
+    font-family: var(--font-display);
+    letter-spacing: 1px;
+}
+.form-subtitle {
+    text-transform: none;
+    font-family: var(--font-body);
+}
+#loginPass, #signupPass { text-transform: none; }
+#businessName { text-transform: capitalize; }
+
+/* Utilities */
+.gradient-bg {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%);
+}
+.gradient-text {
+    background: linear-gradient(135deg, #7c3aed, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.clay {
+    background: linear-gradient(145deg, #ffffff, #e8eeff);
+    border-radius: var(--radius);
+    box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9);
+}
+.clay-inset {
+    background: linear-gradient(145deg, #dde4f6, #f5f8ff);
+    border-radius: var(--radius);
+    box-shadow: inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9);
+}
+
+/* ===== FLOATING CRM BACKGROUND ===== */
+.floating-bg {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.floating-icon {
+    position: absolute;
+    opacity: 0.08;
+    color: var(--primary);
+    animation: floatIcon 20s ease-in-out infinite;
+}
+
+.floating-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.floating-icon:nth-child(1) { top: 5%; left: 5%; width: 80px; height: 80px; animation-delay: 0s; animation-duration: 25s; }
+.floating-icon:nth-child(2) { top: 15%; right: 10%; width: 60px; height: 60px; animation-delay: -3s; animation-duration: 22s; }
+.floating-icon:nth-child(3) { top: 35%; left: 8%; width: 70px; height: 70px; animation-delay: -5s; animation-duration: 28s; }
+.floating-icon:nth-child(4) { top: 55%; right: 5%; width: 90px; height: 90px; animation-delay: -8s; animation-duration: 24s; }
+.floating-icon:nth-child(5) { top: 75%; left: 12%; width: 55px; height: 55px; animation-delay: -2s; animation-duration: 26s; }
+.floating-icon:nth-child(6) { top: 85%; right: 15%; width: 65px; height: 65px; animation-delay: -6s; animation-duration: 23s; }
+.floating-icon:nth-child(7) { top: 25%; left: 85%; width: 75px; height: 75px; animation-delay: -4s; animation-duration: 27s; }
+.floating-icon:nth-child(8) { top: 65%; left: 3%; width: 50px; height: 50px; animation-delay: -7s; animation-duration: 21s; }
+.floating-icon:nth-child(9) { top: 10%; left: 75%; width: 45px; height: 45px; animation-delay: -1s; animation-duration: 29s; }
+.floating-icon:nth-child(10) { top: 45%; right: 12%; width: 85px; height: 85px; animation-delay: -9s; animation-duration: 20s; }
+.floating-icon:nth-child(11) { top: 90%; left: 60%; width: 40px; height: 40px; animation-delay: -3.5s; animation-duration: 24s; }
+.floating-icon:nth-child(12) { top: 20%; left: 20%; width: 35px; height: 35px; animation-delay: -5.5s; animation-duration: 26s; }
+.floating-icon:nth-child(13) { top: 70%; right: 25%; width: 55px; height: 55px; animation-delay: -7.5s; animation-duration: 22s; }
+.floating-icon:nth-child(14) { top: 40%; left: 92%; width: 48px; height: 48px; animation-delay: -2.5s; animation-duration: 25s; }
+.floating-icon:nth-child(15) { top: 80%; left: 30%; width: 42px; height: 42px; animation-delay: -6.5s; animation-duration: 28s; }
+.floating-icon:nth-child(16) { top: 3%; left: 45%; width: 58px; height: 58px; animation-delay: -4.5s; animation-duration: 23s; }
+
+/* Connection Lines */
+.floating-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0.04;
+    animation: floatLine 15s ease-in-out infinite;
+}
+
+.floating-line:nth-child(17) { top: 20%; left: 0; width: 40%; height: 2px; animation-delay: 0s; }
+.floating-line:nth-child(18) { top: 50%; right: 0; width: 35%; height: 2px; animation-delay: -3s; transform: rotate(-5deg); }
+.floating-line:nth-child(19) { top: 80%; left: 10%; width: 30%; height: 2px; animation-delay: -6s; transform: rotate(3deg); }
+.floating-line:nth-child(20) { top: 35%; right: 5%; width: 25%; height: 2px; animation-delay: -2s; transform: rotate(-8deg); }
+
+/* Floating Orbs */
+.floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    animation: floatOrb 18s ease-in-out infinite;
+}
+
+.floating-orb:nth-child(21) { top: 15%; left: 25%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%); animation-delay: 0s; }
+.floating-orb:nth-child(22) { top: 60%; right: 20%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(244,114,182,0.05) 0%, transparent 70%); animation-delay: -5s; }
+.floating-orb:nth-child(23) { top: 40%; left: 60%; width: 180px; height: 180px; background: radial-gradient(circle, rgba(167,139,250,0.05) 0%, transparent 70%); animation-delay: -10s; }
+.floating-orb:nth-child(24) { top: 75%; left: 10%; width: 150px; height: 150px; background: radial-gradient(circle, rgba(124,58,237,0.04) 0%, transparent 70%); animation-delay: -3s; }
+
+/* Data Dots */
+.floating-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: floatDot 12s ease-in-out infinite;
+}
+
+.floating-dot:nth-child(25) { top: 12%; left: 35%; animation-delay: 0s; }
+.floating-dot:nth-child(26) { top: 28%; right: 30%; animation-delay: -2s; }
+.floating-dot:nth-child(27) { top: 45%; left: 15%; animation-delay: -4s; }
+.floating-dot:nth-child(28) { top: 62%; right: 40%; animation-delay: -1s; }
+.floating-dot:nth-child(29) { top: 78%; left: 55%; animation-delay: -3s; }
+.floating-dot:nth-child(30) { top: 88%; right: 35%; animation-delay: -5s; }
+.floating-dot:nth-child(31) { top: 8%; left: 65%; animation-delay: -2.5s; }
+.floating-dot:nth-child(32) { top: 52%; left: 88%; animation-delay: -4.5s; }
+
+@keyframes floatIcon {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translateY(-20px) rotate(5deg) scale(1.05);
+    }
+    50% {
+        transform: translateY(-10px) rotate(-3deg) scale(0.95);
+    }
+    75% {
+        transform: translateY(-25px) rotate(8deg) scale(1.02);
+    }
+}
+
+@keyframes floatLine {
+    0%, 100% {
+        transform: translateX(0) scaleX(1);
+        opacity: 0.04;
+    }
+    50% {
+        transform: translateX(20px) scaleX(1.1);
+        opacity: 0.08;
+    }
+}
+
+@keyframes floatOrb {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    33% {
+        transform: translate(30px, -20px) scale(1.1);
+        opacity: 0.8;
+    }
+    66% {
+        transform: translate(-20px, 15px) scale(0.9);
+        opacity: 0.6;
+    }
+}
+
+@keyframes floatDot {
+    0%, 100% {
+        transform: translate(0, 0);
+        opacity: 0.15;
+    }
+    25% {
+        transform: translate(10px, -15px);
+        opacity: 0.25;
+    }
+    50% {
+        transform: translate(-5px, -25px);
+        opacity: 0.1;
+    }
+    75% {
+        transform: translate(15px, -10px);
+        opacity: 0.2;
+    }
+}
+
+/* ===== Layout ===== */
+.auth-container{display:flex;height:100%;width:100%; justify-content:center; align-items:center; position: relative; z-index: 1;}
+
+.auth-form-container{flex:1;display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:1.5rem 1rem 1rem;position:relative;justify-content:flex-start; z-index: 2;}
+
+.auth-form-wrapper{width:100%;max-width:100%;margin:0 auto;display:flex;flex-direction:column;padding:0;}
+
+.mobile-brand{display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;justify-content:center}
+.mobile-brand h1{font-size:1.75rem;font-weight:700;display:flex;align-items:center;gap:0.5rem}
+.mobile-brand h1 svg{width:28px;height:28px}
+
+/* Slider Tabs */
+.slider-tabs {
+    display: flex;
+    position: relative;
+    border-radius: var(--radius);
+    padding: 0.3rem;
+}
+.slider-tab {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: calc(var(--radius) - 2px);
+    transition: color 0.4s ease;
+    font-family: var(--font-ui);
+    position: relative;
+    z-index: 2;
+}
+.slider-tab.active {
+    color: var(--primary);
+}
+.tab-slider {
+    position: absolute;
+    top: 0.3rem;
+    bottom: 0.3rem;
+    left: 0.3rem;
+    width: calc(50% - 0.3rem);
+    background: linear-gradient(145deg, #ffffff, #e8eeff);
+    border-radius: calc(var(--radius) - 2px);
+    box-shadow: 2px 2px 6px rgba(166,180,200,0.4), -2px -2px 6px rgba(255,255,255,0.8);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.form-section{display:none;flex:1}
+.form-section.active{display:flex;flex-direction:column;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.form-header{margin-bottom:1.5rem;text-align:center}
+.form-title{font-size:1.5rem;font-weight:700;margin-bottom:0.25rem}
+
+/* Form Elements */
+.form-body{flex:1;display:flex;flex-direction:column}
+.form-grid{display:grid;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:0.35rem}
+.form-label{font-size:0.75rem;font-weight:700;color:var(--text);letter-spacing:0.5px}
+
+/* Password Smooth Collapse */
+.password-transition {
+    transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+    max-height: 150px;
+    opacity: 1;
+    overflow: hidden;
+    margin-top: 0;
+}
+.password-transition.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin-top: -1rem;
+    pointer-events: none;
+}
+
+/* Clay Inputs */
+.input-wrapper{position:relative}
+.form-input{width:100%;padding:0.75rem 1rem;background:linear-gradient(145deg, #dde4f6, #f5f8ff);border-radius:var(--radius);box-shadow:inset 3px 3px 8px rgba(166,180,200,0.5),inset -3px -3px 8px rgba(255,255,255,0.9);border:2px solid transparent;color:var(--text);font-size:0.875rem;transition:all 0.3s;outline:none}
+.form-input:focus{border-color:var(--secondary)}
+.form-input.input-error{border-color:var(--error);box-shadow:inset 3px 3px 8px rgba(239,68,68,0.2),inset -3px -3px 8px rgba(255,255,255,0.9)}
+.form-input::placeholder{color:var(--text-muted);font-family:var(--font-body);text-transform:uppercase}
+.input-icon{position:absolute;left:0.75rem;top:0;bottom:0;display:flex;align-items:center;color:var(--text-secondary);pointer-events:none}
+.input-icon svg{width:16px;height:16px}
+.input-wrapper .form-input{padding-left:2.5rem}
+.password-toggle{position:absolute;right:0.25rem;top:0;bottom:0;display:flex;align-items:center;background:none;border:none;color:var(--text-secondary);cursor:pointer;padding:0.5rem;}
+.password-toggle svg{width:16px;height:16px;display:block}
+
+/* Misc Form Layout */
+.form-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;font-size:0.75rem;margin-top:0.25rem}
+.checkbox-wrapper{display:flex;align-items:center;gap:0.4rem}
+.checkbox-wrapper input{width:14px;height:14px;accent-color:var(--primary);cursor:pointer}
+.checkbox-wrapper label{font-size:0.75rem;color:var(--text-secondary);cursor:pointer;font-weight:600}
+.forgot-link{font-size:0.75rem;color:var(--primary);text-decoration:none;font-weight:700;font-family:var(--font-ui)}
+
+/* Buttons */
+.btn{width:100%;padding:0.75rem 1rem;border:none;border-radius:var(--radius);font-size:0.875rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem;min-height:44px;}
+.btn-primary{background:linear-gradient(145deg, #8b5cf6, #6d28d9);color:white;box-shadow:5px 5px 12px rgba(109,40,217,0.3), -5px -5px 12px rgba(255,255,255,0.9)}
+.btn-primary:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(0,0,0,0.2),inset -4px -4px 10px rgba(255,255,255,0.2)}
+.btn-primary:disabled{opacity:0.7;cursor:not-allowed}
+.btn-outline{background:linear-gradient(145deg, #ffffff, #e8eeff);color:var(--text);box-shadow:5px 5px 12px rgba(166,180,200,0.5), -5px -5px 12px rgba(255,255,255,0.9)}
+.btn-outline:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(166,180,200,0.5),inset -4px -4px 10px rgba(255,255,255,0.9)}
+.btn-outline:disabled{opacity:0.7;cursor:not-allowed}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+
+/* Status Buttons */
+.btn-success{background:linear-gradient(145deg, #10b981, #059669)!important;color:#fff!important;box-shadow:5px 5px 12px rgba(16,185,129,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important}
+.btn-error{background:linear-gradient(145deg, #ef4444, #dc2626)!important;color:#fff!important;box-shadow:5px 5px 12px rgba(239,68,68,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important}
+@keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-4px)}20%,40%,60%,80%{transform:translateX(4px)}}
+.btn-shake{animation:shake 0.5s ease-in-out}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:inline-block}
+
+/* Dividers */
+.divider{display:flex;align-items:center;margin:1.25rem 0;gap:0.75rem}
+.divider::before,.divider::after{content:'';flex:1;height:2px;background:var(--card-bg);box-shadow: inset 1px 1px 2px rgba(166,180,200,0.3)}
+.divider span{color:var(--text-muted);font-size:0.75rem;font-weight:700;font-family:var(--font-ui)}
+
+/* Sheets & Dialogs */
+.sheet-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:100;opacity:0;visibility:hidden;transition:all 0.3s}
+.sheet-overlay.active{opacity:1;visibility:visible}
+.bottom-sheet{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(145deg, #ffffff, #f0f4ff);border-radius:var(--radius) var(--radius) 0 0;box-shadow:0 -8px 30px rgba(166,180,200,0.5);padding:1.5rem;z-index:101;transform:translateY(100%);transition:transform 0.3s ease;max-height:85vh;overflow-y:auto}
+.bottom-sheet.active{transform:translateY(0)}
+.side-sheet{position:fixed;top:0;right:0;bottom:0;width:100%;max-width:400px;background:linear-gradient(145deg, #ffffff, #f0f4ff);box-shadow:-8px 0 30px rgba(166,180,200,0.5);z-index:101;transform:translateX(100%);transition:transform 0.3s ease;padding:1.5rem;overflow-y:auto}
+.side-sheet.active{transform:translateX(0)}
+.pc-dialog{position:fixed;top:50%;left:50%;transform:translate(-50%, -50%) scale(0.95);width:90%;max-width:420px;background:linear-gradient(145deg, #ffffff, #f0f4ff);z-index:101;padding:2rem;border-radius:var(--radius);opacity:0;visibility:hidden;transition:all 0.3s ease;box-shadow: 10px 10px 30px rgba(166,180,200,0.6), -10px -10px 30px rgba(255,255,255,0.9);}
+.pc-dialog.active{opacity:1;visibility:visible;transform:translate(-50%, -50%) scale(1)}
+.sheet-handle{width:40px;height:5px;background:#d1d5db;border-radius:var(--radius);margin:0 auto 1.25rem;box-shadow:inset 1px 1px 3px rgba(0,0,0,0.1)}
+.sheet-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem}
+.sheet-close{background:linear-gradient(145deg, #ffffff, #e8eeff);border-radius:var(--radius);box-shadow:3px 3px 8px rgba(166,180,200,0.5), -3px -3px 8px rgba(255,255,255,0.9);border:none;color:var(--text-secondary);cursor:pointer;padding:0.4rem;display:flex;align-items:center;justify-content:center;}
+.sheet-close:active{box-shadow:inset 2px 2px 5px rgba(166,180,200,0.5),inset -2px -2px 5px rgba(255,255,255,0.9)}
+.sheet-close svg{width:18px;height:18px}
+.form-cols{display:grid;grid-template-columns:1fr;gap:1rem}
+
+/* Desktop Responsiveness */
+@media(min-width:480px){.form-cols{grid-template-columns:1fr 1fr}}
+@media(min-width:768px){
+  .floating-bg {
+      display: block;
+  }
+  
+  .auth-form-container{
+      padding:2rem 3rem;
+      justify-content:flex-start;
+      align-items:center;
+      overflow-y: auto;
+  }
+  
+  .auth-form-wrapper{
+      width: 100%;
+      max-width: 500px; 
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+  }
+
+  .mobile-brand {
+      margin-bottom: 2rem;
+  }
+  
+  .mobile-brand h1 {
+      font-size: 2.25rem;
+  }
+  
+  .mobile-brand h1 svg {
+      width: 36px;
+      height: 36px;
+  }
+
+  .slider-tabs {
+      margin-bottom: 2rem;
+  }
+  
+  .form-title {
+      font-size: 2rem;
+  }
+  
+  .form-subtitle {
+      font-size: 0.875rem;
+  }
+  
+  .bottom-sheet {
+      display: none;
+  }
+}
+
+@media(min-width:1024px){
+  .auth-form-container{
+      padding: 3rem 4rem;
+  }
+  
+  .auth-form-wrapper {
+      max-width: 520px;
+  }
+  
+  .mobile-brand h1 {
+      font-size: 2.5rem;
+  }
+  
+  .mobile-brand h1 svg {
+      width: 40px;
+      height: 40px;
+  }
+  
+  .floating-icon {
+      opacity: 0.1;
+  }
+}
+
+@media(max-width:767px){.side-sheet{display:none}}
+@media(max-height:700px){.form-header{margin-bottom:1rem}.form-grid{gap:0.75rem}.divider{margin:1rem 0}.slider-tabs{margin-bottom:1rem}}
 </style>
 </head>
 <body>
-<div class="app">
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-<aside class="sidebar" id="sidebar">
-<div class="logo"><i class="fas fa-dumbbell"></i>GymFlow</div>
-<nav>
-<div class="nav-section"><div class="nav-title">Main</div><div class="nav-item active" data-section="dashboard"><i class="fas fa-th-large"></i>Dashboard</div><div class="nav-item" data-section="members"><i class="fas fa-users"></i>Members</div><div class="nav-item" data-section="enquiries"><i class="fas fa-user-plus"></i>Enquiries<span class="nav-badge" id="enquiryCount">5</span></div></div>
-<div class="nav-section"><div class="nav-title">Operations</div><div class="nav-item" data-section="attendance"><i class="fas fa-fingerprint"></i>Attendance</div><div class="nav-item" data-section="payments"><i class="fas fa-rupee-sign"></i>Payments</div><div class="nav-item" data-section="dues"><i class="fas fa-exclamation-circle"></i>Dues<span class="nav-badge" id="dueCount">8</span></div></div>
-<div class="nav-section"><div class="nav-title">Setup</div><div class="nav-item" data-section="plans"><i class="fas fa-tags"></i>Plans</div><div class="nav-item" data-section="trainers"><i class="fas fa-user-tie"></i>Staff</div><div class="nav-item" data-section="expenses"><i class="fas fa-wallet"></i>Expenses</div><div class="nav-item" data-section="settings"><i class="fas fa-cog"></i>Settings</div></div>
-</nav>
-</aside>
-<main class="main" id="main">
-<header class="header">
-<div class="header-left"><button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button><h1 class="page-title" id="pageTitle">Dashboard</h1></div>
-<div class="header-right"><div class="search-box" id="searchBox"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="searchInput"></div><button class="icon-btn" id="mobileSearch"><i class="fas fa-search"></i></button><button class="icon-btn"><i class="fas fa-bell"></i><span class="badge">3</span></button><button class="icon-btn profile-btn"><img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt=""><span>Admin</span></button></div>
-</header>
-<section class="section active" id="dashboard">
-<div class="stats-grid">
-<div class="stat-card" onclick="navigateTo('members')"><div class="stat-header"><div class="stat-icon purple"><i class="fas fa-users"></i></div><span class="stat-change up"><i class="fas fa-arrow-up"></i>8%</span></div><div class="stat-value" id="totalMembers">0</div><div class="stat-label">Total Members</div></div>
-<div class="stat-card" onclick="navigateTo('members')"><div class="stat-header"><div class="stat-icon green"><i class="fas fa-user-check"></i></div></div><div class="stat-value" id="activeMembers">0</div><div class="stat-label">Active Members</div></div>
-<div class="stat-card" onclick="navigateTo('dues')"><div class="stat-header"><div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div></div><div class="stat-value" id="totalDues">₹0</div><div class="stat-label">Total Dues</div></div>
-<div class="stat-card" onclick="navigateTo('payments')"><div class="stat-header"><div class="stat-icon blue"><i class="fas fa-rupee-sign"></i></div><span class="stat-change up"><i class="fas fa-arrow-up"></i>15%</span></div><div class="stat-value" id="monthlyRevenue">₹0</div><div class="stat-label">This Month</div></div>
+
+<!-- Floating CRM Background -->
+<div class="floating-bg">
+    <!-- CRM Icons -->
+    <!-- Users/Contacts -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    </div>
+    <!-- Analytics/Chart -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+    </div>
+    <!-- Calendar/Schedule -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>
+    </div>
+    <!-- Tasks/Checklist -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    </div>
+    <!-- Email/Communication -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+    </div>
+    <!-- Dashboard -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+    </div>
+    <!-- Database/Storage -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.58 3 4 4.79 4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7c0-2.21-3.58-4-8-4zm0 2c3.87 0 6 1.5 6 2s-2.13 2-6 2-6-1.5-6-2 2.13-2 6-2zm6 12c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V17zm0-5c0 .5-2.13 2-6 2s-6-1.5-6-2V9.77C7.61 10.55 9.72 11 12 11s4.39-.45 6-1.23V12z"/></svg>
+    </div>
+    <!-- Team/Group -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+    </div>
+    <!-- Settings/Gear -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+    </div>
+    <!-- Money/Revenue -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+    </div>
+    <!-- Notifications/Bell -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+    </div>
+    <!-- Documents/Files -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+    </div>
+    <!-- Phone/Support -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+    </div>
+    <!-- Location/Map -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+    </div>
+    <!-- Search/Magnify -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    </div>
+    <!-- Cloud/Sync -->
+    <div class="floating-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+    </div>
+    
+    <!-- Connection Lines -->
+    <div class="floating-line"></div>
+    <div class="floating-line"></div>
+    <div class="floating-line"></div>
+    <div class="floating-line"></div>
+    
+    <!-- Floating Orbs -->
+    <div class="floating-orb"></div>
+    <div class="floating-orb"></div>
+    <div class="floating-orb"></div>
+    <div class="floating-orb"></div>
+    
+    <!-- Data Dots -->
+    <div class="floating-dot"></div>
+    <div class="floating-dot"></div>
+    <div class="floating-dot"></div>
+    <div class="floating-dot"></div>
+    <div class="floating-dot"></div>
+    <div class="floating-dot"></div>
+    <div class="floating-dot"></div>
+    <div class="floating-dot"></div>
 </div>
-<div class="card" style="margin-bottom:.6rem">
-<div class="card-header"><h3 class="card-title">Quick Actions</h3></div>
-<div class="quick-actions">
-<div class="quick-action" onclick="openSheet('memberSheet')"><i class="fas fa-user-plus"></i>New Member</div>
-<div class="quick-action" onclick="openSheet('enquirySheet')"><i class="fas fa-phone"></i>Add Enquiry</div>
-<div class="quick-action" onclick="openSheet('paymentSheet')"><i class="fas fa-rupee-sign"></i>Collect Fee</div>
-<div class="quick-action" onclick="openSheet('checkinSheet')"><i class="fas fa-fingerprint"></i>Check-in</div>
-<div class="quick-action" onclick="openSheet('renewalSheet')"><i class="fas fa-redo"></i>Renewal</div>
-<div class="quick-action" onclick="sendDueReminders()"><i class="fab fa-whatsapp"></i>Due Reminders</div>
-<div class="quick-action" onclick="openSheet('planSheet')"><i class="fas fa-plus-circle"></i>Create Plan</div>
-<div class="quick-action" onclick="openSheet('expenseSheet')"><i class="fas fa-minus-circle"></i>Add Expense</div>
+
+<div class="auth-container">
+<div class="auth-form-container">
+
+<div class="auth-form-wrapper">
+<div class="mobile-brand"><h1 class="gradient-text"><svg width="28" height="28" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>BIZCRM</h1></div>
+<div class="slider-tabs clay-inset" style="margin-bottom: 1.5rem;">
+  <div class="tab-slider" id="authTabSlider"></div>
+  <button type="button" class="slider-tab active" onclick="switchTab('login')">LOGIN</button>
+  <button type="button" class="slider-tab" onclick="switchTab('signup')">SIGN UP</button>
+</div>
+
+<div id="loginForm" class="form-section active">
+<div class="form-header"><h2 class="form-title gradient-text" id="loginHeaderTitle">WELCOME BACK</h2></div>
+<form class="form-body" onsubmit="handleLogin(event)">
+<div class="form-grid">
+<div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="loginEmail" placeholder="NAME@BUSINESS.COM" required></div></div>
+
+<div id="passwordGroup" class="password-transition">
+  <div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="loginPass" placeholder="••••••••" required><button type="button" class="password-toggle" onclick="togglePassword('loginPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
+</div>
+
+<div class="form-row"><div class="checkbox-wrapper"><input type="checkbox" id="remember"><label for="remember">REMEMBER ME</label></div><a href="#" class="forgot-link" id="forgotLink" onclick="handleForgotClick();return false">FORGOT PASSWORD?</a></div>
+<button type="submit" class="btn btn-primary btn-text" id="loginBtn"><span>SIGN IN</span></button>
+</div>
+<div class="divider"><span>OR</span></div>
+<button type="button" class="btn btn-outline btn-text" id="googleLoginBtn" onclick="handleGoogleAuth('login')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
+</form>
+</div>
+
+<div id="signupForm" class="form-section">
+<div class="form-header"><h2 class="form-title gradient-text">CREATE AN ACCOUNT</h2></div>
+<form class="form-body" onsubmit="handleSignup(event)">
+<div class="form-grid">
+<div class="form-cols">
+<div class="form-group"><label class="form-label">BUSINESS NAME</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h-2V9z" clip-rule="evenodd"/></svg></span><input type="text" class="form-input" id="businessName" placeholder="YOUR BUSINESS" required></div></div>
+<div class="form-group"><label class="form-label">PHONE</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg></span><input type="tel" class="form-input" id="phone" placeholder="+91 98765 43210" required></div></div>
+</div>
+
+<div class="form-group">
+  <label class="form-label">BUSINESS TYPE</label>
+  <div class="slider-tabs clay-inset">
+    <div class="tab-slider" id="categoryTabSlider"></div>
+    <button type="button" class="slider-tab active" onclick="selectCategory(this, 0)">GYM</button>
+    <button type="button" class="slider-tab" onclick="selectCategory(this, 1)">LIBRARY</button>
+  </div>
+</div>
+
+<div class="form-cols">
+<div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="signupEmail" placeholder="NAME@BUSINESS.COM" required></div></div>
+<div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="signupPass" placeholder="MIN 8 CHARS" required minlength="8"><button type="button" class="password-toggle" onclick="togglePassword('signupPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
+</div>
+<button type="submit" class="btn btn-primary btn-text" id="signupBtn"><span>CREATE ACCOUNT</span></button>
+</div>
+<div class="divider"><span>OR</span></div>
+<button type="button" class="btn btn-outline btn-text" id="googleSignupBtn" onclick="handleGoogleAuth('signup')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
+</form>
 </div>
 </div>
-<div class="content-grid">
-<div class="card">
-<div class="card-header"><h3 class="card-title">Expiring Soon</h3><button class="btn btn-whatsapp btn-sm" onclick="sendExpiryReminders()"><i class="fab fa-whatsapp"></i>Remind</button></div>
-<div class="table-wrapper"><table><thead><tr><th>Member</th><th>Plan</th><th>Expires</th><th>Actions</th></tr></thead><tbody id="expiringTable"></tbody></table></div>
-</div>
-<div class="card">
-<div class="card-header"><h3 class="card-title">Pending Dues</h3><span class="status-badge due" id="duesBadge">0 Members</span></div>
-<div class="due-list" id="dueList"></div>
 </div>
 </div>
-<div class="content-grid">
-<div class="card">
-<div class="card-header"><h3 class="card-title">Today's Activity</h3></div>
-<div class="activity-list" id="activityList"></div>
+
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
+
+<div class="bottom-sheet" id="bottomSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <h3 class="sheet-title gradient-text form-title" id="sheetTitle" style="margin-bottom:0"></h3>
+    <button class="sheet-close" onclick="closeSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
+  </div>
+  <div id="sheetContent" style="width: 100%;"></div>
 </div>
-<div class="card">
-<div class="card-header"><h3 class="card-title">New Enquiries</h3><button class="btn btn-primary btn-sm" onclick="openSheet('enquirySheet')"><i class="fas fa-plus"></i></button></div>
-<div class="enquiry-list" id="enquiryList"></div>
+
+<div class="side-sheet" id="sideSheet">
+  <div class="sheet-header">
+    <h3 class="sheet-title gradient-text form-title" id="sideSheetTitle" style="margin-bottom:0"></h3>
+    <button class="sheet-close" onclick="closeSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
+  </div>
+  <div id="sideSheetContent"></div>
 </div>
+
+<div class="pc-dialog" id="pcDialog">
+  <div class="sheet-header">
+    <h3 class="sheet-title gradient-text form-title" id="dialogTitle" style="margin-bottom:0"></h3>
+    <button class="sheet-close" onclick="closeSheet()" style="display:block;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
+  </div>
+  <div id="dialogContent"></div>
 </div>
-</section>
-<section class="section" id="members">
-<div class="page-header"><div class="filter-tabs"><button class="filter-tab active" data-filter="all">All</button><button class="filter-tab" data-filter="active">Active</button><button class="filter-tab" data-filter="expired">Expired</button></div><button class="btn btn-primary" onclick="openSheet('memberSheet')"><i class="fas fa-plus"></i>Add</button></div>
-<div class="card">
-<div class="table-wrapper"><table><thead><tr><th>Member</th><th>Phone</th><th>Plan</th><th>Batch</th><th>Expires</th><th>Due</th><th>Actions</th></tr></thead><tbody id="fullMembersTable"></tbody></table></div>
-</div>
-</section>
-<section class="section" id="enquiries">
-<div class="page-header"><h2 style="font-size:.95rem">Enquiries</h2><button class="btn btn-primary" onclick="openSheet('enquirySheet')"><i class="fas fa-plus"></i>Add</button></div>
-<div class="card"><div class="table-wrapper"><table><thead><tr><th>Name</th><th>Phone</th><th>Interest</th><th>Source</th><th>Follow-up</th><th>Actions</th></tr></thead><tbody id="enquiriesTable"></tbody></table></div></div>
-</section>
-<section class="section" id="attendance">
-<div class="page-header"><h2 style="font-size:.95rem">Attendance</h2><button class="btn btn-primary" onclick="openSheet('checkinSheet')"><i class="fas fa-fingerprint"></i>Check-in</button></div>
-<div class="card"><div class="card-header"><h3 class="card-title">Today's Check-ins</h3><span class="status-badge active" id="checkinCount">0 Present</span></div><div class="attendance-list" id="attendanceList"></div></div>
-</section>
-<section class="section" id="payments">
-<div class="page-header"><div class="filter-tabs"><button class="filter-tab active" data-filter="all">All</button><button class="filter-tab" data-filter="Cash">Cash</button><button class="filter-tab" data-filter="UPI">UPI</button><button class="filter-tab" data-filter="Card">Card</button></div><button class="btn btn-primary" onclick="openSheet('paymentSheet')"><i class="fas fa-plus"></i>Collect</button></div>
-<div class="summary-cards">
-<div class="summary-card income"><div class="summary-label">Today</div><div class="summary-value green" id="todayCollection">₹0</div></div>
-<div class="summary-card"><div class="summary-label">This Week</div><div class="summary-value green" id="weekCollection">₹0</div></div>
-<div class="summary-card"><div class="summary-label">This Month</div><div class="summary-value green" id="monthCollection">₹0</div></div>
-</div>
-<div class="desktop-table"><div class="card"><div class="table-wrapper"><table><thead><tr><th>Receipt</th><th>Member</th><th>Amount</th><th>Plan</th><th>Mode</th><th>Date</th><th>Actions</th></tr></thead><tbody id="paymentsTable"></tbody></table></div></div></div>
-<div class="mobile-list" id="paymentsMobileList"></div>
-</section>
-<section class="section" id="dues">
-<div class="page-header"><h2 style="font-size:.95rem">Pending Dues</h2><button class="btn btn-whatsapp" onclick="sendDueReminders()"><i class="fab fa-whatsapp"></i>Remind All</button></div>
-<div class="summary-cards">
-<div class="summary-card expense"><div class="summary-label">Total Due</div><div class="summary-value red" id="totalDueAmount">₹0</div></div>
-<div class="summary-card"><div class="summary-label">Members</div><div class="summary-value red" id="dueMembersCount">0</div></div>
-<div class="summary-card"><div class="summary-label">Overdue 30+ Days</div><div class="summary-value red" id="overdueCount">0</div></div>
-</div>
-<div class="desktop-table"><div class="card"><div class="table-wrapper"><table><thead><tr><th>Member</th><th>Phone</th><th>Due Amount</th><th>Plan</th><th>Due Since</th><th>Actions</th></tr></thead><tbody id="duesTable"></tbody></table></div></div></div>
-<div class="mobile-list" id="duesMobileList"></div>
-</section>
-<section class="section" id="plans">
-<div class="page-header"><h2 style="font-size:.95rem">Membership Plans</h2><button class="btn btn-primary" onclick="openSheet('planSheet')"><i class="fas fa-plus"></i>Create</button></div>
-<div class="plan-type-tabs"><div class="plan-type-tab active" data-type="all">All</div><div class="plan-type-tab" data-type="gym">Gym</div><div class="plan-type-tab" data-type="pt">PT</div><div class="plan-type-tab" data-type="group">Group</div></div>
-<div class="plans-grid" id="plansGrid"></div>
-<div class="empty-state" id="noPlans" style="display:none"><i class="fas fa-tags"></i><p>No plans yet</p></div>
-</section>
-<section class="section" id="trainers">
-<div class="page-header"><h2 style="font-size:.95rem">Staff</h2><button class="btn btn-primary" onclick="openSheet('trainerSheet')"><i class="fas fa-plus"></i>Add</button></div>
-<div class="trainer-grid" id="trainersGrid"></div>
-</section>
-<section class="section" id="expenses">
-<div class="page-header"><h2 style="font-size:.95rem">Income & Expenses</h2><button class="btn btn-primary" onclick="openSheet('expenseSheet')"><i class="fas fa-plus"></i>Add Expense</button></div>
-<div class="summary-cards">
-<div class="summary-card income"><div class="summary-label">Total Income</div><div class="summary-value green" id="totalIncome">₹0</div></div>
-<div class="summary-card expense"><div class="summary-label">Total Expenses</div><div class="summary-value red" id="totalExpense">₹0</div></div>
-<div class="summary-card profit"><div class="summary-label">Net Profit</div><div class="summary-value purple" id="netProfit">₹0</div></div>
-</div>
-<div class="desktop-table"><div class="card"><div class="table-wrapper"><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Amount</th><th>Type</th></tr></thead><tbody id="expensesTable"></tbody></table></div></div></div>
-<div class="mobile-list" id="expensesMobileList"></div>
-</section>
-<section class="section" id="settings">
-<div class="page-header"><h2 style="font-size:.95rem">Settings</h2></div>
-<div class="settings-section">
-<div class="settings-header"><i class="fas fa-palette"></i>Appearance</div>
-<div class="settings-body"><div class="settings-row"><div class="settings-info"><div class="settings-title">Dark Mode</div><div class="settings-desc">Switch theme</div></div><div class="toggle active" id="themeToggle" onclick="toggleTheme()"></div></div></div>
-</div>
-<div class="settings-section">
-<div class="settings-header"><i class="fas fa-building"></i>Gym Details</div>
-<div class="settings-body">
-<div class="form-group"><label class="form-label">Gym Name</label><input type="text" class="form-input" id="gymName" value="PowerFit Gym"></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="gymPhone" value="+91 98765 43210"></div><div class="form-group"><label class="form-label">GST</label><input type="text" class="form-input" id="gymGst" value="29ABCDE1234F1Z5"></div></div>
-<div class="form-group"><label class="form-label">Address</label><textarea class="form-textarea" id="gymAddress">Koramangala, Bangalore</textarea></div>
-<button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i>Save</button>
-</div>
-</div>
-</section>
-</main>
-</div>
-<div class="sheet-overlay" id="sheetOverlay"></div>
-<div class="sheet" id="memberSheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title">Add Member</h3><button class="sheet-close" onclick="closeSheet('memberSheet')">&times;</button></div>
-<div class="sheet-body">
-<div class="form-row"><div class="form-group"><label class="form-label">Name *</label><input type="text" class="form-input" id="memberName"></div><div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-input" id="memberPhone"></div></div>
-<div class="form-group"><label class="form-label">Plan *</label><select class="form-select" id="memberPlan"><option value="">Select Plan</option></select></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Batch</label><select class="form-select" id="memberBatch"><option>Morning</option><option>Evening</option><option>Flexible</option></select></div><div class="form-group"><label class="form-label">Start Date</label><input type="date" class="form-input" id="startDate"></div></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Amount Paid *</label><input type="number" class="form-input" id="amountPaid"></div><div class="form-group"><label class="form-label">Mode</label><select class="form-select" id="paymentMode"><option>Cash</option><option>UPI</option><option>Card</option></select></div></div>
-</div>
-<div class="sheet-footer"><button class="btn btn-outline" onclick="closeSheet('memberSheet')">Cancel</button><button class="btn btn-primary" onclick="addMember()"><i class="fas fa-plus"></i>Add</button></div>
-</div>
-<div class="sheet" id="planSheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title" id="planSheetTitle">Create Plan</h3><button class="sheet-close" onclick="closeSheet('planSheet')">&times;</button></div>
-<div class="sheet-body">
-<div class="form-group"><label class="form-label">Plan Name *</label><input type="text" class="form-input" id="planName"></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Duration (Days) *</label><input type="number" class="form-input" id="planDays"></div><div class="form-group"><label class="form-label">Price (₹) *</label><input type="number" class="form-input" id="planPrice"></div></div>
-<div class="form-group"><label class="form-label">Type</label><select class="form-select" id="planType"><option value="gym">Gym</option><option value="pt">PT</option><option value="group">Group</option></select></div>
-<div class="form-group"><label class="form-label">Features</label><div class="feature-input"><input type="text" class="form-input" id="featureInput"><button class="btn btn-outline" onclick="addFeature()"><i class="fas fa-plus"></i></button></div><div class="features-list" id="featuresList"></div></div>
-<div class="form-row"><div class="toggle-group"><div class="toggle" id="planPopular" onclick="this.classList.toggle('active')"></div><span style="font-size:.7rem">Popular</span></div><div class="toggle-group"><div class="toggle active" id="planActive" onclick="this.classList.toggle('active')"></div><span style="font-size:.7rem">Active</span></div></div>
-<input type="hidden" id="editPlanId">
-</div>
-<div class="sheet-footer"><button class="btn btn-outline" onclick="closeSheet('planSheet')">Cancel</button><button class="btn btn-primary" onclick="savePlan()"><i class="fas fa-check"></i>Save</button></div>
-</div>
-<div class="sheet" id="enquirySheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title">Add Enquiry</h3><button class="sheet-close" onclick="closeSheet('enquirySheet')">&times;</button></div>
-<div class="sheet-body">
-<div class="form-group"><label class="form-label">Name *</label><input type="text" class="form-input" id="enquiryName"></div>
-<div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-input" id="enquiryPhone"></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Interest</label><select class="form-select" id="enquiryInterest"><option>Gym</option><option>PT</option><option>Zumba</option><option>Yoga</option></select></div><div class="form-group"><label class="form-label">Source</label><select class="form-select" id="enquirySource"><option>Walk-in</option><option>Call</option><option>WhatsApp</option><option>Instagram</option><option>Referral</option></select></div></div>
-<div class="form-group"><label class="form-label">Follow-up</label><input type="date" class="form-input" id="followupDate"></div>
-</div>
-<div class="sheet-footer"><button class="btn btn-outline" onclick="closeSheet('enquirySheet')">Cancel</button><button class="btn btn-primary" onclick="addEnquiry()"><i class="fas fa-plus"></i>Add</button></div>
-</div>
-<div class="sheet" id="paymentSheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title">Collect Payment</h3><button class="sheet-close" onclick="closeSheet('paymentSheet')">&times;</button></div>
-<div class="sheet-body">
-<div class="form-group"><label class="form-label">Member *</label><select class="form-select" id="paymentMember"><option value="">Select</option></select></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Amount (₹) *</label><input type="number" class="form-input" id="paymentAmount"></div><div class="form-group"><label class="form-label">Mode</label><select class="form-select" id="collectMode"><option>Cash</option><option>UPI</option><option>Card</option></select></div></div>
-<div class="form-group"><label class="form-label">For</label><select class="form-select" id="paymentFor"><option value="">Select</option><option value="due">Due Payment</option><option value="locker">Locker</option><option value="other">Other</option></select></div>
-<div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="paymentDate"></div>
-</div>
-<div class="sheet-footer"><button class="btn btn-outline" onclick="closeSheet('paymentSheet')">Cancel</button><button class="btn btn-primary" onclick="collectPayment()"><i class="fas fa-check"></i>Collect</button></div>
-</div>
-<div class="sheet" id="checkinSheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title">Check-in</h3><button class="sheet-close" onclick="closeSheet('checkinSheet')">&times;</button></div>
-<div class="sheet-body">
-<div class="form-group"><label class="form-label">Phone / Name</label><input type="text" class="form-input" id="checkinId"></div>
-<div style="text-align:center;padding:1.5rem;border:2px dashed var(--border);border-radius:.5rem;margin-top:.8rem"><i class="fas fa-fingerprint" style="font-size:2rem;color:var(--primary)"></i><p style="font-size:.7rem;color:var(--muted);margin-top:.5rem">Or use biometric</p></div>
-</div>
-<div class="sheet-footer"><button class="btn btn-outline" onclick="closeSheet('checkinSheet')">Cancel</button><button class="btn btn-success" onclick="performCheckin()"><i class="fas fa-check"></i>Check In</button></div>
-</div>
-<div class="sheet" id="renewalSheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title">Renew</h3><button class="sheet-close" onclick="closeSheet('renewalSheet')">&times;</button></div>
-<div class="sheet-body">
-<div class="form-group"><label class="form-label">Member *</label><select class="form-select" id="renewalMember"><option value="">Select</option></select></div>
-<div class="form-group"><label class="form-label">Plan *</label><select class="form-select" id="renewalPlan"><option value="">Select</option></select></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Amount</label><input type="number" class="form-input" id="renewalAmount"></div><div class="form-group"><label class="form-label">Mode</label><select class="form-select" id="renewalMode"><option>Cash</option><option>UPI</option><option>Card</option></select></div></div>
-<div class="form-group"><label class="form-label">Start From</label><input type="date" class="form-input" id="renewalStart"></div>
-</div>
-<div class="sheet-footer"><button class="btn btn-outline" onclick="closeSheet('renewalSheet')">Cancel</button><button class="btn btn-primary" onclick="renewMembership()"><i class="fas fa-redo"></i>Renew</button></div>
-</div>
-<div class="sheet" id="expenseSheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title">Add Expense</h3><button class="sheet-close" onclick="closeSheet('expenseSheet')">&times;</button></div>
-<div class="sheet-body">
-<div class="form-group"><label class="form-label">Category</label><select class="form-select" id="expenseCategory"><option>Rent</option><option>Electricity</option><option>Salary</option><option>Equipment</option><option>Maintenance</option><option>Marketing</option><option>Other</option></select></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Amount (₹) *</label><input type="number" class="form-input" id="expenseAmount"></div><div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="expenseDate"></div></div>
-<div class="form-group"><label class="form-label">Description</label><input type="text" class="form-input" id="expenseDesc"></div>
-</div>
-<div class="sheet-footer"><button class="btn btn-outline" onclick="closeSheet('expenseSheet')">Cancel</button><button class="btn btn-danger" onclick="addExpense()"><i class="fas fa-minus"></i>Add</button></div>
-</div>
-<div class="sheet" id="trainerSheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title">Add Staff</h3><button class="sheet-close" onclick="closeSheet('trainerSheet')">&times;</button></div>
-<div class="sheet-body">
-<div class="form-group"><label class="form-label">Name *</label><input type="text" class="form-input" id="staffName"></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="staffPhone"></div><div class="form-group"><label class="form-label">Role</label><select class="form-select" id="staffRole"><option>Trainer</option><option>PT Trainer</option><option>Receptionist</option><option>Manager</option></select></div></div>
-<div class="form-row"><div class="form-group"><label class="form-label">Salary</label><input type="number" class="form-input" id="staffSalary"></div><div class="form-group"><label class="form-label">Joining</label><input type="date" class="form-input" id="staffJoining"></div></div>
-<div class="form-group"><label class="form-label">Specialization</label><input type="text" class="form-input" id="staffSpecial"></div>
-</div>
-<div class="sheet-footer"><button class="btn btn-outline" onclick="closeSheet('trainerSheet')">Cancel</button><button class="btn btn-primary" onclick="addStaff()"><i class="fas fa-plus"></i>Add</button></div>
-</div>
-<div class="sheet" id="trainerProfileSheet">
-<div class="sheet-header"><div class="sheet-handle"></div><h3 class="sheet-title">Staff Profile</h3><button class="sheet-close" onclick="closeSheet('trainerProfileSheet')">&times;</button></div>
-<div class="sheet-body" style="padding:0">
-<div class="trainer-profile-header"><img src="" class="trainer-profile-avatar" id="profileAvatar"><div class="trainer-profile-name" id="profileName"></div><div class="trainer-profile-role" id="profileRole"></div><div class="trainer-profile-stats"><div class="trainer-profile-stat"><div class="trainer-profile-stat-value" id="profileClients">0</div><div class="trainer-profile-stat-label">Clients</div></div><div class="trainer-profile-stat"><div class="trainer-profile-stat-value" id="profileSalary">₹0</div><div class="trainer-profile-stat-label">Salary</div></div></div></div>
-<div class="trainer-profile-details"><div class="trainer-detail-row"><div class="trainer-detail-icon"><i class="fas fa-phone"></i></div><div class="trainer-detail-info"><div class="trainer-detail-label">Phone</div><div class="trainer-detail-value" id="profilePhone">-</div></div><button class="btn btn-sm btn-whatsapp" onclick="callTrainer()"><i class="fab fa-whatsapp"></i></button></div><div class="trainer-detail-row"><div class="trainer-detail-icon"><i class="fas fa-dumbbell"></i></div><div class="trainer-detail-info"><div class="trainer-detail-label">Specialization</div><div class="trainer-detail-value" id="profileSpecial">-</div></div></div><div class="trainer-detail-row"><div class="trainer-detail-icon"><i class="fas fa-calendar"></i></div><div class="trainer-detail-info"><div class="trainer-detail-label">Joined</div><div class="trainer-detail-value" id="profileJoined">-</div></div></div></div>
-</div>
-<div class="sheet-footer"><button class="btn btn-danger" onclick="deleteTrainer()"><i class="fas fa-trash"></i>Delete</button></div>
-</div>
-<div class="confirm-dialog" id="confirmDialog"><div class="confirm-box"><div class="confirm-title" id="confirmTitle">Confirm</div><div class="confirm-text" id="confirmText">Are you sure?</div><div class="confirm-actions"><button class="btn btn-outline" onclick="closeConfirm()">Cancel</button><button class="btn btn-danger" onclick="confirmAction()">Delete</button></div></div></div>
-<div class="toast" id="toast"><div class="toast-icon success"><i class="fas fa-check"></i></div><div class="toast-message">Success!</div></div>
+
 <script>
-let plans=JSON.parse(localStorage.getItem('gymPlans'))||[];
-let members=JSON.parse(localStorage.getItem('gymMembers'))||[];
-let enquiries=JSON.parse(localStorage.getItem('gymEnquiries'))||[];
-let payments=JSON.parse(localStorage.getItem('gymPayments'))||[];
-let expenses=JSON.parse(localStorage.getItem('gymExpenses'))||[];
-let trainers=JSON.parse(localStorage.getItem('gymTrainers'))||[];
-let activities=JSON.parse(localStorage.getItem('gymActivities'))||[];
-let checkins=[];let currentFeatures=[];let pendingAction=null;let selectedTrainerId=null;
-let currentTheme=localStorage.getItem('gymTheme')||'dark';
-if(plans.length===0){plans=[{id:1,name:"Monthly",type:"gym",days:30,price:1000,features:["Gym Access","Locker"],popular:false,active:true},{id:2,name:"Quarterly",type:"gym",days:90,price:2500,features:["Gym Access","Diet Chart"],popular:true,active:true},{id:3,name:"Half Yearly",type:"gym",days:180,price:4500,features:["All Benefits","2 PT Sessions"],popular:false,active:true},{id:4,name:"Annual",type:"gym",days:365,price:8000,features:["All Benefits","4 PT Sessions"],popular:false,active:true}];savePlans()}
-if(members.length===0){members=[{id:1,name:"Rajesh Kumar",phone:"98765 43210",plan:"Quarterly",planId:2,batch:"Morning",status:"active",joined:"2024-11-01",expires:"2025-02-01",due:0,avatar:"https://i.pravatar.cc/100?img=1"},{id:2,name:"Priya Sharma",phone:"98765 43211",plan:"Monthly",planId:1,batch:"Evening",status:"active",joined:"2024-12-15",expires:"2025-01-15",due:500,avatar:"https://i.pravatar.cc/100?img=5"},{id:3,name:"Amit Singh",phone:"98765 43212",plan:"Half Yearly",planId:3,batch:"Morning",status:"expired",joined:"2024-06-01",expires:"2024-12-01",due:1000,avatar:"https://i.pravatar.cc/100?img=3"},{id:4,name:"Sneha Patel",phone:"98765 43213",plan:"Annual",planId:4,batch:"Evening",status:"active",joined:"2024-10-20",expires:"2025-10-20",due:2500,avatar:"https://i.pravatar.cc/100?img=9"}];saveMembers()}
-if(enquiries.length===0){enquiries=[{id:1,name:"Ravi Verma",phone:"98765 11111",interest:"Gym",source:"Walk-in",followup:"2025-01-12",status:"pending"},{id:2,name:"Kavita Joshi",phone:"98765 22222",interest:"PT",source:"Instagram",followup:"2025-01-10",status:"hot"}];saveEnquiries()}
-if(trainers.length===0){trainers=[{id:1,name:"Arun Kumar",role:"PT Trainer",specialty:"Weight Training",clients:12,salary:20000,phone:"98765 99999",joined:"2023-01-15",avatar:"https://i.pravatar.cc/100?img=11"},{id:2,name:"Sunita Devi",role:"Trainer",specialty:"Cardio",clients:25,salary:15000,phone:"98765 88888",joined:"2023-06-01",avatar:"https://i.pravatar.cc/100?img=23"}];saveTrainers()}
-if(payments.length===0){payments=[{id:1,receipt:"RCP001",member:"Rajesh Kumar",memberId:1,amount:2500,plan:"Quarterly",mode:"UPI",date:"2025-01-10"},{id:2,receipt:"RCP002",member:"Priya Sharma",memberId:2,amount:1000,plan:"Monthly",mode:"Cash",date:"2025-01-09"},{id:3,receipt:"RCP003",member:"Amit Singh",memberId:3,amount:4500,plan:"Half Yearly",mode:"Card",date:"2025-01-08"},{id:4,receipt:"RCP004",member:"Sneha Patel",memberId:4,amount:8000,plan:"Annual",mode:"UPI",date:"2025-01-07"}];savePayments()}
-if(expenses.length===0){expenses=[{id:1,date:"2025-01-05",desc:"Monthly Rent",category:"Rent",amount:25000},{id:2,date:"2025-01-03",desc:"Electricity",category:"Electricity",amount:8500},{id:3,date:"2025-01-02",desc:"Staff Salary",category:"Salary",amount:35000},{id:4,date:"2025-01-01",desc:"Equipment Repair",category:"Maintenance",amount:5000}];saveExpenses()}
-function savePlans(){localStorage.setItem('gymPlans',JSON.stringify(plans))}
-function saveMembers(){localStorage.setItem('gymMembers',JSON.stringify(members))}
-function saveEnquiries(){localStorage.setItem('gymEnquiries',JSON.stringify(enquiries))}
-function savePayments(){localStorage.setItem('gymPayments',JSON.stringify(payments))}
-function saveExpenses(){localStorage.setItem('gymExpenses',JSON.stringify(expenses))}
-function saveTrainers(){localStorage.setItem('gymTrainers',JSON.stringify(trainers))}
-function saveActivities(){localStorage.setItem('gymActivities',JSON.stringify(activities))}
-function init(){document.documentElement.setAttribute('data-theme',currentTheme);updateThemeToggle();renderAll();setupNavigation();setDefaultDates();populateSelects()}
-function updateThemeToggle(){const t=document.getElementById('themeToggle');currentTheme==='dark'?t.classList.add('active'):t.classList.remove('active')}
-function toggleTheme(){currentTheme=currentTheme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',currentTheme);localStorage.setItem('gymTheme',currentTheme);updateThemeToggle()}
-function renderAll(){renderStats();renderExpiring();renderDues();renderActivities();renderEnquiriesWidget();renderMembers();renderEnquiriesTable();renderAttendance();renderPayments();renderDuesPage();renderPlans();renderTrainers();renderExpensesPage();updateBadges()}
-function renderStats(){const active=members.filter(m=>m.status==='active').length;const totalDue=members.reduce((s,m)=>s+m.due,0);const monthRevenue=payments.filter(p=>new Date(p.date).getMonth()===new Date().getMonth()).reduce((s,p)=>s+p.amount,0);document.getElementById('totalMembers').textContent=members.length;document.getElementById('activeMembers').textContent=active;document.getElementById('totalDues').textContent='₹'+totalDue.toLocaleString('en-IN');document.getElementById('monthlyRevenue').textContent='₹'+monthRevenue.toLocaleString('en-IN')}
-function renderExpiring(){const week=Date.now()+7*24*60*60*1000;const exp=members.filter(m=>new Date(m.expires)<=new Date(week)&&m.status!=='expired').slice(0,4);document.getElementById('expiringTable').innerHTML=exp.length?exp.map(m=>`<tr><td><div class="member-info"><img src="${m.avatar}" class="member-avatar"><div><div class="member-name">${m.name}</div></div></div></td><td>${m.plan}</td><td><span class="status-badge warning">${formatDate(m.expires)}</span></td><td><div class="actions"><button class="action-btn whatsapp" onclick="sendWhatsApp('${m.phone}','renewal')"><i class="fab fa-whatsapp"></i></button><button class="action-btn" onclick="openRenewal(${m.id})"><i class="fas fa-redo"></i></button></div></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted)">None</td></tr>'}
-function renderDues(){const dues=members.filter(m=>m.due>0);document.getElementById('duesBadge').textContent=dues.length+' Members';document.getElementById('dueList').innerHTML=dues.length?dues.slice(0,5).map(m=>`<div class="due-item"><div class="due-info"><div class="due-name">${m.name}</div><div class="due-amount">₹${m.due.toLocaleString('en-IN')}</div></div><div class="actions"><button class="action-btn whatsapp" onclick="sendWhatsApp('${m.phone}','due')"><i class="fab fa-whatsapp"></i></button><button class="btn btn-sm btn-primary" onclick="collectDue(${m.id})">Collect</button></div></div>`).join(''):'<div style="text-align:center;padding:1rem;color:var(--muted)">No dues 🎉</div>'}
-function renderActivities(){document.getElementById('activityList').innerHTML=activities.length?activities.slice(0,5).map(a=>`<div class="activity-item"><div class="activity-icon ${a.type}"><i class="fas fa-${a.type==='checkin'?'sign-in-alt':a.type==='payment'?'rupee-sign':'user-plus'}"></i></div><div class="activity-content"><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div></div>`).join(''):'<div style="text-align:center;padding:1rem;color:var(--muted)">No activity</div>'}
-function renderEnquiriesWidget(){document.getElementById('enquiryList').innerHTML=enquiries.length?enquiries.slice(0,3).map(e=>`<div class="enquiry-item"><div class="enquiry-info"><div class="enquiry-name">${e.name}</div><div class="enquiry-phone">${e.phone}</div><div class="enquiry-source">${e.source}</div></div><div class="actions"><button class="action-btn whatsapp" onclick="sendWhatsApp('${e.phone}','enquiry')"><i class="fab fa-whatsapp"></i></button><button class="action-btn" onclick="convertEnquiry(${e.id})"><i class="fas fa-user-plus"></i></button></div></div>`).join(''):'<div style="text-align:center;padding:1rem;color:var(--muted)">No enquiries</div>'}
-function renderMembers(filter='all'){const f=filter==='all'?members:members.filter(m=>m.status===filter);document.getElementById('fullMembersTable').innerHTML=f.length?f.map(m=>`<tr><td><div class="member-info"><img src="${m.avatar}" class="member-avatar"><div><div class="member-name">${m.name}</div></div></div></td><td>${m.phone}</td><td>${m.plan}</td><td>${m.batch}</td><td><span class="status-badge ${new Date(m.expires)<new Date()?'expired':'active'}">${formatDate(m.expires)}</span></td><td>${m.due>0?`<span class="status-badge due">₹${m.due}</span>`:'-'}</td><td><div class="actions"><button class="action-btn whatsapp" onclick="sendWhatsApp('${m.phone}','general')"><i class="fab fa-whatsapp"></i></button><button class="action-btn" onclick="openRenewal(${m.id})"><i class="fas fa-redo"></i></button></div></td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--muted)">No members</td></tr>'}
-function renderEnquiriesTable(){document.getElementById('enquiriesTable').innerHTML=enquiries.length?enquiries.map(e=>`<tr><td>${e.name}</td><td>${e.phone}</td><td>${e.interest}</td><td>${e.source}</td><td>${formatDate(e.followup)}</td><td><div class="actions"><button class="action-btn whatsapp" onclick="sendWhatsApp('${e.phone}','enquiry')"><i class="fab fa-whatsapp"></i></button><button class="action-btn" onclick="convertEnquiry(${e.id})"><i class="fas fa-user-plus"></i></button></div></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--muted)">No enquiries</td></tr>'}
-function renderAttendance(){document.getElementById('checkinCount').textContent=checkins.length+' Present';document.getElementById('attendanceList').innerHTML=checkins.length?checkins.map(c=>`<div class="attendance-item"><div class="attendance-info"><img src="${c.avatar}" class="member-avatar"><div><div class="member-name">${c.name}</div><div class="attendance-time">${c.time}</div></div></div><span class="status-badge active">Present</span></div>`).join(''):'<div style="text-align:center;padding:1rem;color:var(--muted)">No check-ins</div>'}
-function renderPayments(filter='all'){const today=new Date().toISOString().split('T')[0];const weekAgo=new Date(Date.now()-7*24*60*60*1000).toISOString().split('T')[0];const monthStart=new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString().split('T')[0];const todayTotal=payments.filter(p=>p.date===today).reduce((s,p)=>s+p.amount,0);const weekTotal=payments.filter(p=>p.date>=weekAgo).reduce((s,p)=>s+p.amount,0);const monthTotal=payments.filter(p=>p.date>=monthStart).reduce((s,p)=>s+p.amount,0);document.getElementById('todayCollection').textContent='₹'+todayTotal.toLocaleString('en-IN');document.getElementById('weekCollection').textContent='₹'+weekTotal.toLocaleString('en-IN');document.getElementById('monthCollection').textContent='₹'+monthTotal.toLocaleString('en-IN');const filtered=filter==='all'?payments:payments.filter(p=>p.mode===filter);document.getElementById('paymentsTable').innerHTML=filtered.length?filtered.map(p=>`<tr><td><strong>${p.receipt}</strong></td><td>${p.member}</td><td style="color:var(--success);font-weight:600">₹${p.amount.toLocaleString('en-IN')}</td><td>${p.plan||'-'}</td><td><span class="status-badge ${p.mode==='Cash'?'pending':p.mode==='UPI'?'active':'trial'}">${p.mode}</span></td><td>${formatDate(p.date)}</td><td><button class="action-btn"><i class="fas fa-print"></i></button></td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--muted)">No payments</td></tr>';document.getElementById('paymentsMobileList').innerHTML=filtered.length?filtered.map(p=>`<div class="data-card payment-card"><div class="data-card-header"><div class="data-card-title">${p.member}</div><div class="amount">₹${p.amount.toLocaleString('en-IN')}</div></div><div class="data-card-body"><div class="data-card-row"><span class="label">Receipt</span><span class="value">${p.receipt}</span></div><div class="data-card-row"><span class="label">Plan</span><span class="value">${p.plan||'-'}</span></div><div class="data-card-row"><span class="label">Mode</span><span class="value"><span class="status-badge ${p.mode==='Cash'?'pending':p.mode==='UPI'?'active':'trial'}">${p.mode}</span></span></div><div class="data-card-row"><span class="label">Date</span><span class="value">${formatDate(p.date)}</span></div></div><div class="data-card-footer"><button class="btn btn-outline btn-sm"><i class="fas fa-print"></i>Print</button><button class="btn btn-whatsapp btn-sm"><i class="fab fa-whatsapp"></i>Share</button></div></div>`).join(''):'<div class="empty-list"><i class="fas fa-receipt"></i><p>No payments found</p></div>'}
-function renderDuesPage(){const dues=members.filter(m=>m.due>0);const totalDue=dues.reduce((s,m)=>s+m.due,0);const overdue=dues.filter(m=>new Date(m.expires)<new Date(Date.now()-30*24*60*60*1000)).length;document.getElementById('totalDueAmount').textContent='₹'+totalDue.toLocaleString('en-IN');document.getElementById('dueMembersCount').textContent=dues.length;document.getElementById('overdueCount').textContent=overdue;document.getElementById('duesTable').innerHTML=dues.length?dues.map(m=>`<tr><td><div class="member-info"><img src="${m.avatar}" class="member-avatar"><div><div class="member-name">${m.name}</div></div></div></td><td>${m.phone}</td><td style="color:var(--danger);font-weight:700">₹${m.due.toLocaleString('en-IN')}</td><td>${m.plan}</td><td>${formatDate(m.expires)}</td><td><div class="actions"><button class="action-btn whatsapp" onclick="sendWhatsApp('${m.phone}','due')"><i class="fab fa-whatsapp"></i></button><button class="btn btn-sm btn-primary" onclick="collectDue(${m.id})">Collect</button></div></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;color:var(--muted)">No dues 🎉</td></tr>';document.getElementById('duesMobileList').innerHTML=dues.length?dues.map(m=>`<div class="data-card due-card"><div class="data-card-header"><div><div class="data-card-title">${m.name}</div><div style="font-size:.65rem;color:var(--muted)">${m.phone}</div></div><div class="amount">₹${m.due.toLocaleString('en-IN')}</div></div><div class="data-card-body"><div class="data-card-row"><span class="label">Plan</span><span class="value">${m.plan}</span></div><div class="data-card-row"><span class="label">Due Since</span><span class="value">${formatDate(m.expires)}</span></div></div><div class="data-card-footer"><button class="btn btn-whatsapp btn-sm" onclick="sendWhatsApp('${m.phone}','due')"><i class="fab fa-whatsapp"></i>Remind</button><button class="btn btn-primary btn-sm" onclick="collectDue(${m.id})"><i class="fas fa-rupee-sign"></i>Collect</button></div></div>`).join(''):'<div class="empty-list"><i class="fas fa-check-circle"></i><p>No pending dues</p></div>'}
-function renderExpensesPage(){const totalIncome=payments.reduce((s,p)=>s+p.amount,0);const totalExp=expenses.reduce((s,e)=>s+e.amount,0);const net=totalIncome-totalExp;document.getElementById('totalIncome').textContent='₹'+totalIncome.toLocaleString('en-IN');document.getElementById('totalExpense').textContent='₹'+totalExp.toLocaleString('en-IN');document.getElementById('netProfit').textContent='₹'+net.toLocaleString('en-IN');document.getElementById('expensesTable').innerHTML=expenses.length?expenses.map(e=>`<tr><td>${formatDate(e.date)}</td><td>${e.desc}</td><td>${e.category}</td><td style="color:var(--danger);font-weight:600">₹${e.amount.toLocaleString('en-IN')}</td><td><span class="status-badge expired">Expense</span></td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--muted)">No expenses</td></tr>';document.getElementById('expensesMobileList').innerHTML=expenses.length?expenses.map(e=>`<div class="data-card expense-card"><div class="data-card-header"><div><div class="data-card-title">${e.desc}</div><div style="font-size:.6rem;color:var(--muted)">${e.category}</div></div><div class="amount">₹${e.amount.toLocaleString('en-IN')}</div></div><div class="data-card-body"><div class="data-card-row"><span class="label">Date</span><span class="value">${formatDate(e.date)}</span></div></div></div>`).join(''):'<div class="empty-list"><i class="fas fa-wallet"></i><p>No expenses recorded</p></div>'}
-function renderPlans(typeFilter='all'){const filtered=typeFilter==='all'?plans.filter(p=>p.active):plans.filter(p=>p.active&&p.type===typeFilter);document.getElementById('plansGrid').innerHTML=filtered.length?filtered.map(p=>`<div class="plan-card ${p.popular?'popular':''}"><div class="plan-name">${p.name}</div><div class="plan-duration">${getDurationText(p.days)}</div><div class="plan-price">₹${p.price.toLocaleString('en-IN')}</div><ul class="plan-features">${p.features.map(f=>`<li><i class="fas fa-check"></i>${f}</li>`).join('')}</ul><div class="plan-actions"><button class="btn btn-sm btn-outline" onclick="editPlan(${p.id})"><i class="fas fa-edit"></i></button><button class="btn btn-sm btn-danger" onclick="confirmDelete('plan',${p.id})"><i class="fas fa-trash"></i></button></div></div>`).join(''):'';document.getElementById('noPlans').style.display=filtered.length?'none':'block'}
-function renderTrainers(){document.getElementById('trainersGrid').innerHTML=trainers.length?trainers.map(t=>`<div class="trainer-card" onclick="openTrainerProfile(${t.id})"><img src="${t.avatar}" class="trainer-avatar"><div class="trainer-name">${t.name}</div><div class="trainer-specialty">${t.role}</div><div class="trainer-stats"><span><i class="fas fa-users"></i>${t.clients||0}</span><span><i class="fas fa-rupee-sign"></i>${((t.salary||0)/1000).toFixed(0)}k</span></div></div>`).join(''):'<div class="empty-state"><i class="fas fa-user-tie"></i><p>No staff</p></div>'}
-function updateBadges(){document.getElementById('enquiryCount').textContent=enquiries.length;document.getElementById('dueCount').textContent=members.filter(m=>m.due>0).length}
-function getDurationText(days){if(days<=30)return'1 Month';if(days<=90)return'3 Months';if(days<=180)return'6 Months';if(days<=365)return'1 Year';return days+' Days'}
-function populateSelects(){const activePlans=plans.filter(p=>p.active);const planOpts='<option value="">Select</option>'+activePlans.map(p=>`<option value="${p.id}" data-price="${p.price}">${p.name} - ₹${p.price.toLocaleString('en-IN')}</option>`).join('');document.getElementById('memberPlan').innerHTML=planOpts;document.getElementById('renewalPlan').innerHTML=planOpts;const paymentFor='<option value="">Select</option>'+activePlans.map(p=>`<option value="plan-${p.id}">${p.name}</option>`).join('')+'<option value="due">Due</option><option value="other">Other</option>';document.getElementById('paymentFor').innerHTML=paymentFor;const memberOpts='<option value="">Select</option>'+members.map(m=>`<option value="${m.id}">${m.name} - ${m.phone}</option>`).join('');document.getElementById('paymentMember').innerHTML=memberOpts;document.getElementById('renewalMember').innerHTML=memberOpts}
-function setupNavigation(){const sidebar=document.getElementById('sidebar'),overlay=document.getElementById('sidebarOverlay');document.querySelectorAll('.nav-item').forEach(item=>{item.addEventListener('click',()=>{document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));item.classList.add('active');const section=item.dataset.section;document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(section).classList.add('active');document.getElementById('pageTitle').textContent=section.charAt(0).toUpperCase()+section.slice(1);closeSidebar()})});document.getElementById('menuBtn').addEventListener('click',()=>{sidebar.classList.add('open');overlay.classList.add('show')});overlay.addEventListener('click',closeSidebar);document.querySelectorAll('.filter-tab').forEach(tab=>{tab.addEventListener('click',()=>{tab.parentElement.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');const filter=tab.dataset.filter;if(filter)renderMembers(filter);else if(tab.textContent.trim()==='All')renderPayments('all');else renderPayments(tab.textContent.trim())})});document.querySelectorAll('.plan-type-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.plan-type-tab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');renderPlans(tab.dataset.type)})});document.getElementById('memberPlan').addEventListener('change',function(){const opt=this.options[this.selectedIndex];if(opt.dataset.price)document.getElementById('amountPaid').value=opt.dataset.price});document.getElementById('renewalPlan').addEventListener('change',function(){const opt=this.options[this.selectedIndex];if(opt.dataset.price)document.getElementById('renewalAmount').value=opt.dataset.price})}
-function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show')}
-function setDefaultDates(){const today=new Date().toISOString().split('T')[0];['startDate','paymentDate','expenseDate','renewalStart','staffJoining'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=today});document.getElementById('followupDate').value=new Date(Date.now()+2*24*60*60*1000).toISOString().split('T')[0]}
-function openSheet(id){document.getElementById(id).classList.add('active');document.getElementById('sheetOverlay').classList.add('active');document.body.style.overflow='hidden';if(id==='planSheet')resetPlanForm()}
-function closeSheet(id){document.getElementById(id).classList.remove('active');document.getElementById('sheetOverlay').classList.remove('active');document.body.style.overflow=''}
-function closeAllSheets(){document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('active'));document.getElementById('sheetOverlay').classList.remove('active');document.body.style.overflow=''}
-document.getElementById('sheetOverlay').addEventListener('click',closeAllSheets);
-document.getElementById('mobileSearch').addEventListener('click',()=>document.getElementById('searchBox').classList.toggle('show'));
-function showToast(msg,type='success'){const t=document.getElementById('toast');t.querySelector('.toast-message').textContent=msg;t.querySelector('.toast-icon').className=`toast-icon ${type}`;t.querySelector('.toast-icon i').className=`fas fa-${type==='success'?'check':'times'}`;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-function formatDate(d){if(!d)return'-';return new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}
-function navigateTo(section){document.querySelectorAll('.nav-item').forEach(i=>{i.classList.remove('active');if(i.dataset.section===section)i.classList.add('active')});document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(section).classList.add('active');document.getElementById('pageTitle').textContent=section.charAt(0).toUpperCase()+section.slice(1)}
-function sendWhatsApp(phone,type){const cleanPhone='91'+phone.replace(/\s/g,'');let msg='';const gymName=document.getElementById('gymName')?.value||'PowerFit Gym';if(type==='due')msg=encodeURIComponent(`🙏 Namaste! Your gym fee is pending. Kindly pay soon. - ${gymName}`);else if(type==='renewal')msg=encodeURIComponent(`🙏 Namaste! Your membership is expiring. Renew now! - ${gymName}`);else if(type==='enquiry')msg=encodeURIComponent(`🙏 Namaste! Thank you for your interest in ${gymName}. Visit us!`);else msg=encodeURIComponent(`🙏 Namaste! - ${gymName}`);window.open(`https://wa.me/${cleanPhone}?text=${msg}`,'_blank')}
-function sendDueReminders(){const dues=members.filter(m=>m.due>0);if(!dues.length){showToast('No dues','error');return}showToast(`Sending to ${dues.length} members...`)}
-function sendExpiryReminders(){showToast('Sending reminders...')}
-function openTrainerProfile(id){const t=trainers.find(x=>x.id===id);if(!t)return;selectedTrainerId=id;document.getElementById('profileAvatar').src=t.avatar;document.getElementById('profileName').textContent=t.name;document.getElementById('profileRole').textContent=t.role;document.getElementById('profileClients').textContent=t.clients||0;document.getElementById('profileSalary').textContent='₹'+(t.salary||0).toLocaleString('en-IN');document.getElementById('profilePhone').textContent=t.phone||'-';document.getElementById('profileSpecial').textContent=t.specialty||'-';document.getElementById('profileJoined').textContent=t.joined?formatDate(t.joined):'-';openSheet('trainerProfileSheet')}
-function callTrainer(){const t=trainers.find(x=>x.id===selectedTrainerId);if(t?.phone)sendWhatsApp(t.phone,'general')}
-function deleteTrainer(){closeSheet('trainerProfileSheet');confirmDelete('trainer',selectedTrainerId)}
-function addFeature(){const input=document.getElementById('featureInput');const val=input.value.trim();if(!val)return;if(!currentFeatures.includes(val)){currentFeatures.push(val);renderFeatures()}input.value=''}
-function removeFeature(idx){currentFeatures.splice(idx,1);renderFeatures()}
-function renderFeatures(){document.getElementById('featuresList').innerHTML=currentFeatures.map((f,i)=>`<span class="chip">${f}<span class="chip-remove" onclick="removeFeature(${i})">&times;</span></span>`).join('')}
-function resetPlanForm(){document.getElementById('planSheetTitle').textContent='Create Plan';document.getElementById('editPlanId').value='';document.getElementById('planName').value='';document.getElementById('planDays').value='';document.getElementById('planPrice').value='';document.getElementById('planType').value='gym';document.getElementById('planPopular').classList.remove('active');document.getElementById('planActive').classList.add('active');currentFeatures=[];renderFeatures()}
-function savePlan(){const name=document.getElementById('planName').value.trim();const days=parseInt(document.getElementById('planDays').value);const price=parseInt(document.getElementById('planPrice').value);if(!name||!days||!price){showToast('Fill required fields','error');return}const editId=document.getElementById('editPlanId').value;const data={name,type:document.getElementById('planType').value,days,price,features:currentFeatures.length?currentFeatures:['Gym Access'],popular:document.getElementById('planPopular').classList.contains('active'),active:document.getElementById('planActive').classList.contains('active')};if(editId){const idx=plans.findIndex(p=>p.id==editId);if(idx>-1)plans[idx]={...plans[idx],...data}}else{data.id=Date.now();plans.push(data)}savePlans();renderPlans();populateSelects();closeSheet('planSheet');showToast(editId?'Plan updated!':'Plan created!')}
-function editPlan(id){const plan=plans.find(p=>p.id===id);if(!plan)return;document.getElementById('planSheetTitle').textContent='Edit Plan';document.getElementById('editPlanId').value=id;document.getElementById('planName').value=plan.name;document.getElementById('planType').value=plan.type;document.getElementById('planDays').value=plan.days;document.getElementById('planPrice').value=plan.price;plan.popular?document.getElementById('planPopular').classList.add('active'):document.getElementById('planPopular').classList.remove('active');plan.active?document.getElementById('planActive').classList.add('active'):document.getElementById('planActive').classList.remove('active');currentFeatures=[...plan.features];renderFeatures();openSheet('planSheet')}
-function confirmDelete(type,id){pendingAction={type,id};document.getElementById('confirmTitle').textContent='Confirm Delete';document.getElementById('confirmText').textContent='Are you sure?';document.getElementById('confirmDialog').classList.add('active')}
-function closeConfirm(){document.getElementById('confirmDialog').classList.remove('active');pendingAction=null}
-function confirmAction(){if(!pendingAction)return;const{type,id}=pendingAction;if(type==='plan'){plans=plans.filter(p=>p.id!==id);savePlans();renderPlans();populateSelects()}else if(type==='trainer'){trainers=trainers.filter(t=>t.id!==id);saveTrainers();renderTrainers()}closeConfirm();showToast('Deleted!')}
-function addMember(){const name=document.getElementById('memberName').value.trim();const phone=document.getElementById('memberPhone').value.trim();const planId=document.getElementById('memberPlan').value;const amount=parseInt(document.getElementById('amountPaid').value)||0;if(!name||!phone||!planId){showToast('Fill required fields','error');return}const plan=plans.find(p=>p.id==planId);if(!plan)return;const start=document.getElementById('startDate').value;const end=new Date(start);end.setDate(end.getDate()+plan.days);const due=Math.max(0,plan.price-amount);members.unshift({id:Date.now(),name,phone,plan:plan.name,planId:plan.id,batch:document.getElementById('memberBatch').value,status:due>0?'pending':'active',joined:start,expires:end.toISOString().split('T')[0],due,avatar:'https://i.pravatar.cc/100?img='+Math.floor(Math.random()*70)});saveMembers();if(amount>0){payments.unshift({id:Date.now(),receipt:'RCP'+String(payments.length+1).padStart(3,'0'),member:name,memberId:members[0].id,amount,plan:plan.name,mode:document.getElementById('paymentMode').value,date:start});savePayments()}activities.unshift({type:'signup',text:`<strong>${name}</strong> joined`,time:'Just now'});saveActivities();renderAll();populateSelects();closeSheet('memberSheet');showToast('Member added!')}
-function addEnquiry(){const name=document.getElementById('enquiryName').value.trim();const phone=document.getElementById('enquiryPhone').value.trim();if(!name||!phone){showToast('Fill required fields','error');return}enquiries.unshift({id:Date.now(),name,phone,interest:document.getElementById('enquiryInterest').value,source:document.getElementById('enquirySource').value,followup:document.getElementById('followupDate').value,status:'pending'});saveEnquiries();renderAll();closeSheet('enquirySheet');showToast('Enquiry added!')}
-function collectPayment(){const memberId=document.getElementById('paymentMember').value;const amount=parseInt(document.getElementById('paymentAmount').value);if(!memberId||!amount){showToast('Fill required fields','error');return}const member=members.find(m=>m.id==memberId);payments.unshift({id:Date.now(),receipt:'RCP'+String(payments.length+1).padStart(3,'0'),member:member?.name||'Unknown',memberId:+memberId,amount,plan:document.getElementById('paymentFor').value||'-',mode:document.getElementById('collectMode').value,date:document.getElementById('paymentDate').value});savePayments();if(member?.due>0){member.due=Math.max(0,member.due-amount);saveMembers()}activities.unshift({type:'payment',text:`<strong>${member?.name}</strong> paid ₹${amount.toLocaleString('en-IN')}`,time:'Just now'});saveActivities();renderAll();closeSheet('paymentSheet');showToast('Payment collected!')}
-function performCheckin(){const input=document.getElementById('checkinId').value.trim().toLowerCase();if(!input){showToast('Enter phone/name','error');return}const member=members.find(m=>m.phone.replace(/\s/g,'').includes(input.replace(/\s/g,''))||m.name.toLowerCase().includes(input));if(!member){showToast('Not found','error');return}if(checkins.find(c=>c.id===member.id)){showToast('Already checked in','error');return}checkins.unshift({id:member.id,name:member.name,avatar:member.avatar,time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})});activities.unshift({type:'checkin',text:`<strong>${member.name}</strong> checked in`,time:'Just now'});saveActivities();renderAttendance();renderActivities();closeSheet('checkinSheet');showToast(`${member.name} checked in!`);document.getElementById('checkinId').value=''}
-function renewMembership(){const memberId=document.getElementById('renewalMember').value;const planId=document.getElementById('renewalPlan').value;if(!memberId||!planId){showToast('Select member & plan','error');return}const member=members.find(m=>m.id==memberId);const plan=plans.find(p=>p.id==planId);if(!member||!plan)return;const amount=parseInt(document.getElementById('renewalAmount').value)||plan.price;const start=document.getElementById('renewalStart').value;const end=new Date(start);end.setDate(end.getDate()+plan.days);member.plan=plan.name;member.planId=plan.id;member.status='active';member.expires=end.toISOString().split('T')[0];member.due=Math.max(0,plan.price-amount);saveMembers();payments.unshift({id:Date.now(),receipt:'RCP'+String(payments.length+1).padStart(3,'0'),member:member.name,memberId:member.id,amount,plan:plan.name,mode:document.getElementById('renewalMode').value,date:start});savePayments();activities.unshift({type:'renewal',text:`<strong>${member.name}</strong> renewed`,time:'Just now'});saveActivities();renderAll();closeSheet('renewalSheet');showToast('Renewed!')}
-function addExpense(){const amount=parseInt(document.getElementById('expenseAmount').value);if(!amount){showToast('Enter amount','error');return}expenses.unshift({id:Date.now(),date:document.getElementById('expenseDate').value,desc:document.getElementById('expenseDesc').value||document.getElementById('expenseCategory').value,category:document.getElementById('expenseCategory').value,amount});saveExpenses();renderAll();closeSheet('expenseSheet');showToast('Expense added!')}
-function addStaff(){const name=document.getElementById('staffName').value.trim();if(!name){showToast('Enter name','error');return}trainers.push({id:Date.now(),name,role:document.getElementById('staffRole').value,specialty:document.getElementById('staffSpecial').value||'General',clients:0,salary:parseInt(document.getElementById('staffSalary').value)||0,phone:document.getElementById('staffPhone').value||'',joined:document.getElementById('staffJoining').value||'',avatar:'https://i.pravatar.cc/100?img='+Math.floor(Math.random()*70)});saveTrainers();renderTrainers();closeSheet('trainerSheet');showToast('Staff added!')}
-function collectDue(id){const m=members.find(x=>x.id===id);if(m){document.getElementById('paymentMember').value=id;document.getElementById('paymentAmount').value=m.due;document.getElementById('paymentFor').value='due';openSheet('paymentSheet')}}
-function openRenewal(id){document.getElementById('renewalMember').value=id;openSheet('renewalSheet')}
-function convertEnquiry(id){const e=enquiries.find(x=>x.id===id);if(e){document.getElementById('memberName').value=e.name;document.getElementById('memberPhone').value=e.phone;openSheet('memberSheet')}}
-function saveSettings(){showToast('Settings saved!')}
-let touchStartY=0;document.querySelectorAll('.sheet').forEach(sheet=>{sheet.addEventListener('touchstart',e=>{touchStartY=e.touches[0].clientY},{passive:true});sheet.addEventListener('touchmove',e=>{if(e.touches[0].clientY-touchStartY>50&&sheet.scrollTop<=0)closeAllSheets()},{passive:true})});
-document.getElementById('featureInput')?.addEventListener('keypress',e=>{if(e.key==='Enter'){e.preventDefault();addFeature()}});
-document.addEventListener('DOMContentLoaded',init);
+// SVG Icons
+const icons={spinner:'<div class="spinner"></div>',check:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',error:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',google:'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>'};
+
+let selectedCategory='GYM';
+let isResetMode = false;
+
+function toggleResetMode() {
+  isResetMode = !isResetMode;
+  const passGroup = document.getElementById('passwordGroup');
+  const loginBtn = document.getElementById('loginBtn');
+  const forgotLink = document.getElementById('forgotLink');
+  const formTitle = document.getElementById('loginHeaderTitle');
+  const loginPass = document.getElementById('loginPass');
+
+  if (isResetMode) {
+      passGroup.classList.add('collapsed');
+      setButtonState(loginBtn, 'idle', 'RESET');
+      forgotLink.textContent = 'BACK TO LOGIN';
+      formTitle.textContent = 'RESET PASSWORD';
+      loginPass.removeAttribute('required');
+  } else {
+      passGroup.classList.remove('collapsed');
+      setButtonState(loginBtn, 'idle', 'SIGN IN');
+      forgotLink.textContent = 'FORGOT PASSWORD?';
+      formTitle.textContent = 'WELCOME BACK';
+      loginPass.setAttribute('required', 'true');
+  }
+}
+
+function handleForgotClick() {
+  const isMobile = window.innerWidth < 768;
+  if (!isMobile) {
+      toggleResetMode();
+  } else {
+      openSheet('forgot');
+  }
+}
+
+function switchTab(tab){
+  let index = tab === 'login' ? 0 : 1;
+  if(isResetMode && tab === 'signup') {
+      toggleResetMode();
+  }
+  
+  const authTabs = document.querySelectorAll('.auth-form-wrapper > .slider-tabs .slider-tab');
+  authTabs.forEach(t=>t.classList.remove('active'));
+  authTabs[index].classList.add('active');
+  
+  document.getElementById('authTabSlider').style.transform = `translateX(${index * 100}%)`;
+
+  document.querySelectorAll('.form-section').forEach(f=>f.classList.remove('active'));
+  document.getElementById(tab+'Form').classList.add('active');
+  resetButtons()
+}
+
+function togglePassword(id){
+  const input=document.getElementById(id);
+  input.type=input.type==='password'?'text':'password'
+}
+
+function selectCategory(el, index){
+  const tabs = el.parentElement.querySelectorAll('.slider-tab');
+  tabs.forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  selectedCategory=el.textContent;
+  
+  document.getElementById('categoryTabSlider').style.transform = `translateX(${index * 100}%)`;
+}
+
+function setButtonState(btn,state,text,isGoogle=false){
+  btn.disabled=state!=='idle';
+  btn.classList.remove('btn-success','btn-error','btn-shake');
+  const innerWrap = `<span>${text}</span>`;
+  if(state==='loading'){btn.innerHTML=icons.spinner+innerWrap}
+  else if(state==='success'){btn.classList.add('btn-success');btn.innerHTML=icons.check+innerWrap}
+  else if(state==='error'){btn.classList.add('btn-error','btn-shake');btn.innerHTML=icons.error+innerWrap}
+  else{btn.innerHTML=(isGoogle?icons.google:'')+innerWrap}
+}
+
+function resetButtons(){
+  setButtonState(document.getElementById('loginBtn'), 'idle', isResetMode ? 'RESET' : 'SIGN IN');
+  setButtonState(document.getElementById('signupBtn'),'idle','CREATE ACCOUNT');
+  setButtonState(document.getElementById('googleLoginBtn'),'idle','CONTINUE WITH GOOGLE',true);
+  setButtonState(document.getElementById('googleSignupBtn'),'idle','CONTINUE WITH GOOGLE',true)
+}
+
+function markInputError(ids){
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){
+      el.classList.add('input-error');
+      el.addEventListener('input',()=>el.classList.remove('input-error'),{once:true})
+    }
+  })
+}
+
+function handleLogin(e){
+  e.preventDefault();
+  const btn=document.getElementById('loginBtn');
+  const email=document.getElementById('loginEmail').value;
+  
+  if (isResetMode) {
+      if(!email){
+          setButtonState(btn,'error','ENTER EMAIL');
+          markInputError(['loginEmail']);
+          setTimeout(()=>setButtonState(btn,'idle','RESET'),2000);
+          return;
+      }
+      setButtonState(btn,'loading','SENDING...');
+      setTimeout(()=>{
+          setButtonState(btn,'success','LINK SENT!');
+          setTimeout(() => {
+              toggleResetMode();
+              document.getElementById('loginEmail').value = '';
+          }, 1500);
+      },1200);
+      return;
+  }
+
+  const pass=document.getElementById('loginPass').value;
+  setButtonState(btn,'loading','SIGNING IN...');
+  setTimeout(()=>{
+    if(email==='TEST@TEST.COM'&&pass==='password'){
+      setButtonState(btn,'success','LOGIN SUCCESSFUL!');
+      setTimeout(()=>alert('Demo: Redirecting...'),1500)
+    }else{
+      setButtonState(btn,'error','INVALID CREDENTIALS');
+      markInputError(['loginEmail','loginPass']);
+      setTimeout(()=>setButtonState(btn,'idle','SIGN IN'),2000)
+    }
+  },1200)
+}
+
+function handleSignup(e){
+  e.preventDefault();
+  const btn=document.getElementById('signupBtn');
+  if(!selectedCategory){
+    setButtonState(btn,'error','SELECT BUSINESS TYPE');
+    setTimeout(()=>setButtonState(btn,'idle','CREATE ACCOUNT'),2000);
+    return
+  }
+  const email=document.getElementById('signupEmail').value;
+  setButtonState(btn,'loading','CREATING ACCOUNT...');
+  setTimeout(()=>{
+    if(email==='EXISTS@TEST.COM'){
+      setButtonState(btn,'error','EMAIL ALREADY EXISTS');
+      markInputError(['signupEmail']);
+      setTimeout(()=>setButtonState(btn,'idle','CREATE ACCOUNT'),2000)
+    }else{
+      setButtonState(btn,'success','ACCOUNT CREATED!');
+      setTimeout(()=>{switchTab('login');resetButtons()},1500)
+    }
+  },1200)
+}
+
+function handleGoogleAuth(type){
+  const btn=document.getElementById(type==='login'?'googleLoginBtn':'googleSignupBtn');
+  setButtonState(btn,'loading','CONNECTING...');
+  setTimeout(()=>{
+    const success=Math.random()>0.3;
+    if(success){
+      setButtonState(btn,'success','AUTH SUCCESSFUL!');
+      setTimeout(()=>alert('Demo: Redirecting...'),1500)
+    }else{
+      setButtonState(btn,'error','AUTH FAILED',true);
+      setTimeout(()=>setButtonState(btn,'idle','CONTINUE WITH GOOGLE',true),2000)
+    }
+  },1500)
+}
+
+function openSheet(type){
+  const isMobile=window.innerWidth<768;
+  const overlay=document.getElementById('sheetOverlay');
+  
+  let sheet, title, content;
+  
+  if (!isMobile && type === 'forgot') {
+    sheet = document.getElementById('pcDialog');
+    title = document.getElementById('dialogTitle');
+    content = document.getElementById('dialogContent');
+  } else {
+    sheet = isMobile ? document.getElementById('bottomSheet') : document.getElementById('sideSheet');
+    title = isMobile ? document.getElementById('sheetTitle') : document.getElementById('sideSheetTitle');
+    content = isMobile ? document.getElementById('sheetContent') : document.getElementById('sideSheetContent');
+  }
+  
+  document.querySelectorAll('.sheet-close').forEach(btn => {
+    btn.style.display = (type === 'forgot' && isMobile) ? 'none' : 'block';
+  });
+
+  let html='';
+  if(type==='forgot'){
+    title.textContent='FORGOT PASSWORD?';
+    html=`<div style="width: 100%;"><div class="form-group" style="margin-bottom:1rem; width: 100%;"><input type="email" class="form-input" id="resetEmail" placeholder="NAME@BUSINESS.COM" style="width: 100%;"></div><button class="btn btn-primary btn-text" id="resetBtn" onclick="handleReset()" style="width: 100%;"><span>SUBMIT</span></button></div>`
+  }else if(type==='terms'){
+    title.textContent='TERMS';
+    html=`<div style="color:var(--text-secondary);font-size:0.8rem;line-height:1.6"><p>Terms of Service placeholder.</p></div>`
+  }else if(type==='privacy'){
+    title.textContent='PRIVACY';
+    html=`<div style="color:var(--text-secondary);font-size:0.8rem;line-height:1.6"><p>Privacy Policy placeholder.</p></div>`
+  }
+  
+  content.innerHTML=html;
+  overlay.classList.add('active');
+  sheet.classList.add('active');
+}
+
+function closeSheet(){
+  document.getElementById('sheetOverlay').classList.remove('active');
+  document.getElementById('bottomSheet').classList.remove('active');
+  document.getElementById('sideSheet').classList.remove('active');
+  document.getElementById('pcDialog').classList.remove('active');
+}
+
+function handleReset(){
+  const btn=document.getElementById('resetBtn');
+  const email=document.getElementById('resetEmail').value;
+  if(!email){
+    setButtonState(btn,'error','ENTER EMAIL');
+    markInputError(['resetEmail']);
+    setTimeout(()=>setButtonState(btn,'idle','SUBMIT'),2000);
+    return
+  }
+  setButtonState(btn,'loading','SENDING...');
+  setTimeout(()=>{
+    setButtonState(btn,'success','LINK SENT!');
+    setTimeout(closeSheet,1500)
+  },1200)
+}
 </script>
 </body>
 </html>
