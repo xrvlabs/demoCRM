@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>BizCRM - Authentication</title>
+<title>BizCRM - Auth & Onboarding</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Iceland&family=JetBrains+Mono:wght@400;500;600;700&family=Play:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -15,13 +15,8 @@
     -webkit-tap-highlight-color: transparent !important;
 }
 
-*:focus {
-    outline: none !important;
-}
-
-button::-moz-focus-inner {
-    border: 0;
-}
+*:focus { outline: none !important; }
+button::-moz-focus-inner { border: 0; }
 
 :root {
     --primary: #7c3aed;
@@ -34,6 +29,7 @@ button::-moz-focus-inner {
     --text-muted: #94a3b8;
     --error: #ef4444;
     --success: #10b981;
+    --warning: #f59e0b;
     --radius: 5px; 
     
     --font-display: 'Iceland', cursive;
@@ -42,7 +38,7 @@ button::-moz-focus-inner {
     --font-ui: 'Play', sans-serif;
 }
 
-html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none; margin:0;}
 
 ::-webkit-scrollbar { display: none; }
 * { -ms-overflow-style: none; scrollbar-width: none; }
@@ -63,25 +59,13 @@ body, input, select, textarea {
     100% { background-position: 0% 50%; }
 }
 
-button, label, .btn-text {
-    font-family: var(--font-ui);
-    text-transform: uppercase;
-}
-h1, h2, h3, .form-title, .brand-text {
-    font-family: var(--font-display);
-    letter-spacing: 1px;
-}
-.form-subtitle {
-    text-transform: none;
-    font-family: var(--font-body);
-}
-#loginPass, #signupPass { text-transform: none; }
-#businessName { text-transform: capitalize; }
+button, label, .btn-text { font-family: var(--font-ui); text-transform: uppercase; }
+h1, h2, h3, .form-title, .brand-text { font-family: var(--font-display); letter-spacing: 1px; }
+.form-subtitle, .step-description { text-transform: none; font-family: var(--font-body); }
+#loginPass, #signupPass, textarea { text-transform: none; }
 
 /* Utilities */
-.gradient-bg {
-    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%);
-}
+.gradient-bg { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%); }
 .gradient-text {
     background: linear-gradient(135deg, #7c3aed, #f472b6);
     -webkit-background-clip: text;
@@ -103,775 +87,545 @@ h1, h2, h3, .form-title, .brand-text {
 .floating-bg {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
 }
-
-.floating-icon {
-    position: absolute;
-    opacity: 0.08;
-    color: var(--primary);
-    animation: floatIcon 20s ease-in-out infinite;
-}
-
-.floating-icon svg {
-    width: 100%;
-    height: 100%;
-}
-
-.floating-icon:nth-child(1) { top: 5%; left: 5%; width: 80px; height: 80px; animation-delay: 0s; animation-duration: 25s; }
+.floating-icon { position: absolute; opacity: 0.08; color: var(--primary); animation: floatIcon 20s ease-in-out infinite; }
+.floating-icon svg { width: 100%; height: 100%; }
+.floating-icon:nth-child(1) { top: 5%; left: 5%; width: 80px; height: 80px; animation-duration: 25s; }
 .floating-icon:nth-child(2) { top: 15%; right: 10%; width: 60px; height: 60px; animation-delay: -3s; animation-duration: 22s; }
 .floating-icon:nth-child(3) { top: 35%; left: 8%; width: 70px; height: 70px; animation-delay: -5s; animation-duration: 28s; }
 .floating-icon:nth-child(4) { top: 55%; right: 5%; width: 90px; height: 90px; animation-delay: -8s; animation-duration: 24s; }
 .floating-icon:nth-child(5) { top: 75%; left: 12%; width: 55px; height: 55px; animation-delay: -2s; animation-duration: 26s; }
 .floating-icon:nth-child(6) { top: 85%; right: 15%; width: 65px; height: 65px; animation-delay: -6s; animation-duration: 23s; }
-.floating-icon:nth-child(7) { top: 25%; left: 85%; width: 75px; height: 75px; animation-delay: -4s; animation-duration: 27s; }
-.floating-icon:nth-child(8) { top: 65%; left: 3%; width: 50px; height: 50px; animation-delay: -7s; animation-duration: 21s; }
-.floating-icon:nth-child(9) { top: 10%; left: 75%; width: 45px; height: 45px; animation-delay: -1s; animation-duration: 29s; }
-.floating-icon:nth-child(10) { top: 45%; right: 12%; width: 85px; height: 85px; animation-delay: -9s; animation-duration: 20s; }
-.floating-icon:nth-child(11) { top: 90%; left: 60%; width: 40px; height: 40px; animation-delay: -3.5s; animation-duration: 24s; }
-.floating-icon:nth-child(12) { top: 20%; left: 20%; width: 35px; height: 35px; animation-delay: -5.5s; animation-duration: 26s; }
-.floating-icon:nth-child(13) { top: 70%; right: 25%; width: 55px; height: 55px; animation-delay: -7.5s; animation-duration: 22s; }
-.floating-icon:nth-child(14) { top: 40%; left: 92%; width: 48px; height: 48px; animation-delay: -2.5s; animation-duration: 25s; }
-.floating-icon:nth-child(15) { top: 80%; left: 30%; width: 42px; height: 42px; animation-delay: -6.5s; animation-duration: 28s; }
-.floating-icon:nth-child(16) { top: 3%; left: 45%; width: 58px; height: 58px; animation-delay: -4.5s; animation-duration: 23s; }
+.floating-line { position: absolute; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.04; animation: floatLine 15s ease-in-out infinite; }
+.floating-line:nth-child(7) { top: 20%; left: 0; width: 40%; height: 2px; }
+.floating-line:nth-child(8) { top: 50%; right: 0; width: 35%; height: 2px; animation-delay: -3s; transform: rotate(-5deg); }
+.floating-orb { position: absolute; border-radius: 50%; animation: floatOrb 18s ease-in-out infinite; }
+.floating-orb:nth-child(9) { top: 15%; left: 25%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%); }
+.floating-orb:nth-child(10) { top: 60%; right: 20%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(244,114,182,0.05) 0%, transparent 70%); animation-delay: -5s; }
+.floating-dot { position: absolute; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; opacity: 0.15; animation: floatDot 12s ease-in-out infinite; }
+.floating-dot:nth-child(11) { top: 12%; left: 35%; }
+.floating-dot:nth-child(12) { top: 62%; right: 40%; animation-delay: -1s; }
 
-/* Connection Lines */
-.floating-line {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, var(--primary), transparent);
-    opacity: 0.04;
-    animation: floatLine 15s ease-in-out infinite;
+@keyframes floatIcon { 0%, 100% { transform: translateY(0) rotate(0deg) scale(1); } 50% { transform: translateY(-10px) rotate(-3deg) scale(0.95); } }
+@keyframes floatLine { 0%, 100% { transform: translateX(0) scaleX(1); opacity: 0.04; } 50% { transform: translateX(20px) scaleX(1.1); opacity: 0.08; } }
+@keyframes floatOrb { 0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; } 50% { transform: translate(30px, -20px) scale(1.1); opacity: 0.8; } }
+@keyframes floatDot { 0%, 100% { transform: translate(0, 0); opacity: 0.15; } 50% { transform: translate(10px, -15px); opacity: 0.25; } }
+
+/* ===== Views Management ===== */
+.view-container {
+    display: flex; height: 100%; width: 100%;
+    justify-content: center; align-items: center;
+    position: absolute; top: 0; left: 0;
+    z-index: 1; transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.view-container.hidden {
+    opacity: 0; visibility: hidden; pointer-events: none;
+}
+.view-wrapper {
+    width: 100%; max-width: 100%; margin: 0 auto;
+    display: flex; flex-direction: column;
+    height: 100%; overflow-y: auto;
+    padding: 1.5rem 1rem 1rem; position: relative;
+    justify-content: flex-start; z-index: 2;
 }
 
-.floating-line:nth-child(17) { top: 20%; left: 0; width: 40%; height: 2px; animation-delay: 0s; }
-.floating-line:nth-child(18) { top: 50%; right: 0; width: 35%; height: 2px; animation-delay: -3s; transform: rotate(-5deg); }
-.floating-line:nth-child(19) { top: 80%; left: 10%; width: 30%; height: 2px; animation-delay: -6s; transform: rotate(3deg); }
-.floating-line:nth-child(20) { top: 35%; right: 5%; width: 25%; height: 2px; animation-delay: -2s; transform: rotate(-8deg); }
+/* Base Form Elements */
+.mobile-brand { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; flex-shrink: 0; }
+.mobile-brand h1, .brand-mini span { font-weight: 700; display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-display); }
+.mobile-brand h1 svg, .brand-mini svg { width: 28px; height: 28px; }
+.brand-mini { display: flex; align-items: center; gap: 0.5rem; }
+.brand-mini span { font-size: 1.25rem; }
 
-/* Floating Orbs */
-.floating-orb {
-    position: absolute;
-    border-radius: 50%;
-    animation: floatOrb 18s ease-in-out infinite;
+.form-header, .step-header { margin-bottom: 1.5rem; text-align: center; flex-shrink: 0; }
+.form-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
+.form-body { flex: 1; display: flex; flex-direction: column; }
+.form-grid { display: grid; gap: 1rem; }
+.form-cols { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.form-label { font-size: 0.75rem; font-weight: 700; color: var(--text); letter-spacing: 0.5px; }
+
+.input-wrapper { position: relative; }
+.form-input {
+    width: 100%; padding: calc(0.75rem - 0.5px) 1rem;
+    background: linear-gradient(145deg, #dde4f6, #f5f8ff);
+    border-radius: var(--radius); border: 2px solid transparent; color: var(--text); font-size: 0.875rem; transition: all 0.3s; outline: none;
+    box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9);
 }
-
-.floating-orb:nth-child(21) { top: 15%; left: 25%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%); animation-delay: 0s; }
-.floating-orb:nth-child(22) { top: 60%; right: 20%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(244,114,182,0.05) 0%, transparent 70%); animation-delay: -5s; }
-.floating-orb:nth-child(23) { top: 40%; left: 60%; width: 180px; height: 180px; background: radial-gradient(circle, rgba(167,139,250,0.05) 0%, transparent 70%); animation-delay: -10s; }
-.floating-orb:nth-child(24) { top: 75%; left: 10%; width: 150px; height: 150px; background: radial-gradient(circle, rgba(124,58,237,0.04) 0%, transparent 70%); animation-delay: -3s; }
-
-/* Data Dots */
-.floating-dot {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: var(--primary);
-    border-radius: 50%;
-    opacity: 0.15;
-    animation: floatDot 12s ease-in-out infinite;
-}
-
-.floating-dot:nth-child(25) { top: 12%; left: 35%; animation-delay: 0s; }
-.floating-dot:nth-child(26) { top: 28%; right: 30%; animation-delay: -2s; }
-.floating-dot:nth-child(27) { top: 45%; left: 15%; animation-delay: -4s; }
-.floating-dot:nth-child(28) { top: 62%; right: 40%; animation-delay: -1s; }
-.floating-dot:nth-child(29) { top: 78%; left: 55%; animation-delay: -3s; }
-.floating-dot:nth-child(30) { top: 88%; right: 35%; animation-delay: -5s; }
-.floating-dot:nth-child(31) { top: 8%; left: 65%; animation-delay: -2.5s; }
-.floating-dot:nth-child(32) { top: 52%; left: 88%; animation-delay: -4.5s; }
-
-@keyframes floatIcon {
-    0%, 100% {
-        transform: translateY(0) rotate(0deg) scale(1);
-    }
-    25% {
-        transform: translateY(-20px) rotate(5deg) scale(1.05);
-    }
-    50% {
-        transform: translateY(-10px) rotate(-3deg) scale(0.95);
-    }
-    75% {
-        transform: translateY(-25px) rotate(8deg) scale(1.02);
-    }
-}
-
-@keyframes floatLine {
-    0%, 100% {
-        transform: translateX(0) scaleX(1);
-        opacity: 0.04;
-    }
-    50% {
-        transform: translateX(20px) scaleX(1.1);
-        opacity: 0.08;
-    }
-}
-
-@keyframes floatOrb {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
-        opacity: 1;
-    }
-    33% {
-        transform: translate(30px, -20px) scale(1.1);
-        opacity: 0.8;
-    }
-    66% {
-        transform: translate(-20px, 15px) scale(0.9);
-        opacity: 0.6;
-    }
-}
-
-@keyframes floatDot {
-    0%, 100% {
-        transform: translate(0, 0);
-        opacity: 0.15;
-    }
-    25% {
-        transform: translate(10px, -15px);
-        opacity: 0.25;
-    }
-    50% {
-        transform: translate(-5px, -25px);
-        opacity: 0.1;
-    }
-    75% {
-        transform: translate(15px, -10px);
-        opacity: 0.2;
-    }
-}
-
-/* ===== Layout ===== */
-.auth-container{display:flex;height:100%;width:100%; justify-content:center; align-items:center; position: relative; z-index: 1;}
-
-.auth-form-container{flex:1;display:flex;flex-direction:column;height:100%;overflow-y:auto;padding:1.5rem 1rem 1rem;position:relative;justify-content:flex-start; z-index: 2;}
-
-.auth-form-wrapper{width:100%;max-width:100%;margin:0 auto;display:flex;flex-direction:column;padding:0;}
-
-.mobile-brand{display:flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;justify-content:center}
-.mobile-brand h1{font-size:1.75rem;font-weight:700;display:flex;align-items:center;gap:0.5rem}
-.mobile-brand h1 svg{width:28px;height:28px}
-
-/* Slider Tabs */
-.slider-tabs {
-    display: flex;
-    position: relative;
-    border-radius: var(--radius);
-    padding: 0.3rem;
-}
-.slider-tab {
-    flex: 1;
-    padding: 0.6rem 1rem;
-    border: none;
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: calc(var(--radius) - 2px);
-    transition: color 0.4s ease;
-    font-family: var(--font-ui);
-    position: relative;
-    z-index: 2;
-}
-.slider-tab.active {
-    color: var(--primary);
-}
-.tab-slider {
-    position: absolute;
-    top: 0.3rem;
-    bottom: 0.3rem;
-    left: 0.3rem;
-    width: calc(50% - 0.3rem);
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    border-radius: calc(var(--radius) - 2px);
-    box-shadow: 2px 2px 6px rgba(166,180,200,0.4), -2px -2px 6px rgba(255,255,255,0.8);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1;
-}
-
-.form-section{display:none;flex:1}
-.form-section.active{display:flex;flex-direction:column;animation:fadeIn 0.3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.form-header{margin-bottom:1.5rem;text-align:center}
-.form-title{font-size:1.5rem;font-weight:700;margin-bottom:0.25rem}
-
-/* Form Elements */
-.form-body{flex:1;display:flex;flex-direction:column}
-.form-grid{display:grid;gap:1rem}
-.form-group{display:flex;flex-direction:column;gap:0.35rem}
-.form-label{font-size:0.75rem;font-weight:700;color:var(--text);letter-spacing:0.5px}
-
-/* Password Smooth Collapse */
-.password-transition {
-    transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
-    max-height: 150px;
-    opacity: 1;
-    overflow: hidden;
-    margin-top: 0;
-}
-.password-transition.collapsed {
-    max-height: 0;
-    opacity: 0;
-    margin-top: -1rem;
-    pointer-events: none;
-}
-
-/* Clay Inputs */
-.input-wrapper{position:relative}
-.form-input{width:100%;padding:0.75rem 1rem;background:linear-gradient(145deg, #dde4f6, #f5f8ff);border-radius:var(--radius);box-shadow:inset 3px 3px 8px rgba(166,180,200,0.5),inset -3px -3px 8px rgba(255,255,255,0.9);border:2px solid transparent;color:var(--text);font-size:0.875rem;transition:all 0.3s;outline:none}
-.form-input:focus{border-color:var(--secondary)}
-.form-input.input-error{border-color:var(--error);box-shadow:inset 3px 3px 8px rgba(239,68,68,0.2),inset -3px -3px 8px rgba(255,255,255,0.9)}
-.form-input::placeholder{color:var(--text-muted);font-family:var(--font-body);text-transform:uppercase}
-.input-icon{position:absolute;left:0.75rem;top:0;bottom:0;display:flex;align-items:center;color:var(--text-secondary);pointer-events:none}
-.input-icon svg{width:16px;height:16px}
-.input-wrapper .form-input{padding-left:2.5rem}
-.password-toggle{position:absolute;right:0.25rem;top:0;bottom:0;display:flex;align-items:center;background:none;border:none;color:var(--text-secondary);cursor:pointer;padding:0.5rem;}
-.password-toggle svg{width:16px;height:16px;display:block}
-
-/* Misc Form Layout */
-.form-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;font-size:0.75rem;margin-top:0.25rem}
-.checkbox-wrapper{display:flex;align-items:center;gap:0.4rem}
-.checkbox-wrapper input{width:14px;height:14px;accent-color:var(--primary);cursor:pointer}
-.checkbox-wrapper label{font-size:0.75rem;color:var(--text-secondary);cursor:pointer;font-weight:600}
-.forgot-link{font-size:0.75rem;color:var(--primary);text-decoration:none;font-weight:700;font-family:var(--font-ui)}
+.form-input:focus { border-color: var(--secondary); }
+.form-input.input-error { border-color: var(--error); box-shadow: inset 3px 3px 8px rgba(239,68,68,0.2), inset -3px -3px 8px rgba(255,255,255,0.9); }
+.form-input::placeholder { color: var(--text-muted); font-family: var(--font-body); text-transform: none; }
+textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
+.input-icon { position: absolute; left: 0.75rem; top: 0; bottom: 0; display: flex; align-items: center; color: var(--text-secondary); pointer-events: none; }
+.input-icon svg { width: 16px; height: 16px; }
+.input-wrapper .form-input { padding-left: 2.5rem; }
 
 /* Buttons */
-.btn{width:100%;padding:0.75rem 1rem;border:none;border-radius:var(--radius);font-size:0.875rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem;min-height:44px;}
-.btn-primary{background:linear-gradient(145deg, #8b5cf6, #6d28d9);color:white;box-shadow:5px 5px 12px rgba(109,40,217,0.3), -5px -5px 12px rgba(255,255,255,0.9)}
-.btn-primary:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(0,0,0,0.2),inset -4px -4px 10px rgba(255,255,255,0.2)}
-.btn-primary:disabled{opacity:0.7;cursor:not-allowed}
-.btn-outline{background:linear-gradient(145deg, #ffffff, #e8eeff);color:var(--text);box-shadow:5px 5px 12px rgba(166,180,200,0.5), -5px -5px 12px rgba(255,255,255,0.9)}
-.btn-outline:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(166,180,200,0.5),inset -4px -4px 10px rgba(255,255,255,0.9)}
-.btn-outline:disabled{opacity:0.7;cursor:not-allowed}
-.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn {
+    width: 100%; padding: 0.75rem 1rem; border: none; border-radius: var(--radius); font-size: 0.875rem;
+    font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; font-family: var(--font-ui);
+}
+.btn-primary { background: linear-gradient(145deg, #8b5cf6, #6d28d9); color: white; box-shadow: 5px 5px 12px rgba(109,40,217,0.3), -5px -5px 12px rgba(255,255,255,0.9); }
+.btn-primary:active:not(:disabled) { box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2), inset -4px -4px 10px rgba(255,255,255,0.2); }
+.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+.btn-outline { background: linear-gradient(145deg, #ffffff, #e8eeff); color: var(--text); box-shadow: 5px 5px 12px rgba(166,180,200,0.5), -5px -5px 12px rgba(255,255,255,0.9); }
+.btn-outline:active:not(:disabled) { box-shadow: inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9); }
+.btn-outline:disabled { opacity: 0.7; cursor: not-allowed; }
+.btn-success { background: linear-gradient(145deg, #10b981, #059669)!important; color: #fff!important; box-shadow: 5px 5px 12px rgba(16,185,129,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important; }
+.btn-error { background: linear-gradient(145deg, #ef4444, #dc2626)!important; color: #fff!important; box-shadow: 5px 5px 12px rgba(239,68,68,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important; }
+.btn svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-/* Status Buttons */
-.btn-success{background:linear-gradient(145deg, #10b981, #059669)!important;color:#fff!important;box-shadow:5px 5px 12px rgba(16,185,129,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important}
-.btn-error{background:linear-gradient(145deg, #ef4444, #dc2626)!important;color:#fff!important;box-shadow:5px 5px 12px rgba(239,68,68,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important}
+@keyframes spin{to{transform:rotate(360deg)}}
 @keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-4px)}20%,40%,60%,80%{transform:translateX(4px)}}
 .btn-shake{animation:shake 0.5s ease-in-out}
-@keyframes spin{to{transform:rotate(360deg)}}
-.btn .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:inline-block}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:inline-block}
 
-/* Dividers */
-.divider{display:flex;align-items:center;margin:1.25rem 0;gap:0.75rem}
-.divider::before,.divider::after{content:'';flex:1;height:2px;background:var(--card-bg);box-shadow: inset 1px 1px 2px rgba(166,180,200,0.3)}
-.divider span{color:var(--text-muted);font-size:0.75rem;font-weight:700;font-family:var(--font-ui)}
+/* ===== Auth Specific ===== */
+.slider-tabs { display: flex; position: relative; border-radius: var(--radius); padding: 0.3rem; margin-bottom: 1.5rem; flex-shrink: 0; }
+.slider-tab { flex: 1; padding: 0.6rem 1rem; border: none; background: transparent; color: var(--text-secondary); font-size: 0.875rem; font-weight: 700; cursor: pointer; border-radius: calc(var(--radius) - 2px); transition: color 0.3s ease; font-family: var(--font-ui); position: relative; z-index: 2; }
+.slider-tab.active { color: var(--primary); background: linear-gradient(145deg, #ffffff, #e8eeff); box-shadow: 2px 2px 6px rgba(166,180,200,0.4), -2px -2px 6px rgba(255,255,255,0.8); animation: fadeTab 0.3s ease-out forwards; }
+@keyframes fadeTab { 0% { opacity: 0; transform: scale(0.96); } 100% { opacity: 1; transform: scale(1); } }
 
-/* Sheets & Dialogs */
-.sheet-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:100;opacity:0;visibility:hidden;transition:all 0.3s}
-.sheet-overlay.active{opacity:1;visibility:visible}
-.bottom-sheet{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(145deg, #ffffff, #f0f4ff);border-radius:var(--radius) var(--radius) 0 0;box-shadow:0 -8px 30px rgba(166,180,200,0.5);padding:1.5rem;z-index:101;transform:translateY(100%);transition:transform 0.3s ease;max-height:85vh;overflow-y:auto}
-.bottom-sheet.active{transform:translateY(0)}
-.side-sheet{position:fixed;top:0;right:0;bottom:0;width:100%;max-width:400px;background:linear-gradient(145deg, #ffffff, #f0f4ff);box-shadow:-8px 0 30px rgba(166,180,200,0.5);z-index:101;transform:translateX(100%);transition:transform 0.3s ease;padding:1.5rem;overflow-y:auto}
-.side-sheet.active{transform:translateX(0)}
-.pc-dialog{position:fixed;top:50%;left:50%;transform:translate(-50%, -50%) scale(0.95);width:90%;max-width:420px;background:linear-gradient(145deg, #ffffff, #f0f4ff);z-index:101;padding:2rem;border-radius:var(--radius);opacity:0;visibility:hidden;transition:all 0.3s ease;box-shadow: 10px 10px 30px rgba(166,180,200,0.6), -10px -10px 30px rgba(255,255,255,0.9);}
-.pc-dialog.active{opacity:1;visibility:visible;transform:translate(-50%, -50%) scale(1)}
-.sheet-handle{width:40px;height:5px;background:#d1d5db;border-radius:var(--radius);margin:0 auto 1.25rem;box-shadow:inset 1px 1px 3px rgba(0,0,0,0.1)}
-.sheet-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem}
-.sheet-close{background:linear-gradient(145deg, #ffffff, #e8eeff);border-radius:var(--radius);box-shadow:3px 3px 8px rgba(166,180,200,0.5), -3px -3px 8px rgba(255,255,255,0.9);border:none;color:var(--text-secondary);cursor:pointer;padding:0.4rem;display:flex;align-items:center;justify-content:center;}
-.sheet-close:active{box-shadow:inset 2px 2px 5px rgba(166,180,200,0.5),inset -2px -2px 5px rgba(255,255,255,0.9)}
-.sheet-close svg{width:18px;height:18px}
-.form-cols{display:grid;grid-template-columns:1fr;gap:1rem}
+.form-section { display: none; flex: 1; }
+.form-section.active { display: flex; flex-direction: column; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+
+.password-transition { transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease; max-height: 150px; opacity: 1; overflow: hidden; margin-top: 0; }
+.password-transition.collapsed { max-height: 0; opacity: 0; margin-top: -1rem; pointer-events: none; }
+.password-toggle { position: absolute; right: 0.25rem; top: 0; bottom: 0; display: flex; align-items: center; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.5rem; }
+.password-toggle svg { width: 16px; height: 16px; display: block; }
+.form-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem; margin-top: 0.25rem; }
+.checkbox-wrapper { display: flex; align-items: center; gap: 0.4rem; }
+.checkbox-wrapper input { width: 14px; height: 14px; accent-color: var(--primary); cursor: pointer; }
+.checkbox-wrapper label { font-size: 0.75rem; color: var(--text-secondary); cursor: pointer; font-weight: 600; }
+.forgot-link { font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: 700; font-family: var(--font-ui); }
+.divider { display: flex; align-items: center; margin: 1.25rem 0; gap: 0.75rem; }
+.divider::before, .divider::after { content: ''; flex: 1; height: 2px; background: var(--card-bg); box-shadow: inset 1px 1px 2px rgba(166,180,200,0.3); }
+.divider span { color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); }
+
+/* ===== Onboarding Specific ===== */
+.onboarding-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-shrink: 0; }
+.skip-btn { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); cursor: pointer; padding: 0.5rem; transition: color 0.3s; visibility: hidden; pointer-events: none; } /* Hidden global skip to use step-specific skips */
+
+.progress-container { margin-bottom: 1.5rem; flex-shrink: 0; }
+.progress-steps { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+.progress-step { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); transition: all 0.4s ease; background: linear-gradient(145deg, #dde4f6, #f5f8ff); box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9); color: var(--text-muted); }
+.progress-step.active { background: linear-gradient(145deg, #8b5cf6, #6d28d9); box-shadow: 3px 3px 8px rgba(109,40,217,0.3), -3px -3px 8px rgba(255,255,255,0.9); color: white; }
+.progress-step.completed { background: linear-gradient(145deg, #10b981, #059669); box-shadow: 3px 3px 8px rgba(16,185,129,0.3), -3px -3px 8px rgba(255,255,255,0.9); color: white; }
+.progress-step svg { width: 14px; height: 14px; }
+
+/* Smooth Progress Fill Animation */
+.progress-line { flex: 1; max-width: 60px; height: 4px; background: linear-gradient(145deg, #dde4f6, #f5f8ff); box-shadow: inset 1px 1px 3px rgba(166,180,200,0.4); border-radius: var(--radius); position: relative; overflow: hidden; }
+.progress-line::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: linear-gradient(135deg, #7c3aed, #a78bfa); transition: width 0.5s ease-in-out; }
+.progress-line.active::after { width: 100%; }
+.progress-text { text-align: center; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
+
+.steps-container { flex: 1; overflow: hidden; position: relative; min-height: 380px; }
+.step { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: none; flex-direction: column; opacity: 0; transform: translateX(30px); transition: opacity 0.4s ease, transform 0.4s ease; overflow-y: auto; padding: 0 0.25rem 1rem 0; }
+.step.active { display: flex; opacity: 1; transform: translateX(0); }
+.step.slide-left { transform: translateX(-30px); }
+.step.slide-right { transform: translateX(30px); }
+
+.step-icon { width: 64px; height: 64px; margin: 0 auto 1rem; background: linear-gradient(145deg, #ffffff, #e8eeff); border-radius: 50%; box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; }
+.step-icon svg { width: 28px; height: 28px; color: var(--primary); }
+.step-icon.gradient-icon { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%); }
+.step-icon.gradient-icon svg { color: white; }
+.step-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.step-description { font-size: 0.875rem; color: var(--text-secondary); max-width: 300px; margin: 0 auto; line-height: 1.6; }
+
+.nav-buttons { display: flex; gap: 0.75rem; margin-top: auto; padding-top: 1rem; flex-shrink: 0; }
+.nav-buttons .btn { flex: 1; }
+
+/* Plan Cards */
+.plans-container { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.25rem; }
+.plan-card { background: linear-gradient(145deg, #ffffff, #e8eeff); border-radius: var(--radius); box-shadow: 4px 4px 12px rgba(166,180,200,0.5), -4px -4px 12px rgba(255,255,255,0.9); padding: 1rem; border: 2px solid transparent; transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; gap: 0.5rem; }
+.plan-card:hover { transform: translateY(-2px); }
+.plan-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #f5f3ff, #ede9fe); }
+.plan-header { display: flex; justify-content: space-between; align-items: center; }
+.plan-name { font-size: 0.875rem; font-weight: 700; font-family: var(--font-ui); }
+.plan-price { font-size: 1rem; font-weight: 700; color: var(--primary); font-family: var(--font-mono); }
+.plan-features { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.plan-feature { font-size: 0.65rem; padding: 0.25rem 0.5rem; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); color: var(--text-secondary); }
+
+/* Summary Grid */
+.summary-container { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; text-align: left; }
+.summary-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid rgba(166,180,200,0.4); padding-bottom: 0.5rem; }
+.summary-row:last-child { border-bottom: none; padding-bottom: 0; }
+.summary-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; white-space: nowrap; }
+.summary-val { font-size: 0.875rem; color: var(--text); font-weight: 600; text-align: right; word-break: break-word; text-transform: uppercase; }
+
+.completion-icon { width: 80px; height: 80px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 50%; box-shadow: 8px 8px 20px rgba(16,185,129,0.4), -8px -8px 20px rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; animation: completePulse 2s ease-in-out infinite; }
+.completion-icon svg { width: 40px; height: 40px; color: white; }
+@keyframes completePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
 /* Desktop Responsiveness */
-@media(min-width:480px){.form-cols{grid-template-columns:1fr 1fr}}
+@media(min-width:480px){ .form-cols{grid-template-columns:1fr 1fr} }
 @media(min-width:768px){
-  .floating-bg {
-      display: block;
-  }
-  
-  .auth-form-container{
-      padding:2rem 3rem;
-      justify-content:flex-start;
-      align-items:center;
-      overflow-y: auto;
-  }
-  
-  .auth-form-wrapper{
-      width: 100%;
-      max-width: 500px; 
-      padding: 0;
-      background: transparent;
-      border-radius: 0;
-      box-shadow: none;
-      display: flex;
-      flex-direction: column;
-  }
-
-  .mobile-brand {
-      margin-bottom: 2rem;
-  }
-  
-  .mobile-brand h1 {
-      font-size: 2.25rem;
-  }
-  
-  .mobile-brand h1 svg {
-      width: 36px;
-      height: 36px;
-  }
-
-  .slider-tabs {
-      margin-bottom: 2rem;
-  }
-  
-  .form-title {
-      font-size: 2rem;
-  }
-  
-  .form-subtitle {
-      font-size: 0.875rem;
-  }
-  
-  .bottom-sheet {
-      display: none;
-  }
+    .floating-bg {
+        display: block;
+        -webkit-mask-image: linear-gradient(to right, black 0%, black calc(50% - 340px), transparent calc(50% - 280px), transparent calc(50% + 280px), black calc(50% + 340px), black 100%);
+        mask-image: linear-gradient(to right, black 0%, black calc(50% - 340px), transparent calc(50% - 280px), transparent calc(50% + 280px), black calc(50% + 340px), black 100%);
+    }
+    .view-wrapper { width: 100%; max-width: 520px; padding: 2rem 3rem; background: transparent; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; }
+    .mobile-brand { margin-bottom: 2rem; }
+    .mobile-brand h1 { font-size: 2.25rem; }
+    .mobile-brand h1 svg { width: 36px; height: 36px; }
+    .slider-tabs { margin-bottom: 2rem; }
+    .form-title { font-size: 2rem; }
+    .form-subtitle { font-size: 0.875rem; }
+    .step-icon { width: 80px; height: 80px; }
+    .step-icon svg { width: 36px; height: 36px; }
+    .step-title { font-size: 1.75rem; }
+    .progress-step { width: 40px; height: 40px; font-size: 0.875rem; }
+    .progress-line { max-width: 80px; }
+    .steps-container { min-height: 420px; }
 }
 
 @media(min-width:1024px){
-  .auth-form-container{
-      padding: 3rem 4rem;
-  }
-  
-  .auth-form-wrapper {
-      max-width: 520px;
-  }
-  
-  .mobile-brand h1 {
-      font-size: 2.5rem;
-  }
-  
-  .mobile-brand h1 svg {
-      width: 40px;
-      height: 40px;
-  }
-  
-  .floating-icon {
-      opacity: 0.1;
-  }
+    .view-wrapper { padding: 3rem 4rem; max-width: 520px; }
+    .mobile-brand h1 { font-size: 2.5rem; }
+    .mobile-brand h1 svg { width: 40px; height: 40px; }
+    .floating-icon { opacity: 0.1; }
 }
 
-@media(max-width:767px){.side-sheet{display:none}}
-@media(max-height:700px){.form-header{margin-bottom:1rem}.form-grid{gap:0.75rem}.divider{margin:1rem 0}.slider-tabs{margin-bottom:1rem}}
+@media(max-height:700px){
+    .form-header, .step-header { margin-bottom: 1rem; }
+    .form-grid { gap: 0.75rem; }
+    .divider { margin: 1rem 0; }
+    .slider-tabs { margin-bottom: 1rem; }
+    .step-icon { width: 48px; height: 48px; }
+    .step-icon svg { width: 22px; height: 22px; }
+    .completion-icon { width: 60px; height: 60px; }
+    .completion-icon svg { width: 30px; height: 30px; }
+}
 </style>
 </head>
 <body>
 
-<!-- Floating CRM Background -->
 <div class="floating-bg">
-    <!-- CRM Icons -->
-    <!-- Users/Contacts -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-    </div>
-    <!-- Analytics/Chart -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-    </div>
-    <!-- Calendar/Schedule -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg>
-    </div>
-    <!-- Tasks/Checklist -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-    </div>
-    <!-- Email/Communication -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-    </div>
-    <!-- Dashboard -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-    </div>
-    <!-- Database/Storage -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.58 3 4 4.79 4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7c0-2.21-3.58-4-8-4zm0 2c3.87 0 6 1.5 6 2s-2.13 2-6 2-6-1.5-6-2 2.13-2 6-2zm6 12c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V17zm0-5c0 .5-2.13 2-6 2s-6-1.5-6-2V9.77C7.61 10.55 9.72 11 12 11s4.39-.45 6-1.23V12z"/></svg>
-    </div>
-    <!-- Team/Group -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-    </div>
-    <!-- Settings/Gear -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-    </div>
-    <!-- Money/Revenue -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
-    </div>
-    <!-- Notifications/Bell -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-    </div>
-    <!-- Documents/Files -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-    </div>
-    <!-- Phone/Support -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
-    </div>
-    <!-- Location/Map -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-    </div>
-    <!-- Search/Magnify -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-    </div>
-    <!-- Cloud/Sync -->
-    <div class="floating-icon">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
-    </div>
-    
-    <!-- Connection Lines -->
-    <div class="floating-line"></div>
-    <div class="floating-line"></div>
-    <div class="floating-line"></div>
-    <div class="floating-line"></div>
-    
-    <!-- Floating Orbs -->
-    <div class="floating-orb"></div>
-    <div class="floating-orb"></div>
-    <div class="floating-orb"></div>
-    <div class="floating-orb"></div>
-    
-    <!-- Data Dots -->
-    <div class="floating-dot"></div>
-    <div class="floating-dot"></div>
-    <div class="floating-dot"></div>
-    <div class="floating-dot"></div>
-    <div class="floating-dot"></div>
-    <div class="floating-dot"></div>
-    <div class="floating-dot"></div>
-    <div class="floating-dot"></div>
+    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg></div>
+    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg></div>
+    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.58 3 4 4.79 4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7c0-2.21-3.58-4-8-4zm0 2c3.87 0 6 1.5 6 2s-2.13 2-6 2-6-1.5-6-2 2.13-2 6-2zm6 12c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V17zm0-5c0 .5-2.13 2-6 2s-6-1.5-6-2V9.77C7.61 10.55 9.72 11 12 11s4.39-.45 6-1.23V12z"/></svg></div>
+    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg></div>
+    <div class="floating-line"></div><div class="floating-line"></div><div class="floating-orb"></div><div class="floating-orb"></div><div class="floating-dot"></div><div class="floating-dot"></div>
 </div>
 
-<div class="auth-container">
-<div class="auth-form-container">
+<div class="view-container" id="authView">
+    <div class="view-wrapper">
+        <div class="mobile-brand">
+            <h1 class="gradient-text">
+                <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>
+                BIZCRM
+            </h1>
+        </div>
+        
+        <div class="slider-tabs clay-inset">
+            <button type="button" class="slider-tab active" onclick="switchTab('login')">LOGIN</button>
+            <button type="button" class="slider-tab" onclick="switchTab('signup')">SIGN UP</button>
+        </div>
 
-<div class="auth-form-wrapper">
-<div class="mobile-brand"><h1 class="gradient-text"><svg width="28" height="28" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>BIZCRM</h1></div>
-<div class="slider-tabs clay-inset" style="margin-bottom: 1.5rem;">
-  <div class="tab-slider" id="authTabSlider"></div>
-  <button type="button" class="slider-tab active" onclick="switchTab('login')">LOGIN</button>
-  <button type="button" class="slider-tab" onclick="switchTab('signup')">SIGN UP</button>
-</div>
+        <div id="loginForm" class="form-section active">
+            <div class="form-header"><h2 class="form-title gradient-text" id="loginHeaderTitle">WELCOME BACK</h2></div>
+            <form class="form-body" onsubmit="handleLogin(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="loginEmail" placeholder="Name@business.com" required></div></div>
+                    
+                    <div id="passwordGroup" class="password-transition">
+                        <div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="loginPass" placeholder="••••••••" required><button type="button" class="password-toggle" onclick="togglePassword('loginPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
+                    </div>
+                    
+                    <div class="form-row"><div class="checkbox-wrapper"><input type="checkbox" id="remember"><label for="remember">REMEMBER ME</label></div><a href="#" class="forgot-link" id="forgotLink" onclick="handleForgotClick();return false">FORGOT PASSWORD?</a></div>
+                    <button type="submit" class="btn btn-primary btn-text" id="loginBtn"><span>SIGN IN</span></button>
+                </div>
+                <div class="divider"><span>OR</span></div>
+                <button type="button" class="btn btn-outline btn-text" id="googleLoginBtn" onclick="handleGoogleAuth('login')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
+            </form>
+        </div>
 
-<div id="loginForm" class="form-section active">
-<div class="form-header"><h2 class="form-title gradient-text" id="loginHeaderTitle">WELCOME BACK</h2></div>
-<form class="form-body" onsubmit="handleLogin(event)">
-<div class="form-grid">
-<div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="loginEmail" placeholder="NAME@BUSINESS.COM" required></div></div>
-
-<div id="passwordGroup" class="password-transition">
-  <div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="loginPass" placeholder="••••••••" required><button type="button" class="password-toggle" onclick="togglePassword('loginPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
-</div>
-
-<div class="form-row"><div class="checkbox-wrapper"><input type="checkbox" id="remember"><label for="remember">REMEMBER ME</label></div><a href="#" class="forgot-link" id="forgotLink" onclick="handleForgotClick();return false">FORGOT PASSWORD?</a></div>
-<button type="submit" class="btn btn-primary btn-text" id="loginBtn"><span>SIGN IN</span></button>
-</div>
-<div class="divider"><span>OR</span></div>
-<button type="button" class="btn btn-outline btn-text" id="googleLoginBtn" onclick="handleGoogleAuth('login')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
-</form>
-</div>
-
-<div id="signupForm" class="form-section">
-<div class="form-header"><h2 class="form-title gradient-text">CREATE AN ACCOUNT</h2></div>
-<form class="form-body" onsubmit="handleSignup(event)">
-<div class="form-grid">
-<div class="form-cols">
-<div class="form-group"><label class="form-label">BUSINESS NAME</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h-2V9z" clip-rule="evenodd"/></svg></span><input type="text" class="form-input" id="businessName" placeholder="YOUR BUSINESS" required></div></div>
-<div class="form-group"><label class="form-label">PHONE</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg></span><input type="tel" class="form-input" id="phone" placeholder="+91 98765 43210" required></div></div>
-</div>
-
-<div class="form-group">
-  <label class="form-label">BUSINESS TYPE</label>
-  <div class="slider-tabs clay-inset">
-    <div class="tab-slider" id="categoryTabSlider"></div>
-    <button type="button" class="slider-tab active" onclick="selectCategory(this, 0)">GYM</button>
-    <button type="button" class="slider-tab" onclick="selectCategory(this, 1)">LIBRARY</button>
-  </div>
-</div>
-
-<div class="form-cols">
-<div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="signupEmail" placeholder="NAME@BUSINESS.COM" required></div></div>
-<div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="signupPass" placeholder="MIN 8 CHARS" required minlength="8"><button type="button" class="password-toggle" onclick="togglePassword('signupPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
-</div>
-<button type="submit" class="btn btn-primary btn-text" id="signupBtn"><span>CREATE ACCOUNT</span></button>
-</div>
-<div class="divider"><span>OR</span></div>
-<button type="button" class="btn btn-outline btn-text" id="googleSignupBtn" onclick="handleGoogleAuth('signup')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
-</form>
-</div>
-</div>
-</div>
+        <div id="signupForm" class="form-section">
+            <div class="form-header"><h2 class="form-title gradient-text">CREATE AN ACCOUNT</h2></div>
+            <form class="form-body" onsubmit="handleSignup(event)">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="signupEmail" placeholder="Name@business.com" required></div></div>
+                    
+                    <div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="signupPass" placeholder="Min 8 characters" required minlength="8"><button type="button" class="password-toggle" onclick="togglePassword('signupPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
+                    
+                    <button type="submit" class="btn btn-primary btn-text" id="signupBtn"><span>CREATE ACCOUNT</span></button>
+                </div>
+                <div class="divider"><span>OR</span></div>
+                <button type="button" class="btn btn-outline btn-text" id="googleSignupBtn" onclick="handleGoogleAuth('signup')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
+            </form>
+        </div>
+    </div>
 </div>
 
-<div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
+<div class="view-container hidden" id="onboardingView">
+    <div class="view-wrapper">
+        <div class="onboarding-header">
+            <div class="brand-mini">
+                <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>
+                <span class="gradient-text">BIZCRM</span>
+            </div>
+            <button type="button" class="skip-btn" id="skipBtn">SKIP</button>
+        </div>
 
-<div class="bottom-sheet" id="bottomSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-header">
-    <h3 class="sheet-title gradient-text form-title" id="sheetTitle" style="margin-bottom:0"></h3>
-    <button class="sheet-close" onclick="closeSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
-  </div>
-  <div id="sheetContent" style="width: 100%;"></div>
-</div>
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-step active" data-step="1">1</div>
+                <div class="progress-line" data-line="1"></div>
+                <div class="progress-step" data-step="2">2</div>
+                <div class="progress-line" data-line="2"></div>
+                <div class="progress-step" data-step="3">3</div>
+            </div>
+            <div class="progress-text" id="progressText">STEP 1 OF 3 • PROFILE</div>
+        </div>
 
-<div class="side-sheet" id="sideSheet">
-  <div class="sheet-header">
-    <h3 class="sheet-title gradient-text form-title" id="sideSheetTitle" style="margin-bottom:0"></h3>
-    <button class="sheet-close" onclick="closeSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
-  </div>
-  <div id="sideSheetContent"></div>
-</div>
+        <div class="steps-container" id="stepsContainer">
 
-<div class="pc-dialog" id="pcDialog">
-  <div class="sheet-header">
-    <h3 class="sheet-title gradient-text form-title" id="dialogTitle" style="margin-bottom:0"></h3>
-    <button class="sheet-close" onclick="closeSheet()" style="display:block;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
-  </div>
-  <div id="dialogContent"></div>
+            <div class="step active" data-step="1">
+                <div class="step-header">
+                    <div class="step-icon gradient-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </div>
+                    <h2 class="step-title gradient-text">BUSINESS DETAILS</h2>
+                    <p class="step-description">Tell us what you run and the basics of your business.</p>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <div class="slider-tabs clay-inset" id="categoryTabs" style="margin-bottom:0;">
+                            <button type="button" class="slider-tab active" data-cat="gym">GYM</button>
+                            <button type="button" class="slider-tab" data-cat="library">LIBRARY</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BUSINESS NAME</label>
+                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></span>
+                        <input type="text" class="form-input" id="bizName" placeholder="E.G. FITPRO GYM"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BUSINESS PHONE</label>
+                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
+                        <input type="tel" class="form-input" id="bizPhone" placeholder="+91 9876543210"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">BUSINESS ADDRESS</label>
+                        <textarea class="form-input" id="bizAddress" placeholder="123 MAIN STREET, CITY"></textarea>
+                    </div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-primary" id="step1Next">CONTINUE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+
+            <div class="step" data-step="2">
+                <div class="step-header">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <h2 class="step-title gradient-text">LEGAL & PLAN</h2>
+                    <p class="step-description">Set up your owner details and optional default membership.</p>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">OWNER NAME</label>
+                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+                        <input type="text" class="form-input" id="ownerName" placeholder="JOHN DOE"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">GST NUMBER</label>
+                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+                        <input type="text" class="form-input" id="gstNumber" placeholder="22AAAAA0000A1Z5"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CHOOSE A DEFAULT PLAN (OPTIONAL)</label>
+                        <div class="plans-container" id="plansContainer">
+                            <div class="plan-card" data-plan="MONTHLY (₹999)">
+                                <div class="plan-header"><span class="plan-name">MONTHLY</span><span class="plan-price">₹999</span></div>
+                                <div class="plan-features"><span class="plan-feature">30 DAYS</span></div>
+                            </div>
+                            <div class="plan-card" data-plan="QUARTERLY (₹2499)">
+                                <div class="plan-header"><span class="plan-name">QUARTERLY</span><span class="plan-price">₹2,499</span></div>
+                                <div class="plan-features"><span class="plan-feature">90 DAYS</span></div>
+                            </div>
+                            <div class="plan-card" data-plan="YEARLY (₹8999)">
+                                <div class="plan-header"><span class="plan-name">YEARLY</span><span class="plan-price">₹8,999</span></div>
+                                <div class="plan-features"><span class="plan-feature">365 DAYS</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-outline" id="step2Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                    <button type="button" class="btn btn-outline" id="step2Skip" style="flex: 2;">SKIP PLAN</button>
+                    <button type="button" class="btn btn-primary" id="step2Next" style="flex: 2;">CONTINUE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+
+            <div class="step" data-step="3">
+                <div class="step-header">
+                    <div class="completion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <h2 class="step-title gradient-text">REVIEW & CONFIRM</h2>
+                    <p class="step-description">Verify the details you've entered before we create your workspace.</p>
+                </div>
+                
+                <div class="summary-container clay-inset">
+                    <div class="summary-row"><span class="summary-label">CATEGORY:</span> <span id="sumCategory" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">NAME:</span> <span id="sumName" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">PHONE:</span> <span id="sumPhone" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">ADDRESS:</span> <span id="sumAddress" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">OWNER:</span> <span id="sumOwner" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">GST:</span> <span id="sumGst" class="summary-val"></span></div>
+                    <div class="summary-row"><span class="summary-label">PLAN:</span> <span id="sumPlan" class="summary-val"></span></div>
+                </div>
+                
+                <div class="nav-buttons" style="margin-top: 1rem;">
+                    <button type="button" class="btn btn-outline" id="step3Back" style="flex: 0.5;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                    <button type="button" class="btn btn-success" id="completeBtn" style="flex: 2;">GO TO DASHBOARD</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-// SVG Icons
+// ================= Shared Utils =================
 const icons={spinner:'<div class="spinner"></div>',check:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',error:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',google:'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>'};
 
-let selectedCategory='GYM';
+// ================= AUTH LOGIC =================
 let isResetMode = false;
-
 function toggleResetMode() {
-  isResetMode = !isResetMode;
-  const passGroup = document.getElementById('passwordGroup');
-  const loginBtn = document.getElementById('loginBtn');
-  const forgotLink = document.getElementById('forgotLink');
-  const formTitle = document.getElementById('loginHeaderTitle');
-  const loginPass = document.getElementById('loginPass');
-
-  if (isResetMode) {
-      passGroup.classList.add('collapsed');
-      setButtonState(loginBtn, 'idle', 'RESET');
-      forgotLink.textContent = 'BACK TO LOGIN';
-      formTitle.textContent = 'RESET PASSWORD';
-      loginPass.removeAttribute('required');
-  } else {
-      passGroup.classList.remove('collapsed');
-      setButtonState(loginBtn, 'idle', 'SIGN IN');
-      forgotLink.textContent = 'FORGOT PASSWORD?';
-      formTitle.textContent = 'WELCOME BACK';
-      loginPass.setAttribute('required', 'true');
-  }
+    isResetMode = !isResetMode;
+    const passGroup = document.getElementById('passwordGroup'), loginBtn = document.getElementById('loginBtn'), forgotLink = document.getElementById('forgotLink'), formTitle = document.getElementById('loginHeaderTitle'), loginPass = document.getElementById('loginPass');
+    if (isResetMode) { passGroup.classList.add('collapsed'); setButtonState(loginBtn, 'idle', 'RESET'); forgotLink.textContent = 'BACK TO LOGIN'; formTitle.textContent = 'RESET PASSWORD'; loginPass.removeAttribute('required'); } 
+    else { passGroup.classList.remove('collapsed'); setButtonState(loginBtn, 'idle', 'SIGN IN'); forgotLink.textContent = 'FORGOT PASSWORD?'; formTitle.textContent = 'WELCOME BACK'; loginPass.setAttribute('required', 'true'); }
 }
-
-function handleForgotClick() {
-  const isMobile = window.innerWidth < 768;
-  if (!isMobile) {
-      toggleResetMode();
-  } else {
-      openSheet('forgot');
-  }
-}
-
+function handleForgotClick() { toggleResetMode(); }
 function switchTab(tab){
-  let index = tab === 'login' ? 0 : 1;
-  if(isResetMode && tab === 'signup') {
-      toggleResetMode();
-  }
-  
-  const authTabs = document.querySelectorAll('.auth-form-wrapper > .slider-tabs .slider-tab');
-  authTabs.forEach(t=>t.classList.remove('active'));
-  authTabs[index].classList.add('active');
-  
-  document.getElementById('authTabSlider').style.transform = `translateX(${index * 100}%)`;
-
-  document.querySelectorAll('.form-section').forEach(f=>f.classList.remove('active'));
-  document.getElementById(tab+'Form').classList.add('active');
-  resetButtons()
+    let index = tab === 'login' ? 0 : 1;
+    if(isResetMode && tab === 'signup') { toggleResetMode(); }
+    const authTabs = document.querySelectorAll('#authView .slider-tab');
+    authTabs.forEach(t=>t.classList.remove('active')); authTabs[index].classList.add('active');
+    document.querySelectorAll('.form-section').forEach(f=>f.classList.remove('active'));
+    document.getElementById(tab+'Form').classList.add('active'); resetButtons();
 }
-
-function togglePassword(id){
-  const input=document.getElementById(id);
-  input.type=input.type==='password'?'text':'password'
-}
-
-function selectCategory(el, index){
-  const tabs = el.parentElement.querySelectorAll('.slider-tab');
-  tabs.forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  selectedCategory=el.textContent;
-  
-  document.getElementById('categoryTabSlider').style.transform = `translateX(${index * 100}%)`;
-}
-
+function togglePassword(id){ const input=document.getElementById(id); input.type=input.type==='password'?'text':'password'; }
 function setButtonState(btn,state,text,isGoogle=false){
-  btn.disabled=state!=='idle';
-  btn.classList.remove('btn-success','btn-error','btn-shake');
-  const innerWrap = `<span>${text}</span>`;
-  if(state==='loading'){btn.innerHTML=icons.spinner+innerWrap}
-  else if(state==='success'){btn.classList.add('btn-success');btn.innerHTML=icons.check+innerWrap}
-  else if(state==='error'){btn.classList.add('btn-error','btn-shake');btn.innerHTML=icons.error+innerWrap}
-  else{btn.innerHTML=(isGoogle?icons.google:'')+innerWrap}
+    btn.disabled=state!=='idle'; btn.classList.remove('btn-success','btn-error','btn-shake'); const innerWrap = `<span>${text}</span>`;
+    if(state==='loading') btn.innerHTML=icons.spinner+innerWrap; else if(state==='success') { btn.classList.add('btn-success'); btn.innerHTML=icons.check+innerWrap; } else if(state==='error') { btn.classList.add('btn-error','btn-shake'); btn.innerHTML=icons.error+innerWrap; } else btn.innerHTML=(isGoogle?icons.google:'')+innerWrap;
 }
-
-function resetButtons(){
-  setButtonState(document.getElementById('loginBtn'), 'idle', isResetMode ? 'RESET' : 'SIGN IN');
-  setButtonState(document.getElementById('signupBtn'),'idle','CREATE ACCOUNT');
-  setButtonState(document.getElementById('googleLoginBtn'),'idle','CONTINUE WITH GOOGLE',true);
-  setButtonState(document.getElementById('googleSignupBtn'),'idle','CONTINUE WITH GOOGLE',true)
-}
-
-function markInputError(ids){
-  ids.forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){
-      el.classList.add('input-error');
-      el.addEventListener('input',()=>el.classList.remove('input-error'),{once:true})
-    }
-  })
-}
-
+function resetButtons(){ setButtonState(document.getElementById('loginBtn'), 'idle', isResetMode ? 'RESET' : 'SIGN IN'); setButtonState(document.getElementById('signupBtn'),'idle','CREATE ACCOUNT'); setButtonState(document.getElementById('googleLoginBtn'),'idle','CONTINUE WITH GOOGLE',true); setButtonState(document.getElementById('googleSignupBtn'),'idle','CONTINUE WITH GOOGLE',true); }
+function markInputError(ids){ ids.forEach(id=>{ const el=document.getElementById(id); if(el){ el.classList.add('input-error'); el.addEventListener('input',()=>el.classList.remove('input-error'),{once:true}) } }) }
 function handleLogin(e){
-  e.preventDefault();
-  const btn=document.getElementById('loginBtn');
-  const email=document.getElementById('loginEmail').value;
-  
-  if (isResetMode) {
-      if(!email){
-          setButtonState(btn,'error','ENTER EMAIL');
-          markInputError(['loginEmail']);
-          setTimeout(()=>setButtonState(btn,'idle','RESET'),2000);
-          return;
-      }
-      setButtonState(btn,'loading','SENDING...');
-      setTimeout(()=>{
-          setButtonState(btn,'success','LINK SENT!');
-          setTimeout(() => {
-              toggleResetMode();
-              document.getElementById('loginEmail').value = '';
-          }, 1500);
-      },1200);
-      return;
-  }
+    e.preventDefault(); const btn=document.getElementById('loginBtn'), email=document.getElementById('loginEmail').value;
+    if (isResetMode) { if(!email){ setButtonState(btn,'error','ENTER EMAIL'); markInputError(['loginEmail']); setTimeout(()=>setButtonState(btn,'idle','RESET'),2000); return; } setButtonState(btn,'loading','SENDING...'); setTimeout(()=>{ setButtonState(btn,'success','LINK SENT!'); setTimeout(() => { toggleResetMode(); document.getElementById('loginEmail').value = ''; }, 1500); },1200); return; }
+    const pass=document.getElementById('loginPass').value; setButtonState(btn,'loading','SIGNING IN...');
+    setTimeout(()=>{ setButtonState(btn,'success','LOGIN SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1500); },1200)
+}
+function handleSignup(e){ e.preventDefault(); const btn=document.getElementById('signupBtn'); setButtonState(btn,'loading','CREATING ACCOUNT...'); setTimeout(()=>{ setButtonState(btn,'success','ACCOUNT CREATED!'); setTimeout(()=>transitionToOnboarding(),1500); },1200) }
+function handleGoogleAuth(type){ const btn=document.getElementById(type==='login'?'googleLoginBtn':'googleSignupBtn'); setButtonState(btn,'loading','CONNECTING...'); setTimeout(()=>{ setButtonState(btn,'success','AUTH SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1500); },1500) }
 
-  const pass=document.getElementById('loginPass').value;
-  setButtonState(btn,'loading','SIGNING IN...');
-  setTimeout(()=>{
-    if(email==='TEST@TEST.COM'&&pass==='password'){
-      setButtonState(btn,'success','LOGIN SUCCESSFUL!');
-      setTimeout(()=>alert('Demo: Redirecting...'),1500)
-    }else{
-      setButtonState(btn,'error','INVALID CREDENTIALS');
-      markInputError(['loginEmail','loginPass']);
-      setTimeout(()=>setButtonState(btn,'idle','SIGN IN'),2000)
-    }
-  },1200)
+function transitionToOnboarding() {
+    const authView = document.getElementById('authView'), onbView = document.getElementById('onboardingView');
+    authView.style.opacity = '0';
+    setTimeout(() => {
+        authView.classList.add('hidden'); onbView.classList.remove('hidden');
+        setTimeout(() => onbView.style.opacity = '1', 50); goToStep(1);
+    }, 400);
 }
 
-function handleSignup(e){
-  e.preventDefault();
-  const btn=document.getElementById('signupBtn');
-  if(!selectedCategory){
-    setButtonState(btn,'error','SELECT BUSINESS TYPE');
-    setTimeout(()=>setButtonState(btn,'idle','CREATE ACCOUNT'),2000);
-    return
-  }
-  const email=document.getElementById('signupEmail').value;
-  setButtonState(btn,'loading','CREATING ACCOUNT...');
-  setTimeout(()=>{
-    if(email==='EXISTS@TEST.COM'){
-      setButtonState(btn,'error','EMAIL ALREADY EXISTS');
-      markInputError(['signupEmail']);
-      setTimeout(()=>setButtonState(btn,'idle','CREATE ACCOUNT'),2000)
-    }else{
-      setButtonState(btn,'success','ACCOUNT CREATED!');
-      setTimeout(()=>{switchTab('login');resetButtons()},1500)
-    }
-  },1200)
+// ================= ONBOARDING LOGIC =================
+let currentStep = 1;
+const totalSteps = 3;
+const stepNames = ['PROFILE', 'LEGAL & PLAN', 'CONFIRM'];
+const progressText = document.getElementById('progressText'), skipBtn = document.getElementById('skipBtn');
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Nav Listeners
+    document.getElementById('step1Next').addEventListener('click', () => goToStep(2));
+    
+    document.getElementById('step2Back').addEventListener('click', () => goToStep(1));
+    document.getElementById('step2Next').addEventListener('click', () => goToStep(3));
+    document.getElementById('step2Skip').addEventListener('click', () => { 
+        document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+        goToStep(3);
+    });
+    
+    document.getElementById('step3Back').addEventListener('click', () => goToStep(2));
+    document.getElementById('completeBtn').addEventListener('click', () => alert('Demo: Redirecting to Dashboard...'));
+    
+    // UI Interactions
+    document.getElementById('categoryTabs').addEventListener('click', e => { 
+        if (e.target.classList.contains('slider-tab')) { 
+            document.querySelectorAll('#categoryTabs .slider-tab').forEach(t => t.classList.remove('active')); 
+            e.target.classList.add('active'); 
+        }
+    });
+    
+    document.getElementById('plansContainer').addEventListener('click', e => { 
+        const card = e.target.closest('.plan-card'); 
+        if (card) { 
+            // Optional toggling: if clicked again, deselect
+            if(card.classList.contains('selected')) {
+                card.classList.remove('selected');
+            } else {
+                document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected')); 
+                card.classList.add('selected'); 
+            }
+        } 
+    });
+});
+
+function goToStep(stepNum) {
+    if (stepNum < 1 || stepNum > totalSteps) return;
+    
+    // If going to Step 3, populate summary
+    if (stepNum === 3) populateSummary();
+    
+    const currentStepEl = document.querySelector('.step.active'), newStepEl = document.querySelector(`.step[data-step="${stepNum}"]`);
+    if (!currentStepEl || !newStepEl) return;
+    
+    const direction = stepNum > currentStep ? 'slide-left' : 'slide-right';
+    currentStepEl.classList.remove('active'); currentStepEl.classList.add(direction); currentStep = stepNum;
+    setTimeout(() => { currentStepEl.classList.remove('slide-left', 'slide-right'); newStepEl.classList.add('active'); updateProgress(); }, 50);
 }
 
-function handleGoogleAuth(type){
-  const btn=document.getElementById(type==='login'?'googleLoginBtn':'googleSignupBtn');
-  setButtonState(btn,'loading','CONNECTING...');
-  setTimeout(()=>{
-    const success=Math.random()>0.3;
-    if(success){
-      setButtonState(btn,'success','AUTH SUCCESSFUL!');
-      setTimeout(()=>alert('Demo: Redirecting...'),1500)
-    }else{
-      setButtonState(btn,'error','AUTH FAILED',true);
-      setTimeout(()=>setButtonState(btn,'idle','CONTINUE WITH GOOGLE',true),2000)
-    }
-  },1500)
+function updateProgress() {
+    const steps = document.querySelectorAll('.progress-step'), lines = document.querySelectorAll('.progress-line');
+    steps.forEach((step, i) => {
+        const stepNum = i + 1; step.classList.remove('active', 'completed');
+        if (stepNum < currentStep) { step.classList.add('completed'); step.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'; }
+        else if (stepNum === currentStep) { step.classList.add('active'); step.textContent = stepNum; }
+        else { step.textContent = stepNum; }
+    });
+    
+    lines.forEach((line, i) => { if (i < currentStep - 1) line.classList.add('active'); else line.classList.remove('active'); });
+    progressText.textContent = 'STEP ' + currentStep + ' OF ' + totalSteps + ' • ' + stepNames[currentStep - 1];
 }
 
-function openSheet(type){
-  const isMobile=window.innerWidth<768;
-  const overlay=document.getElementById('sheetOverlay');
-  
-  let sheet, title, content;
-  
-  if (!isMobile && type === 'forgot') {
-    sheet = document.getElementById('pcDialog');
-    title = document.getElementById('dialogTitle');
-    content = document.getElementById('dialogContent');
-  } else {
-    sheet = isMobile ? document.getElementById('bottomSheet') : document.getElementById('sideSheet');
-    title = isMobile ? document.getElementById('sheetTitle') : document.getElementById('sideSheetTitle');
-    content = isMobile ? document.getElementById('sheetContent') : document.getElementById('sideSheetContent');
-  }
-  
-  document.querySelectorAll('.sheet-close').forEach(btn => {
-    btn.style.display = (type === 'forgot' && isMobile) ? 'none' : 'block';
-  });
-
-  let html='';
-  if(type==='forgot'){
-    title.textContent='FORGOT PASSWORD?';
-    html=`<div style="width: 100%;"><div class="form-group" style="margin-bottom:1rem; width: 100%;"><input type="email" class="form-input" id="resetEmail" placeholder="NAME@BUSINESS.COM" style="width: 100%;"></div><button class="btn btn-primary btn-text" id="resetBtn" onclick="handleReset()" style="width: 100%;"><span>SUBMIT</span></button></div>`
-  }else if(type==='terms'){
-    title.textContent='TERMS';
-    html=`<div style="color:var(--text-secondary);font-size:0.8rem;line-height:1.6"><p>Terms of Service placeholder.</p></div>`
-  }else if(type==='privacy'){
-    title.textContent='PRIVACY';
-    html=`<div style="color:var(--text-secondary);font-size:0.8rem;line-height:1.6"><p>Privacy Policy placeholder.</p></div>`
-  }
-  
-  content.innerHTML=html;
-  overlay.classList.add('active');
-  sheet.classList.add('active');
-}
-
-function closeSheet(){
-  document.getElementById('sheetOverlay').classList.remove('active');
-  document.getElementById('bottomSheet').classList.remove('active');
-  document.getElementById('sideSheet').classList.remove('active');
-  document.getElementById('pcDialog').classList.remove('active');
-}
-
-function handleReset(){
-  const btn=document.getElementById('resetBtn');
-  const email=document.getElementById('resetEmail').value;
-  if(!email){
-    setButtonState(btn,'error','ENTER EMAIL');
-    markInputError(['resetEmail']);
-    setTimeout(()=>setButtonState(btn,'idle','SUBMIT'),2000);
-    return
-  }
-  setButtonState(btn,'loading','SENDING...');
-  setTimeout(()=>{
-    setButtonState(btn,'success','LINK SENT!');
-    setTimeout(closeSheet,1500)
-  },1200)
+function populateSummary() {
+    // Step 1
+    const activeCategory = document.querySelector('#categoryTabs .slider-tab.active');
+    document.getElementById('sumCategory').textContent = activeCategory ? activeCategory.textContent : 'N/A';
+    document.getElementById('sumName').textContent = document.getElementById('bizName').value || 'NOT PROVIDED';
+    document.getElementById('sumPhone').textContent = document.getElementById('bizPhone').value || 'NOT PROVIDED';
+    document.getElementById('sumAddress').textContent = document.getElementById('bizAddress').value || 'NOT PROVIDED';
+    
+    // Step 2
+    document.getElementById('sumOwner').textContent = document.getElementById('ownerName').value || 'NOT PROVIDED';
+    document.getElementById('sumGst').textContent = document.getElementById('gstNumber').value || 'NOT PROVIDED';
+    
+    const selectedPlan = document.querySelector('.plan-card.selected');
+    document.getElementById('sumPlan').textContent = selectedPlan ? selectedPlan.dataset.plan : 'NONE SELECTED';
 }
 </script>
 </body>
