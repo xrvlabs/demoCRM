@@ -3,700 +3,762 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>BizCRM - Auth & Onboarding</title>
+<title>BizCRM - Complete Platform</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Iceland&family=JetBrains+Mono:wght@400;500;600;700&family=Play:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* Global Resets */
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent !important;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent!important}
+*:focus{outline:none!important}
+button::-moz-focus-inner{border:0}
+:root{
+--primary:#7c3aed;--secondary:#a78bfa;--accent:#f472b6;
+--bg:#f0f4ff;--card-bg:#e8eeff;
+--text:#1e1b4b;--text-secondary:#475569;--text-muted:#94a3b8;
+--error:#ef4444;--success:#10b981;--warning:#f59e0b;--info:#3b82f6;
+--radius:5px;
+--font-display:'Iceland',cursive;--font-mono:'JetBrains Mono',monospace;
+--font-body:'Space Grotesk',sans-serif;--font-ui:'Play',sans-serif;
+--sidebar-width:260px
 }
-
-*:focus { outline: none !important; }
-button::-moz-focus-inner { border: 0; }
-
-:root {
-    --primary: #7c3aed;
-    --secondary: #a78bfa;
-    --accent: #f472b6;
-    --bg: #f0f4ff;
-    --card-bg: #e8eeff;
-    --text: #1e1b4b;
-    --text-secondary: #475569;
-    --text-muted: #94a3b8;
-    --error: #ef4444;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --radius: 5px; 
-    
-    --font-display: 'Iceland', cursive;
-    --font-mono: 'JetBrains Mono', monospace;
-    --font-body: 'Space Grotesk', sans-serif;
-    --font-ui: 'Play', sans-serif;
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;margin:0}
+::-webkit-scrollbar{display:none}
+*{-ms-overflow-style:none;scrollbar-width:none}
+body,input,select,textarea{
+font-family:var(--font-body);text-transform:uppercase;
+background:linear-gradient(-45deg,#f0f4ff,#e8eeff,#fdf2f8,#f5f3ff);
+background-size:400% 400%;animation:smoothBg 15s ease infinite;
+color:var(--text);line-height:1.5
 }
-
-html,body{height:100%;overflow:hidden;overscroll-behavior:none; margin:0;}
-
-::-webkit-scrollbar { display: none; }
-* { -ms-overflow-style: none; scrollbar-width: none; }
-
-body, input, select, textarea {
-    font-family: var(--font-body);
-    text-transform: uppercase;
-    background: linear-gradient(-45deg, #f0f4ff, #e8eeff, #fdf2f8, #f5f3ff);
-    background-size: 400% 400%;
-    animation: smoothBg 15s ease infinite;
-    color: var(--text);
-    line-height: 1.5;
-}
-
-@keyframes smoothBg {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-button, label, .btn-text { font-family: var(--font-ui); text-transform: uppercase; }
-h1, h2, h3, .form-title, .brand-text { font-family: var(--font-display); letter-spacing: 1px; }
-#loginPass, #signupPass, textarea { text-transform: none; }
-
-/* Utilities */
-.gradient-bg { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%); }
-.gradient-text {
-    background: linear-gradient(135deg, #7c3aed, #f472b6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-.clay {
-    background: linear-gradient(145deg, #ffffff, #e8eeff);
-    border-radius: var(--radius);
-    box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9);
-}
-.clay-inset {
-    background: linear-gradient(145deg, #dde4f6, #f5f8ff);
-    border-radius: var(--radius);
-    box-shadow: inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9);
-}
-
-/* ===== Views Management ===== */
-.view-container { display: flex; flex-direction: column; height: 100%; width: 100%; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 1; transition: opacity 0.4s ease, visibility 0.4s ease; }
-.view-container.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-.view-wrapper { width: 100%; max-width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: 100%; overflow-y: hidden; padding: 1.5rem 1rem 1rem; position: relative; justify-content: flex-start; z-index: 2; }
-
-/* Base Form Elements */
-.mobile-brand { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; flex-shrink: 0; }
-.mobile-brand h1, .brand-mini span { font-weight: 700; display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-display); }
-.mobile-brand h1 svg, .brand-mini svg { width: 28px; height: 28px; }
-.brand-mini { display: flex; align-items: center; gap: 0.5rem; }
-.brand-mini span { font-size: 1.25rem; }
-
-.form-header, .step-header { margin-bottom: 1.5rem; text-align: center; flex-shrink: 0; }
-.form-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
-.form-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-right: 0; }
-.form-grid { display: grid; gap: 1rem; flex: 1; overflow-y: auto; min-height: 0; align-content: start; padding-right: 0.25rem; margin-bottom: 0.5rem; }
-.form-cols { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-.form-group { display: flex; flex-direction: column; gap: 0.35rem; }
-.form-label { font-size: 0.75rem; font-weight: 700; color: var(--text); letter-spacing: 0.5px; }
-
-/* Inner scrolling hide scrollbars */
-.form-grid::-webkit-scrollbar, .summary-container::-webkit-scrollbar { display: none; }
-.form-grid, .summary-container { -ms-overflow-style: none; scrollbar-width: none; }
-
-.input-wrapper { position: relative; }
-.form-input { width: 100%; padding: calc(0.75rem - 0.5px) 1rem; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); border: 2px solid transparent; color: var(--text); font-size: 0.875rem; transition: all 0.3s; outline: none; box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9); }
-.form-input:focus { border-color: var(--secondary); }
-.form-input.input-error { border-color: var(--error); box-shadow: inset 3px 3px 8px rgba(239,68,68,0.2), inset -3px -3px 8px rgba(255,255,255,0.9); }
-.form-input::placeholder { color: var(--text-muted); font-family: var(--font-body); text-transform: none; }
-textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
-.input-icon { position: absolute; left: 0.75rem; top: 0; bottom: 0; display: flex; align-items: center; color: var(--text-secondary); pointer-events: none; }
-.input-icon svg { width: 16px; height: 16px; }
-.input-wrapper .form-input { padding-left: 2.5rem; }
-
-/* Hide Password Toggle when empty */
-.form-input:placeholder-shown + .password-toggle { display: none; }
-
-/* Password Strength Meter */
-.password-strength { display: none; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem; padding: 0 0.25rem; }
-.password-strength.active { display: flex; animation: fadeIn 0.3s ease; }
-.strength-bar-bg { height: 4px; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); overflow: hidden; box-shadow: inset 1px 1px 3px rgba(166,180,200,0.4); }
-.strength-bar-fill { height: 100%; width: 0%; border-radius: var(--radius); transition: width 0.4s ease, background-color 0.4s ease; }
-.strength-text { font-size: 0.65rem; font-weight: 700; font-family: var(--font-ui); text-align: right; transition: color 0.4s ease; }
-
-.strength-weak { background-color: var(--error); }
-.strength-medium { background-color: var(--warning); }
-.strength-strong { background-color: var(--success); }
-.text-weak { color: var(--error); }
-.text-medium { color: var(--warning); }
-.text-strong { color: var(--success); }
-
-/* Buttons */
-.btn { width: 100%; padding: 0.75rem 1rem; border: none; border-radius: var(--radius); font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; font-family: var(--font-ui); }
-.btn-primary { background: linear-gradient(145deg, #8b5cf6, #6d28d9); color: white; box-shadow: 5px 5px 12px rgba(109,40,217,0.3), -5px -5px 12px rgba(255,255,255,0.9); }
-.btn-primary:active:not(:disabled) { box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2), inset -4px -4px 10px rgba(255,255,255,0.2); }
-.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
-.btn-outline { background: linear-gradient(145deg, #ffffff, #e8eeff); color: var(--text); box-shadow: 5px 5px 12px rgba(166,180,200,0.5), -5px -5px 12px rgba(255,255,255,0.9); }
-.btn-outline:active:not(:disabled) { box-shadow: inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9); }
-.btn-outline:disabled { opacity: 0.7; cursor: not-allowed; }
-.btn-success { background: linear-gradient(145deg, #10b981, #059669)!important; color: #fff!important; box-shadow: 5px 5px 12px rgba(16,185,129,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important; }
-.btn-error { background: linear-gradient(145deg, #ef4444, #dc2626)!important; color: #fff!important; box-shadow: 5px 5px 12px rgba(239,68,68,0.3), -5px -5px 12px rgba(255,255,255,0.9)!important; }
-.btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-
+@keyframes smoothBg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+button,label,.btn-text{font-family:var(--font-ui);text-transform:uppercase}
+h1,h2,h3,.form-title,.brand-text{font-family:var(--font-display);letter-spacing:1px}
+#loginPass,#signupPass,textarea{text-transform:none}
+.gradient-text{background:linear-gradient(135deg,#7c3aed,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.clay{background:linear-gradient(145deg,#ffffff,#e8eeff);border-radius:var(--radius);box-shadow:6px 6px 16px rgba(166,180,200,.5),-6px -6px 16px rgba(255,255,255,.9)}
+.clay-sm{background:linear-gradient(145deg,#ffffff,#e8eeff);border-radius:var(--radius);box-shadow:4px 4px 10px rgba(166,180,200,.4),-4px -4px 10px rgba(255,255,255,.9)}
+.clay-inset{background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);box-shadow:inset 4px 4px 10px rgba(166,180,200,.5),inset -4px -4px 10px rgba(255,255,255,.9)}
+.view-container{display:flex;flex-direction:column;height:100%;width:100%;justify-content:center;align-items:center;position:absolute;top:0;left:0;z-index:1;transition:opacity .4s,visibility .4s}
+.view-container.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.view-wrapper{width:100%;max-width:100%;margin:0 auto;display:flex;flex-direction:column;height:100%;overflow-y:hidden;padding:1.5rem 1rem 1rem;position:relative;justify-content:flex-start;z-index:2}
+.mobile-brand{display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;justify-content:center;flex-shrink:0}
+.mobile-brand h1{font-weight:700;display:flex;align-items:center;gap:.5rem;font-family:var(--font-display)}
+.mobile-brand h1 svg{width:28px;height:28px}
+.brand-mini{display:flex;align-items:center;gap:.5rem}
+.brand-mini span{font-size:1.25rem;font-weight:700;font-family:var(--font-display)}
+.form-header,.step-header{margin-bottom:1.5rem;text-align:center;flex-shrink:0}
+.form-title{font-size:1.5rem;font-weight:700;margin-bottom:.25rem}
+.form-body{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.form-grid{display:grid;gap:1rem;flex:1;overflow-y:auto;min-height:0;align-content:start;padding-right:.25rem;margin-bottom:.5rem}
+.form-group{display:flex;flex-direction:column;gap:.35rem}
+.form-label{font-size:.75rem;font-weight:700;color:var(--text);letter-spacing:.5px}
+.input-wrapper{position:relative}
+.form-input{width:100%;padding:calc(.75rem - .5px) 1rem;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);border:2px solid transparent;color:var(--text);font-size:.875rem;transition:all .3s;outline:none;box-shadow:inset 3px 3px 8px rgba(166,180,200,.5),inset -3px -3px 8px rgba(255,255,255,.9)}
+.form-input:focus{border-color:var(--secondary)}
+.form-input::placeholder{color:var(--text-muted);font-family:var(--font-body);text-transform:none}
+textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
+.input-icon{position:absolute;left:.75rem;top:0;bottom:0;display:flex;align-items:center;color:var(--text-secondary);pointer-events:none}
+.input-icon svg{width:16px;height:16px}
+.input-wrapper .form-input{padding-left:2.5rem}
+.form-input:placeholder-shown+.password-toggle{display:none}
+.password-strength{display:none;flex-direction:column;gap:.35rem;margin-top:.5rem;padding:0 .25rem}
+.password-strength.active{display:flex;animation:fadeIn .3s ease}
+.strength-bar-bg{height:4px;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);overflow:hidden}
+.strength-bar-fill{height:100%;width:0;border-radius:var(--radius);transition:width .4s,background-color .4s}
+.strength-text{font-size:.65rem;font-weight:700;font-family:var(--font-ui);text-align:right}
+.strength-weak{background-color:var(--error)}.strength-medium{background-color:var(--warning)}.strength-strong{background-color:var(--success)}
+.text-weak{color:var(--error)}.text-medium{color:var(--warning)}.text-strong{color:var(--success)}
+.btn{width:100%;padding:.75rem 1rem;border:none;border-radius:var(--radius);font-size:.875rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;font-family:var(--font-ui)}
+.btn-primary{background:linear-gradient(145deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:5px 5px 12px rgba(109,40,217,.3),-5px -5px 12px rgba(255,255,255,.9)}
+.btn-primary:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(0,0,0,.2),inset -4px -4px 10px rgba(255,255,255,.2)}
+.btn-primary:disabled{opacity:.7;cursor:not-allowed}
+.btn-outline{background:linear-gradient(145deg,#fff,#e8eeff);color:var(--text);box-shadow:5px 5px 12px rgba(166,180,200,.5),-5px -5px 12px rgba(255,255,255,.9)}
+.btn-outline:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(166,180,200,.5),inset -4px -4px 10px rgba(255,255,255,.9)}
+.btn-success{background:linear-gradient(145deg,#10b981,#059669)!important;color:#fff!important;box-shadow:5px 5px 12px rgba(16,185,129,.3),-5px -5px 12px rgba(255,255,255,.9)!important}
+.btn-error{background:linear-gradient(145deg,#ef4444,#dc2626)!important;color:#fff!important}
+.btn-warning{background:linear-gradient(145deg,#f59e0b,#d97706)!important;color:#fff!important}
+.btn-info{background:linear-gradient(145deg,#3b82f6,#2563eb)!important;color:#fff!important}
+.btn svg{width:18px;height:18px;flex-shrink:0}
+.btn-sm{padding:.5rem .75rem;font-size:.75rem;min-height:34px;width:auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-4px)}20%,40%,60%,80%{transform:translateX(4px)}}
-.btn-shake{animation:shake 0.5s ease-in-out}
-.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:inline-block}
+.btn-shake{animation:shake .5s ease-in-out}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:inline-block}
+.large-spinner{width:56px;height:56px;border:4px solid rgba(124,58,237,.2);border-radius:50%;border-top-color:var(--primary);animation:spin 1s ease-in-out infinite;margin-bottom:1.5rem}
+.slider-tabs{display:flex;position:relative;border-radius:var(--radius);padding:.3rem;margin-bottom:1.5rem;flex-shrink:0}
+.slider-tab{flex:1;padding:.6rem 1rem;border:none;background:transparent;color:var(--text-secondary);font-size:.875rem;font-weight:700;cursor:pointer;border-radius:calc(var(--radius) - 2px);transition:color .3s;font-family:var(--font-ui);position:relative;z-index:2}
+.slider-tab.active{color:var(--primary);background:linear-gradient(145deg,#fff,#e8eeff);box-shadow:2px 2px 6px rgba(166,180,200,.4),-2px -2px 6px rgba(255,255,255,.8);animation:fadeTab .3s ease-out forwards}
+@keyframes fadeTab{0%{opacity:0;transform:scale(.96)}100%{opacity:1;transform:scale(1)}}
+.form-section{display:none;flex:1}
+.form-section.active{display:flex;flex-direction:column;animation:fadeIn .3s ease;overflow:hidden}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.password-transition{transition:max-height .4s,opacity .4s,margin-top .4s;max-height:150px;opacity:1;overflow:hidden}
+.password-transition.collapsed{max-height:0;opacity:0;margin-top:-1rem;pointer-events:none}
+.password-toggle{position:absolute;right:.25rem;top:0;bottom:0;display:flex;align-items:center;background:none;border:none;color:var(--text-secondary);cursor:pointer;padding:.5rem}
+.password-toggle svg{width:16px;height:16px;display:block}
+.form-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;font-size:.75rem;margin-top:.25rem}
+.checkbox-wrapper{display:flex;align-items:center;gap:.4rem}
+.checkbox-wrapper input{width:14px;height:14px;accent-color:var(--primary);cursor:pointer}
+.checkbox-wrapper label{font-size:.75rem;color:var(--text-secondary);cursor:pointer;font-weight:600}
+.forgot-link{font-size:.75rem;color:var(--primary);text-decoration:none;font-weight:700;font-family:var(--font-ui)}
+.divider{display:flex;align-items:center;margin:.75rem 0;gap:.75rem;flex-shrink:0}
+.divider::before,.divider::after{content:'';flex:1;height:2px;background:var(--card-bg)}
+.divider span{color:var(--text-muted);font-size:.75rem;font-weight:700;font-family:var(--font-ui)}
+.onboarding-header{order:1;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-shrink:0}
+.skip-btn{background:none;border:none;color:var(--text-muted);font-size:.75rem;font-weight:700;font-family:var(--font-ui);cursor:pointer;padding:.5rem;visibility:hidden;pointer-events:none}
+.progress-container{order:3;flex-shrink:0}
+.progress-steps{display:flex;align-items:center;justify-content:center;gap:.5rem}
+.progress-step{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:var(--font-ui);transition:all .4s;background:linear-gradient(145deg,#dde4f6,#f5f8ff);box-shadow:inset 3px 3px 8px rgba(166,180,200,.5),inset -3px -3px 8px rgba(255,255,255,.9);color:var(--text-muted)}
+.progress-step.active{background:linear-gradient(145deg,#8b5cf6,#6d28d9);box-shadow:3px 3px 8px rgba(109,40,217,.3),-3px -3px 8px rgba(255,255,255,.9);color:#fff}
+.progress-step.completed{background:linear-gradient(145deg,#10b981,#059669);box-shadow:3px 3px 8px rgba(16,185,129,.3),-3px -3px 8px rgba(255,255,255,.9);color:#fff}
+.progress-step svg{width:14px;height:14px}
+.progress-line{flex:1;max-width:60px;height:4px;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);position:relative;overflow:hidden}
+.progress-line::after{content:'';position:absolute;top:0;left:0;height:100%;width:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);transition:width .5s ease-in-out}
+.progress-line.active::after{width:100%}
+.progress-text{text-align:center;font-size:.7rem;color:var(--text-muted);font-weight:600;margin-top:.75rem}
+.steps-container{order:2;flex:1;overflow:hidden;position:relative;min-height:0;display:flex;flex-direction:column}
+.step{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow:hidden;z-index:1}
+.step.active{opacity:1;visibility:visible;z-index:5}
+.step-icon,.completion-icon{width:56px;height:56px;margin:0 auto .75rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-icon{background:linear-gradient(145deg,#fff,#e8eeff);box-shadow:6px 6px 16px rgba(166,180,200,.5),-6px -6px 16px rgba(255,255,255,.9)}
+.step-icon.gradient-icon{background:linear-gradient(135deg,#7c3aed,#a78bfa,#f472b6);box-shadow:6px 6px 16px rgba(124,58,237,.3),-6px -6px 16px rgba(255,255,255,.9)}
+.completion-icon{background:linear-gradient(135deg,#10b981,#059669);box-shadow:6px 6px 16px rgba(16,185,129,.3),-6px -6px 16px rgba(255,255,255,.9)}
+.step-icon svg{width:28px;height:28px;color:var(--primary)}
+.step-icon.gradient-icon svg,.completion-icon svg{width:28px;height:28px;color:#fff}
+.step-title{font-size:1.5rem;font-weight:700;margin-bottom:.5rem;text-align:center}
+.nav-buttons{display:flex;gap:.75rem;margin-top:auto;padding-top:.5rem;flex-shrink:0;position:relative;z-index:10}
+.nav-buttons .btn{flex:1}
+.plans-container{display:grid;grid-template-columns:1fr;gap:.75rem;margin-top:.25rem}
+.plan-card{background:linear-gradient(145deg,#fff,#e8eeff);border-radius:var(--radius);box-shadow:4px 4px 12px rgba(166,180,200,.5),-4px -4px 12px rgba(255,255,255,.9);padding:1rem;border:2px solid transparent;transition:all .3s;cursor:pointer;display:flex;flex-direction:column;gap:.5rem}
+.plan-card:hover{transform:translateY(-2px)}
+.plan-card.selected{border-color:var(--primary);background:linear-gradient(145deg,#f5f3ff,#ede9fe)}
+.plan-header{display:flex;justify-content:space-between;align-items:center}
+.plan-name{font-size:.875rem;font-weight:700;font-family:var(--font-ui)}
+.plan-price{font-size:1rem;font-weight:700;color:var(--primary);font-family:var(--font-mono)}
+.plan-features{display:flex;gap:.5rem;flex-wrap:wrap}
+.plan-feature{font-size:.65rem;padding:.25rem .5rem;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);color:var(--text-secondary)}
+.summary-container{display:flex;flex-direction:column;gap:.75rem;padding:1.25rem;margin-bottom:.5rem;text-align:left;flex:1;overflow-y:auto;min-height:0}
+.summary-row{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;border-bottom:1px solid rgba(166,180,200,.4);padding-bottom:.5rem;flex-shrink:0}
+.summary-row:last-child{border-bottom:none;padding-bottom:0}
+.summary-label{font-size:.75rem;color:var(--text-secondary);font-weight:700;white-space:nowrap}
+.summary-val{font-size:.875rem;color:var(--text);font-weight:600;text-align:right;word-break:break-word}
 
-/* Large Spinner for Loading Screen */
-.large-spinner { width: 56px; height: 56px; border: 4px solid rgba(124, 58, 237, 0.2); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s ease-in-out infinite; margin-bottom: 1.5rem; }
+/* DASHBOARD */
+#dashboardView{z-index:100}
+.dashboard-layout{display:flex;height:100%;width:100%;overflow:hidden}
+.sidebar{width:var(--sidebar-width);height:100%;background:linear-gradient(180deg,#1e1b4b,#312e81,#3b0764);display:flex;flex-direction:column;transition:all .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;z-index:50;overflow:hidden}
+.sidebar-header{padding:1.25rem 1rem;display:flex;align-items:center;gap:.75rem;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0}
+.sidebar-logo{width:36px;height:36px;flex-shrink:0}
+.sidebar-brand{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:#fff;white-space:nowrap}
+.sidebar-category{font-size:.6rem;font-family:var(--font-mono);color:rgba(167,139,250,.8);padding:.25rem .75rem;margin:.75rem 1rem 0;letter-spacing:2px;white-space:nowrap}
+.sidebar-nav{flex:1;padding:.5rem 0;overflow-y:auto}
+.nav-section-label{font-size:.6rem;font-family:var(--font-mono);color:rgba(255,255,255,.3);padding:.75rem 1.25rem .35rem;letter-spacing:2px}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.25rem;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-left:3px solid transparent;white-space:nowrap;font-family:var(--font-ui);font-size:.78rem;font-weight:600;letter-spacing:.5px}
+.nav-item:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.05)}
+.nav-item.active{color:#fff;background:rgba(124,58,237,.3);border-left-color:var(--accent)}
+.nav-item i{width:20px;text-align:center;font-size:.95rem;flex-shrink:0}
+.nav-item .nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:10px;font-family:var(--font-mono);font-weight:700}
+.sidebar-footer{padding:1rem;border-top:1px solid rgba(255,255,255,.1);flex-shrink:0}
+.user-profile{display:flex;align-items:center;gap:.75rem;cursor:pointer;padding:.5rem;border-radius:var(--radius);transition:background .2s}
+.user-profile:hover{background:rgba(255,255,255,.05)}
+.user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f472b6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.875rem;flex-shrink:0}
+.user-info{overflow:hidden}
+.user-name{font-size:.8rem;font-weight:700;color:#fff;font-family:var(--font-ui);white-space:nowrap}
+.user-role{font-size:.65rem;color:rgba(255,255,255,.5);font-family:var(--font-mono);white-space:nowrap}
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;flex-shrink:0;gap:1rem;background:rgba(255,255,255,.5);backdrop-filter:blur(10px);border-bottom:1px solid rgba(166,180,200,.3)}
+.topbar-left{display:flex;align-items:center;gap:1rem}
+.menu-toggle{background:none;border:none;color:var(--text);font-size:1.25rem;cursor:pointer;padding:.5rem;border-radius:var(--radius);display:none;width:auto;min-height:auto}
+.page-title{font-family:var(--font-display);font-size:1.5rem;font-weight:700}
+.topbar-right{display:flex;align-items:center;gap:.75rem}
+.topbar-btn{background:linear-gradient(145deg,#fff,#e8eeff);border:none;width:38px;height:38px;min-height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);font-size:1rem;box-shadow:3px 3px 8px rgba(166,180,200,.4),-3px -3px 8px rgba(255,255,255,.9);position:relative}
+.topbar-btn:active{box-shadow:inset 2px 2px 5px rgba(166,180,200,.5),inset -2px -2px 5px rgba(255,255,255,.9)}
+.topbar-btn .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--error);border-radius:50%;border:2px solid #fff}
+.search-bar{display:flex;align-items:center;gap:.5rem;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);padding:.5rem 1rem;box-shadow:inset 3px 3px 8px rgba(166,180,200,.4),inset -3px -3px 8px rgba(255,255,255,.9);flex:1;max-width:320px}
+.search-bar i{color:var(--text-muted);font-size:.875rem}
+.search-bar input{background:none;border:none;font-size:.8rem;color:var(--text);width:100%;font-family:var(--font-body);box-shadow:none}
+.search-bar input::placeholder{color:var(--text-muted)}
+.dash-content{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:1.25rem}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:1rem}
+.stat-card{padding:1.1rem;display:flex;flex-direction:column;gap:.6rem;transition:transform .2s;animation:cardUp .5s ease-out both}
+.stat-card:nth-child(1){animation-delay:.08s}.stat-card:nth-child(2){animation-delay:.14s}.stat-card:nth-child(3){animation-delay:.2s}.stat-card:nth-child(4){animation-delay:.26s}
+@keyframes cardUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.stat-card:hover{transform:translateY(-3px)}
+.stat-card-header{display:flex;align-items:center;justify-content:space-between}
+.stat-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.stat-icon.purple{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff}
+.stat-icon.pink{background:linear-gradient(135deg,#ec4899,#f472b6);color:#fff}
+.stat-icon.green{background:linear-gradient(135deg,#10b981,#34d399);color:#fff}
+.stat-icon.blue{background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff}
+.stat-icon.orange{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff}
+.stat-icon.red{background:linear-gradient(135deg,#ef4444,#f87171);color:#fff}
+.stat-icon.teal{background:linear-gradient(135deg,#14b8a6,#5eead4);color:#fff}
+.stat-trend{font-size:.65rem;font-weight:700;font-family:var(--font-mono);padding:.15rem .4rem;border-radius:var(--radius)}
+.stat-trend.up{color:var(--success);background:rgba(16,185,129,.1)}
+.stat-trend.down{color:var(--error);background:rgba(239,68,68,.1)}
+.stat-value{font-size:1.5rem;font-weight:700;font-family:var(--font-mono);color:var(--text);line-height:1}
+.stat-label{font-size:.65rem;color:var(--text-muted);font-weight:600;font-family:var(--font-ui);letter-spacing:.5px}
+.chart-row{display:grid;grid-template-columns:1fr;gap:1rem}
+.dash-card{padding:1.25rem;animation:cardUp .5s ease-out .3s both}
+.dash-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.dash-card-title{font-family:var(--font-ui);font-size:.85rem;font-weight:700;color:var(--text)}
+.dash-card-action{font-size:.7rem;color:var(--primary);font-weight:700;font-family:var(--font-ui);cursor:pointer;background:none;border:none;padding:.3rem .6rem;border-radius:var(--radius);width:auto;min-height:auto}
+.dash-card-action:hover{background:rgba(124,58,237,.1)}
+.chart-area{width:100%;height:200px;position:relative;overflow:hidden}
+.chart-bars{display:flex;align-items:flex-end;height:100%;padding:0 .5rem;justify-content:space-between}
+.chart-bar-group{display:flex;flex-direction:column;align-items:center;gap:.35rem;flex:1}
+.chart-bar{width:60%;max-width:40px;border-radius:var(--radius) var(--radius) 0 0;background:linear-gradient(180deg,#7c3aed,#a78bfa);transition:height 1s cubic-bezier(.4,0,.2,1);min-height:4px;box-shadow:2px 0 8px rgba(124,58,237,.2)}
+.chart-bar.accent{background:linear-gradient(180deg,#ec4899,#f472b6);box-shadow:2px 0 8px rgba(236,72,153,.2)}
+.chart-bar.green{background:linear-gradient(180deg,#10b981,#34d399)}
+.chart-bar-label{font-size:.6rem;color:var(--text-muted);font-family:var(--font-mono);font-weight:600}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-size:.68rem;font-weight:700;font-family:var(--font-ui);color:var(--text-muted);padding:.7rem;text-align:left;border-bottom:2px solid rgba(166,180,200,.3)}
+.data-table td{font-size:.78rem;padding:.7rem;border-bottom:1px solid rgba(166,180,200,.2);color:var(--text);font-family:var(--font-body)}
+.data-table tbody tr:hover{background:rgba(124,58,237,.03)}
+.member-cell{display:flex;align-items:center;gap:.6rem}
+.member-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;color:#fff;flex-shrink:0}
+.status-badge{font-size:.6rem;font-weight:700;font-family:var(--font-ui);padding:.18rem .5rem;border-radius:10px;white-space:nowrap}
+.status-active{background:rgba(16,185,129,.15);color:var(--success)}
+.status-expired{background:rgba(239,68,68,.15);color:var(--error)}
+.status-pending{background:rgba(245,158,11,.15);color:var(--warning)}
+.status-available{background:rgba(16,185,129,.15);color:var(--success)}
+.status-issued{background:rgba(59,130,246,.15);color:#3b82f6}
+.status-overdue{background:rgba(239,68,68,.15);color:var(--error)}
+.status-paid{background:rgba(16,185,129,.15);color:var(--success)}
+.status-unpaid{background:rgba(239,68,68,.15);color:var(--error)}
+.status-partial{background:rgba(245,158,11,.15);color:var(--warning)}
+.quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.75rem}
+.quick-action-btn{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1.1rem .5rem;border:none;cursor:pointer;transition:all .2s;font-family:var(--font-ui);width:auto;min-height:auto}
+.quick-action-btn:hover{transform:translateY(-2px)}
+.quick-action-btn:active{box-shadow:inset 3px 3px 8px rgba(166,180,200,.5),inset -3px -3px 8px rgba(255,255,255,.9)}
+.quick-action-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.quick-action-label{font-size:.65rem;font-weight:700;color:var(--text);text-align:center}
+.table-wrapper{overflow-x:auto;margin:0 -.5rem;padding:0 .5rem}
+.activity-feed{display:flex;flex-direction:column}
+.activity-item{display:flex;align-items:flex-start;gap:.75rem;padding:.65rem 0;border-bottom:1px solid rgba(166,180,200,.2)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:.4rem}
+.activity-dot.purple{background:var(--primary)}.activity-dot.green{background:var(--success)}.activity-dot.pink{background:var(--accent)}.activity-dot.orange{background:var(--warning)}.activity-dot.blue{background:var(--info)}
+.activity-text{font-size:.78rem;color:var(--text);line-height:1.4}
+.activity-time{font-size:.6rem;color:var(--text-muted);font-family:var(--font-mono);margin-top:.1rem}
+.sidebar-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:45;opacity:0;transition:opacity .3s}
+.sidebar-overlay.show{display:block;opacity:1}
+.page-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.25rem}
+.filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.filter-chip{padding:.35rem .75rem;border-radius:20px;font-size:.7rem;font-weight:700;font-family:var(--font-ui);cursor:pointer;border:none;transition:all .2s}
+.filter-chip.active{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;box-shadow:2px 2px 6px rgba(124,58,237,.3)}
+.filter-chip:not(.active){background:linear-gradient(145deg,#fff,#e8eeff);color:var(--text-secondary);box-shadow:2px 2px 6px rgba(166,180,200,.3),-2px -2px 6px rgba(255,255,255,.8)}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.info-item{display:flex;flex-direction:column;gap:.25rem;padding:.75rem}
+.info-item-label{font-size:.65rem;color:var(--text-muted);font-weight:700;font-family:var(--font-ui)}
+.info-item-value{font-size:.85rem;color:var(--text);font-weight:600}
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:linear-gradient(145deg,#dde4f6,#c8d0e8);border-radius:24px;transition:.3s}
+.toggle-slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:1px 1px 3px rgba(0,0,0,.15)}
+.toggle-switch input:checked+.toggle-slider{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+.toggle-switch input:checked+.toggle-slider:before{transform:translateX(20px)}
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:.85rem 0;border-bottom:1px solid rgba(166,180,200,.2)}
+.settings-item:last-child{border-bottom:none}
+.settings-item-left{display:flex;align-items:center;gap:.75rem}
+.settings-item-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.settings-item-text{display:flex;flex-direction:column}
+.settings-item-title{font-size:.8rem;font-weight:700;font-family:var(--font-ui)}
+.settings-item-desc{font-size:.65rem;color:var(--text-muted);text-transform:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:pulse 2s ease-in-out infinite;display:inline-block;margin-right:.35rem}
 
-/* ===== Auth Specific ===== */
-.slider-tabs { display: flex; position: relative; border-radius: var(--radius); padding: 0.3rem; margin-bottom: 1.5rem; flex-shrink: 0; }
-.slider-tab { flex: 1; padding: 0.6rem 1rem; border: none; background: transparent; color: var(--text-secondary); font-size: 0.875rem; font-weight: 700; cursor: pointer; border-radius: calc(var(--radius) - 2px); transition: color 0.3s ease; font-family: var(--font-ui); position: relative; z-index: 2; }
-.slider-tab.active { color: var(--primary); background: linear-gradient(145deg, #ffffff, #e8eeff); box-shadow: 2px 2px 6px rgba(166,180,200,0.4), -2px -2px 6px rgba(255,255,255,0.8); animation: fadeTab 0.3s ease-out forwards; }
-@keyframes fadeTab { 0% { opacity: 0; transform: scale(0.96); } 100% { opacity: 1; transform: scale(1); } }
+/* CARD GRID for members & staff */
+.person-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.person-card{padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;transition:transform .2s;animation:cardUp .5s ease-out both}
+.person-card:hover{transform:translateY(-3px)}
+.person-card-top{display:flex;align-items:center;gap:1rem}
+.person-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1rem;flex-shrink:0}
+.person-info{flex:1;min-width:0}
+.person-name{font-size:.9rem;font-weight:700;font-family:var(--font-ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.person-role{font-size:.68rem;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.5px}
+.person-details{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.person-detail{display:flex;flex-direction:column;gap:.1rem}
+.person-detail-label{font-size:.58rem;color:var(--text-muted);font-weight:700;font-family:var(--font-ui)}
+.person-detail-value{font-size:.78rem;color:var(--text);font-weight:600;font-family:var(--font-mono)}
+.person-actions{display:flex;gap:.5rem;margin-top:.15rem}
+.person-actions .btn-sm{flex:1;font-size:.63rem;padding:.4rem .5rem;min-height:30px}
 
-.form-section { display: none; flex: 1; }
-.form-section.active { display: flex; flex-direction: column; animation: fadeIn 0.3s ease; overflow: hidden; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+/* Progress bars for salary/plan */
+.prog-bar-wrap{margin-top:.15rem}
+.prog-bar-bg{height:6px;border-radius:3px;background:linear-gradient(145deg,#dde4f6,#f5f8ff);box-shadow:inset 1px 1px 3px rgba(166,180,200,.4);overflow:hidden}
+.prog-bar-fill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.prog-bar-fill.green{background:linear-gradient(90deg,#10b981,#34d399)}
+.prog-bar-fill.orange{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.prog-bar-fill.red{background:linear-gradient(90deg,#ef4444,#f87171);width:0!important}
+.prog-bar-fill.purple{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.prog-bar-fill.blue{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.prog-bar-labels{display:flex;justify-content:space-between;margin-top:.2rem}
+.prog-bar-labels span{font-size:.58rem;font-family:var(--font-mono);color:var(--text-muted)}
 
-.password-transition { transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease; max-height: 150px; opacity: 1; overflow: hidden; margin-top: 0; }
-.password-transition.collapsed { max-height: 0; opacity: 0; margin-top: -1rem; pointer-events: none; }
-.password-toggle { position: absolute; right: 0.25rem; top: 0; bottom: 0; display: flex; align-items: center; background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.5rem; }
-.password-toggle svg { width: 16px; height: 16px; display: block; }
-.form-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem; margin-top: 0.25rem; }
-.checkbox-wrapper { display: flex; align-items: center; gap: 0.4rem; }
-.checkbox-wrapper input { width: 14px; height: 14px; accent-color: var(--primary); cursor: pointer; }
-.checkbox-wrapper label { font-size: 0.75rem; color: var(--text-secondary); cursor: pointer; font-weight: 600; }
-.forgot-link { font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: 700; font-family: var(--font-ui); }
-.divider { display: flex; align-items: center; margin: 0.75rem 0; gap: 0.75rem; flex-shrink: 0; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 2px; background: var(--card-bg); box-shadow: inset 1px 1px 2px rgba(166,180,200,0.3); }
-.divider span { color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); }
+/* Attendance dots */
+.att-dots{display:flex;gap:3px;flex-wrap:wrap;margin-top:.1rem}
+.att-dot{width:8px;height:8px;border-radius:50%;transition:transform .2s}
+.att-dot.present{background:var(--success)}
+.att-dot.absent{background:var(--error)}
+.att-dot.half{background:var(--warning)}
+.att-dot:hover{transform:scale(1.6)}
 
-/* ===== Onboarding Specific ===== */
-.onboarding-header { order: 1; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-shrink: 0; }
-.skip-btn { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); cursor: pointer; padding: 0.5rem; transition: color 0.3s; visibility: hidden; pointer-events: none; } 
+/* Days remaining ring */
+.days-ring{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.days-ring-text{font-size:.6rem;font-weight:700;font-family:var(--font-mono);z-index:2;line-height:1;text-align:center}
+.days-ring-text span{display:block;font-size:.45rem;color:var(--text-muted);font-weight:600}
 
-/* Progress Bar Ordered Flex Logic */
-.progress-container { order: 3; flex-shrink: 0; }
-.progress-steps { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-.progress-step { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); transition: all 0.4s ease; background: linear-gradient(145deg, #dde4f6, #f5f8ff); box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9); color: var(--text-muted); }
-.progress-step.active { background: linear-gradient(145deg, #8b5cf6, #6d28d9); box-shadow: 3px 3px 8px rgba(109,40,217,0.3), -3px -3px 8px rgba(255,255,255,0.9); color: white; }
-.progress-step.completed { background: linear-gradient(145deg, #10b981, #059669); box-shadow: 3px 3px 8px rgba(16,185,129,0.3), -3px -3px 8px rgba(255,255,255,0.9); color: white; }
-.progress-step svg { width: 14px; height: 14px; }
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;opacity:0;transition:opacity .3s}
+.modal-overlay.show{display:flex;opacity:1}
+.modal{width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:1.5rem;animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.modal-title{font-family:var(--font-display);font-size:1.25rem;font-weight:700}
+.modal-close{background:none;border:none;font-size:1.25rem;color:var(--text-muted);cursor:pointer;padding:.25rem;width:auto;min-height:auto}
+.modal-body{display:flex;flex-direction:column;gap:1rem}
+.modal-actions{display:flex;gap:.75rem;margin-top:.5rem}
+.modal-actions .btn{flex:1}
 
-/* Smooth Progress Fill Animation */
-.progress-line { flex: 1; max-width: 60px; height: 4px; background: linear-gradient(145deg, #dde4f6, #f5f8ff); box-shadow: inset 1px 1px 3px rgba(166,180,200,0.4); border-radius: var(--radius); position: relative; overflow: hidden; }
-.progress-line::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: linear-gradient(135deg, #7c3aed, #a78bfa); transition: width 0.5s ease-in-out; }
-.progress-line.active::after { width: 100%; }
-.progress-text { text-align: center; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 0.75rem; }
-
-.steps-container { order: 2; flex: 1; overflow: hidden; position: relative; min-height: 0; display: flex; flex-direction: column; }
-
-/* FADE ANIMATION ONLY (No sliding) */
-.step { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; overflow: hidden; padding: 0; z-index: 1; }
-.step.active { opacity: 1; visibility: visible; z-index: 5; }
-
-/* Uniform Static Sized Icons for all steps */
-.step-icon, .completion-icon { width: 56px; height: 56px; margin: 0 auto 0.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.step-icon { background: linear-gradient(145deg, #ffffff, #e8eeff); box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9); }
-.step-icon.gradient-icon { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%); box-shadow: 6px 6px 16px rgba(124,58,237,0.3), -6px -6px 16px rgba(255,255,255,0.9); }
-.completion-icon { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 6px 6px 16px rgba(16,185,129,0.3), -6px -6px 16px rgba(255,255,255,0.9); }
-
-.step-icon svg { width: 28px; height: 28px; color: var(--primary); }
-.step-icon.gradient-icon svg, .completion-icon svg { width: 28px; height: 28px; color: white; }
-.step-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; text-align: center; }
-
-/* Sticky Mobile Nav Action Buttons */
-.nav-buttons { display: flex; gap: 0.75rem; margin-top: auto; padding-top: 0.5rem; flex-shrink: 0; position: relative; z-index: 10; }
-.nav-buttons .btn { flex: 1; }
-
-/* Plan Cards */
-.plans-container { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 0.25rem; }
-.plan-card { background: linear-gradient(145deg, #ffffff, #e8eeff); border-radius: var(--radius); box-shadow: 4px 4px 12px rgba(166,180,200,0.5), -4px -4px 12px rgba(255,255,255,0.9); padding: 1rem; border: 2px solid transparent; transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; gap: 0.5rem; }
-.plan-card:hover { transform: translateY(-2px); }
-.plan-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #f5f3ff, #ede9fe); }
-.plan-header { display: flex; justify-content: space-between; align-items: center; }
-.plan-name { font-size: 0.875rem; font-weight: 700; font-family: var(--font-ui); }
-.plan-price { font-size: 1rem; font-weight: 700; color: var(--primary); font-family: var(--font-mono); }
-.plan-features { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-.plan-feature { font-size: 0.65rem; padding: 0.25rem 0.5rem; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); color: var(--text-secondary); }
-
-/* Summary Grid */
-.summary-container { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem; margin-bottom: 0.5rem; text-align: left; flex: 1; overflow-y: auto; min-height: 0; }
-.summary-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid rgba(166,180,200,0.4); padding-bottom: 0.5rem; flex-shrink: 0; }
-.summary-row:last-child { border-bottom: none; padding-bottom: 0; }
-.summary-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; white-space: nowrap; }
-.summary-val { font-size: 0.875rem; color: var(--text); font-weight: 600; text-align: right; word-break: break-word; text-transform: uppercase; }
-
-/* Mobile / Tablet precise margins */
-@media(max-width: 1023px) {
-    .progress-container { margin: 3px 0 !important; padding: 0 !important; }
-    .progress-steps { margin: 0 !important; }
-    .nav-buttons { padding-top: 0.5rem; padding-bottom: 3px; margin-bottom: 1.5rem; }
+@media(max-width:1023px){
+.sidebar{position:fixed;left:-280px;top:0;height:100%;z-index:50;transition:left .3s cubic-bezier(.4,0,.2,1)}
+.sidebar.open{left:0}
+.menu-toggle{display:flex}
+.search-bar{max-width:200px}
+.progress-container{margin:3px 0!important}
+.nav-buttons{padding-top:.5rem;padding-bottom:3px;margin-bottom:1.5rem}
 }
-
-@media(max-width: 767px) {
-    .nav-buttons::before {
-        content: ''; position: absolute; top: 0; left: -1rem; right: -1rem; bottom: -1.5rem;
-        background: linear-gradient(to bottom, transparent, rgba(240, 244, 255, 0.95) 30%, rgba(240, 244, 255, 1));
-        backdrop-filter: blur(5px); z-index: -1; pointer-events: none;
-    }
-    .progress-text { display: none; }
+@media(max-width:767px){
+.search-bar{display:none}
+.stats-row{grid-template-columns:repeat(2,1fr)}
+.quick-actions{grid-template-columns:repeat(2,1fr)}
+.topbar{padding:.75rem 1rem}
+.dash-content{padding:1rem;gap:1rem}
+.stat-value{font-size:1.25rem}
+.stat-card{padding:.9rem}
+.chart-area{height:160px}
+.page-title{font-size:1.25rem}
+.nav-buttons::before{content:'';position:absolute;top:0;left:-1rem;right:-1rem;bottom:-1.5rem;background:linear-gradient(to bottom,transparent,rgba(240,244,255,.95) 30%,rgba(240,244,255,1));backdrop-filter:blur(5px);z-index:-1;pointer-events:none}
+.progress-text{display:none}
+.info-grid{grid-template-columns:1fr 1fr}
+.person-cards{grid-template-columns:1fr}
 }
-
-/* Desktop Responsiveness */
-@media(min-width:480px){ 
-    .form-cols{grid-template-columns:1fr 1fr} 
-    .plans-container { grid-template-columns: 1fr 1fr; }
-}
+@media(min-width:480px){.plans-container{grid-template-columns:1fr 1fr}}
 @media(min-width:768px){
-    .view-wrapper { width: 100%; max-width: 680px; padding: 2.5rem 3.5rem; background: transparent; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; }
-    
-    .progress-container { order: 2; margin: 3px 0 1.5rem !important; }
-    .steps-container { order: 3; min-height: 420px; }
-    .nav-buttons { position: relative; bottom: auto; background: none; margin-bottom: 0; }
-    .nav-buttons::before { display: none; }
-
-    .mobile-brand { margin-bottom: 2rem; }
-    .mobile-brand h1 { font-size: 2.25rem; }
-    .mobile-brand h1 svg { width: 36px; height: 36px; }
-    .slider-tabs { margin-bottom: 2rem; }
-    .form-title { font-size: 2rem; }
-    
-    .step-icon, .completion-icon { width: 64px; height: 64px; }
-    .step-icon svg, .completion-icon svg, .step-icon.gradient-icon svg { width: 32px; height: 32px; }
-    
-    .step-title { font-size: 1.75rem; }
-    .progress-step { width: 40px; height: 40px; font-size: 0.875rem; }
-    .progress-line { max-width: 80px; }
+.view-wrapper:not(.dash-wrapper){width:100%;max-width:680px;padding:2.5rem 3.5rem}
+.progress-container{order:2;margin:3px 0 1.5rem!important}
+.steps-container{order:3;min-height:420px}
+.nav-buttons{position:relative;bottom:auto;background:none;margin-bottom:0}
+.nav-buttons::before{display:none}
+.mobile-brand{margin-bottom:2rem}
+.mobile-brand h1{font-size:2.25rem}
+.slider-tabs{margin-bottom:2rem}
+.form-title{font-size:2rem}
+.step-icon,.completion-icon{width:64px;height:64px}
+.step-icon svg,.completion-icon svg,.step-icon.gradient-icon svg{width:32px;height:32px}
+.step-title{font-size:1.75rem}
+.progress-step{width:40px;height:40px;font-size:.875rem}
+.progress-line{max-width:80px}
 }
-
 @media(min-width:1024px){
-    .view-wrapper { padding: 3rem 4rem; max-width: 760px; }
-    .mobile-brand h1 { font-size: 2.5rem; }
-    .mobile-brand h1 svg { width: 40px; height: 40px; }
+.view-wrapper:not(.dash-wrapper){padding:3rem 4rem;max-width:760px}
+.chart-row{grid-template-columns:2fr 1fr}
 }
-
 @media(max-height:700px){
-    .form-header, .step-header { margin-bottom: 1rem; }
-    .form-grid { gap: 0.75rem; }
-    .divider { margin: 1rem 0; }
-    .slider-tabs { margin-bottom: 1rem; }
-    .step-icon, .completion-icon { width: 48px; height: 48px; }
-    .step-icon svg, .completion-icon svg, .step-icon.gradient-icon svg { width: 24px; height: 24px; }
+.form-header,.step-header{margin-bottom:1rem}
+.form-grid{gap:.75rem}
+.slider-tabs{margin-bottom:1rem}
+.step-icon,.completion-icon{width:48px;height:48px}
+.step-icon svg,.completion-icon svg,.step-icon.gradient-icon svg{width:24px;height:24px}
 }
 </style>
 </head>
 <body>
 
 <div class="view-container" id="authView">
-    <div class="view-wrapper">
-        <div class="mobile-brand">
-            <h1 class="gradient-text">
-                <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>
-                BIZCRM
-            </h1>
-        </div>
-        
-        <div class="slider-tabs clay-inset">
-            <button type="button" class="slider-tab active" onclick="switchTab('login')">LOGIN</button>
-            <button type="button" class="slider-tab" onclick="switchTab('signup')">SIGN UP</button>
-        </div>
+<div class="view-wrapper">
+<div class="mobile-brand"><h1 class="gradient-text"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#g1)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>BIZCRM</h1></div>
+<div class="slider-tabs clay-inset"><button type="button" class="slider-tab active" onclick="switchTab('login')">LOGIN</button><button type="button" class="slider-tab" onclick="switchTab('signup')">SIGN UP</button></div>
+<div id="loginForm" class="form-section active"><div class="form-header"><h2 class="form-title gradient-text" id="loginHeaderTitle">WELCOME BACK</h2></div>
+<form class="form-body" onsubmit="handleLogin(event)"><div class="form-grid">
+<div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="loginEmail" placeholder="Name@business.com" required></div></div>
+<div id="passwordGroup" class="password-transition"><div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="loginPass" placeholder="••••••••" required><button type="button" class="password-toggle" onclick="togglePassword('loginPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div></div>
+<div class="form-row"><div class="checkbox-wrapper"><input type="checkbox" id="remember"><label for="remember">REMEMBER ME</label></div><a href="#" class="forgot-link" id="forgotLink" onclick="handleForgotClick();return false">FORGOT PASSWORD?</a></div>
+<button type="submit" class="btn btn-primary" id="loginBtn"><span>SIGN IN</span></button>
+</div><div class="divider"><span>OR</span></div>
+<div class="nav-buttons" style="margin-top:0;padding-top:0"><button type="button" class="btn btn-outline" id="googleLoginBtn" onclick="handleGoogleAuth('login')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.07 5.07 0 01-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button></div></form></div>
+<div id="signupForm" class="form-section"><div class="form-header"><h2 class="form-title gradient-text">CREATE AN ACCOUNT</h2></div>
+<form class="form-body" onsubmit="handleSignup(event)"><div class="form-grid">
+<div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="signupEmail" placeholder="Name@business.com" required></div></div>
+<div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="signupPass" placeholder="Min 8 characters" required minlength="8"><button type="button" class="password-toggle" onclick="togglePassword('signupPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div><div class="password-strength" id="strengthContainer"><div class="strength-bar-bg"><div class="strength-bar-fill" id="strengthBar"></div></div><span class="strength-text" id="strengthText"></span></div></div>
+<button type="submit" class="btn btn-primary" id="signupBtn"><span>CREATE ACCOUNT</span></button>
+</div><div class="divider"><span>OR</span></div>
+<div class="nav-buttons" style="margin-top:0;padding-top:0"><button type="button" class="btn btn-outline" id="googleSignupBtn" onclick="handleGoogleAuth('signup')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.07 5.07 0 01-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button></div></form></div>
+</div></div>
 
-        <div id="loginForm" class="form-section active">
-            <div class="form-header"><h2 class="form-title gradient-text" id="loginHeaderTitle">WELCOME BACK</h2></div>
-            <form class="form-body" onsubmit="handleLogin(event)">
-                <div class="form-grid">
-                    <div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="loginEmail" placeholder="Name@business.com" required></div></div>
-                    
-                    <div id="passwordGroup" class="password-transition">
-                        <div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="loginPass" placeholder="••••••••" required><button type="button" class="password-toggle" onclick="togglePassword('loginPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
-                    </div>
-                    
-                    <div class="form-row"><div class="checkbox-wrapper"><input type="checkbox" id="remember"><label for="remember">REMEMBER ME</label></div><a href="#" class="forgot-link" id="forgotLink" onclick="handleForgotClick();return false">FORGOT PASSWORD?</a></div>
-                    <button type="submit" class="btn btn-primary btn-text" id="loginBtn"><span>SIGN IN</span></button>
-                </div>
-                
-                <div class="divider"><span>OR</span></div>
-                
-                <div class="nav-buttons" style="margin-top: 0; padding-top: 0;">
-                    <button type="button" class="btn btn-outline btn-text" id="googleLoginBtn" onclick="handleGoogleAuth('login')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
-                </div>
-            </form>
-        </div>
-
-        <div id="signupForm" class="form-section">
-            <div class="form-header"><h2 class="form-title gradient-text">CREATE AN ACCOUNT</h2></div>
-            <form class="form-body" onsubmit="handleSignup(event)">
-                <div class="form-grid">
-                    <div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="signupEmail" placeholder="Name@business.com" required></div></div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">PASSWORD</label>
-                        <div class="input-wrapper">
-                            <span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span>
-                            <input type="password" class="form-input" id="signupPass" placeholder="Min 8 characters" required minlength="8">
-                            <button type="button" class="password-toggle" onclick="togglePassword('signupPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button>
-                        </div>
-                        <div class="password-strength" id="strengthContainer">
-                            <div class="strength-bar-bg"><div class="strength-bar-fill" id="strengthBar"></div></div>
-                            <span class="strength-text" id="strengthText"></span>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-text" id="signupBtn"><span>CREATE ACCOUNT</span></button>
-                </div>
-                
-                <div class="divider"><span>OR</span></div>
-                
-                <div class="nav-buttons" style="margin-top: 0; padding-top: 0;">
-                    <button type="button" class="btn btn-outline btn-text" id="googleSignupBtn" onclick="handleGoogleAuth('signup')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="view-container hidden" id="loadingView">
-    <div class="large-spinner"></div>
-    <h2 class="gradient-text" style="font-family: var(--font-display); letter-spacing: 1px; font-size: 1.5rem;">PREPARING WORKSPACE...</h2>
-</div>
+<div class="view-container hidden" id="loadingView"><div class="large-spinner"></div><h2 class="gradient-text" id="loadingText" style="font-family:var(--font-display);letter-spacing:1px;font-size:1.5rem">PREPARING WORKSPACE...</h2></div>
 
 <div class="view-container hidden" id="onboardingView">
-    <div class="view-wrapper">
-        <div class="onboarding-header">
-            <div class="brand-mini">
-                <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="5" fill="url(#paint0_linear)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="paint0_linear" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs></svg>
-                <span class="gradient-text">BIZCRM</span>
-            </div>
-            <button type="button" class="skip-btn" id="skipBtn">SKIP</button>
-        </div>
+<div class="view-wrapper">
+<div class="onboarding-header"><div class="brand-mini"><svg viewBox="0 0 48 48" fill="none" width="28" height="28"><rect width="48" height="48" rx="5" fill="url(#g1)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="gradient-text">BIZCRM</span></div><button type="button" class="skip-btn">SKIP</button></div>
+<div class="progress-container"><div class="progress-steps"><div class="progress-step active">1</div><div class="progress-line"></div><div class="progress-step">2</div><div class="progress-line"></div><div class="progress-step">3</div></div><div class="progress-text" id="progressText">STEP 1 OF 3 • PROFILE</div></div>
+<div class="steps-container">
+<div class="step active" data-step="1"><div class="step-header"><div class="step-icon gradient-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><h2 class="step-title gradient-text">BUSINESS DETAILS</h2></div>
+<div class="form-grid">
+<div class="form-group"><label class="form-label">CATEGORY</label><div class="slider-tabs clay-inset" id="categoryTabs" style="margin-bottom:0"><button type="button" class="slider-tab active" data-cat="gym">GYM</button><button type="button" class="slider-tab" data-cat="library">LIBRARY</button></div></div>
+<div class="form-group"><label class="form-label">BUSINESS NAME</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></span><input type="text" class="form-input" id="bizName" placeholder="E.G. FITPRO GYM"></div></div>
+<div class="form-group"><label class="form-label">PHONE</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.87.36 1.72.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c1.09.34 1.94.57 2.81.7A2 2 0 0122 16.92z"/></svg></span><input type="tel" class="form-input" id="bizPhone" placeholder="+91 9876543210"></div></div>
+<div class="form-group"><label class="form-label">ADDRESS</label><textarea class="form-input" id="bizAddress" placeholder="123 Main Street, City"></textarea></div>
+</div><div class="nav-buttons"><button type="button" class="btn btn-primary" id="step1Next">CONTINUE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div></div>
+<div class="step" data-step="2"><div class="step-header"><div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h2 class="step-title gradient-text">LEGAL & PLAN</h2></div>
+<div class="form-grid">
+<div class="form-group"><label class="form-label">OWNER NAME</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><input type="text" class="form-input" id="ownerName" placeholder="JOHN DOE"></div></div>
+<div class="form-group"><label class="form-label">GST NUMBER</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span><input type="text" class="form-input" id="gstNumber" placeholder="22AAAAA0000A1Z5"></div></div>
+<div class="form-group"><label class="form-label">PLAN (OPTIONAL)</label><div class="plans-container" id="plansContainer"><div class="plan-card" data-plan="MONTHLY (₹999)"><div class="plan-header"><span class="plan-name">MONTHLY</span><span class="plan-price">₹999</span></div><div class="plan-features"><span class="plan-feature">30 DAYS</span></div></div><div class="plan-card" data-plan="YEARLY (₹8999)"><div class="plan-header"><span class="plan-name">YEARLY</span><span class="plan-price">₹8,999</span></div><div class="plan-features"><span class="plan-feature">365 DAYS</span></div></div></div></div>
+</div><div class="nav-buttons"><button type="button" class="btn btn-outline" id="step2Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><button type="button" class="btn btn-outline" id="step2Skip" style="flex:2">SKIP</button><button type="button" class="btn btn-primary" id="step2Next" style="flex:2">CONTINUE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div></div>
+<div class="step" data-step="3"><div class="step-header"><div class="completion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><h2 class="step-title gradient-text">REVIEW & CONFIRM</h2></div>
+<div class="summary-container clay-inset"><div class="summary-row"><span class="summary-label">CATEGORY:</span><span id="sumCategory" class="summary-val"></span></div><div class="summary-row"><span class="summary-label">NAME:</span><span id="sumName" class="summary-val"></span></div><div class="summary-row"><span class="summary-label">PHONE:</span><span id="sumPhone" class="summary-val"></span></div><div class="summary-row"><span class="summary-label">ADDRESS:</span><span id="sumAddress" class="summary-val"></span></div><div class="summary-row"><span class="summary-label">OWNER:</span><span id="sumOwner" class="summary-val"></span></div><div class="summary-row"><span class="summary-label">GST:</span><span id="sumGst" class="summary-val"></span></div><div class="summary-row"><span class="summary-label">PLAN:</span><span id="sumPlan" class="summary-val"></span></div></div>
+<div class="nav-buttons"><button type="button" class="btn btn-outline" id="step3Back" style="flex:.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><button type="button" class="btn btn-success" id="completeBtn" style="flex:2">CONFIRM</button></div></div>
+</div></div></div>
 
-        <div class="progress-container">
-            <div class="progress-steps">
-                <div class="progress-step active" data-step="1">1</div>
-                <div class="progress-line" data-line="1"></div>
-                <div class="progress-step" data-step="2">2</div>
-                <div class="progress-line" data-line="2"></div>
-                <div class="progress-step" data-step="3">3</div>
-            </div>
-            <div class="progress-text" id="progressText">STEP 1 OF 3 • PROFILE</div>
-        </div>
+<div class="view-container hidden" id="dashboardView">
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="dashboard-layout">
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-header"><svg class="sidebar-logo" viewBox="0 0 48 48" fill="none" width="36" height="36"><rect width="48" height="48" rx="5" fill="url(#g1)"/><path d="M14 20C14 16.6863 16.6863 14 20 14H28C31.3137 14 34 16.6863 34 20V28C34 31.3137 31.3137 34 28 34H20C16.6863 34 14 31.3137 14 28V20Z" fill="white"/><path d="M20 22L23 25L28 20" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sidebar-brand">BIZCRM</span></div>
+<div class="sidebar-category" id="sidebarCategory">GYM MANAGEMENT</div>
+<nav class="sidebar-nav" id="sidebarNav"></nav>
+<div class="sidebar-footer"><div class="user-profile"><div class="user-avatar" id="userAvatar">JD</div><div class="user-info"><div class="user-name" id="userName">JOHN DOE</div><div class="user-role">ADMIN</div></div></div></div>
+</aside>
+<div class="main-content"><header class="topbar"><div class="topbar-left"><button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button><h1 class="page-title gradient-text" id="pageTitle">DASHBOARD</h1></div><div class="topbar-right"><div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="searchInput"></div><button class="topbar-btn"><i class="fas fa-bell"></i><span class="notif-dot"></span></button><button class="topbar-btn"><i class="fas fa-cog"></i></button></div></header>
+<div class="dash-content" id="dashContent"></div></div>
+</div></div>
 
-        <div class="steps-container" id="stepsContainer">
-
-            <div class="step active" data-step="1">
-                <div class="step-header">
-                    <div class="step-icon gradient-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-                        </svg>
-                    </div>
-                    <h2 class="step-title gradient-text">BUSINESS DETAILS</h2>
-                </div>
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">BUSINESS CATEGORY</label>
-                        <div class="slider-tabs clay-inset" id="categoryTabs" style="margin-bottom:0;">
-                            <button type="button" class="slider-tab active" data-cat="gym">GYM</button>
-                            <button type="button" class="slider-tab" data-cat="library">LIBRARY</button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">BUSINESS NAME</label>
-                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></span>
-                        <input type="text" class="form-input" id="bizName" placeholder="E.G. FITPRO GYM"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">BUSINESS PHONE</label>
-                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
-                        <input type="tel" class="form-input" id="bizPhone" placeholder="+91 9876543210"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">BUSINESS ADDRESS</label>
-                        <textarea class="form-input" id="bizAddress" placeholder="123 MAIN STREET, CITY"></textarea>
-                    </div>
-                </div>
-                
-                <div class="nav-buttons">
-                    <button type="button" class="btn btn-primary" id="step1Next">CONTINUE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-                </div>
-            </div>
-
-            <div class="step" data-step="2">
-                <div class="step-header">
-                    <div class="step-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    </div>
-                    <h2 class="step-title gradient-text">LEGAL & PLAN</h2>
-                </div>
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">OWNER NAME</label>
-                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
-                        <input type="text" class="form-input" id="ownerName" placeholder="JOHN DOE"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">GST NUMBER</label>
-                        <div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
-                        <input type="text" class="form-input" id="gstNumber" placeholder="22AAAAA0000A1Z5"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">CHOOSE A DEFAULT PLAN (OPTIONAL)</label>
-                        <div class="plans-container" id="plansContainer">
-                            <div class="plan-card" data-plan="MONTHLY (₹999)">
-                                <div class="plan-header"><span class="plan-name">MONTHLY</span><span class="plan-price">₹999</span></div>
-                                <div class="plan-features"><span class="plan-feature">30 DAYS</span></div>
-                            </div>
-                            <div class="plan-card" data-plan="YEARLY (₹8999)">
-                                <div class="plan-header"><span class="plan-name">YEARLY</span><span class="plan-price">₹8,999</span></div>
-                                <div class="plan-features"><span class="plan-feature">365 DAYS</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="nav-buttons">
-                    <button type="button" class="btn btn-outline" id="step2Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-                    <button type="button" class="btn btn-outline" id="step2Skip" style="flex: 2;">SKIP PLAN</button>
-                    <button type="button" class="btn btn-primary" id="step2Next" style="flex: 2;">CONTINUE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-                </div>
-            </div>
-
-            <div class="step" data-step="3">
-                <div class="step-header">
-                    <div class="completion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                    <h2 class="step-title gradient-text">REVIEW & CONFIRM</h2>
-                </div>
-                
-                <div class="summary-container clay-inset">
-                    <div class="summary-row"><span class="summary-label">CATEGORY:</span> <span id="sumCategory" class="summary-val"></span></div>
-                    <div class="summary-row"><span class="summary-label">NAME:</span> <span id="sumName" class="summary-val"></span></div>
-                    <div class="summary-row"><span class="summary-label">PHONE:</span> <span id="sumPhone" class="summary-val"></span></div>
-                    <div class="summary-row"><span class="summary-label">ADDRESS:</span> <span id="sumAddress" class="summary-val"></span></div>
-                    <div class="summary-row"><span class="summary-label">OWNER:</span> <span id="sumOwner" class="summary-val"></span></div>
-                    <div class="summary-row"><span class="summary-label">GST:</span> <span id="sumGst" class="summary-val"></span></div>
-                    <div class="summary-row"><span class="summary-label">PLAN:</span> <span id="sumPlan" class="summary-val"></span></div>
-                </div>
-                
-                <div class="nav-buttons">
-                    <button type="button" class="btn btn-outline" id="step3Back" style="flex: 0.5;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-                    <button type="button" class="btn btn-success" id="completeBtn" style="flex: 2;">CONFIRM</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal clay" id="modalContent"></div></div>
 
 <script>
-// ================= Shared Utils =================
-const icons={spinner:'<div class="spinner"></div>',check:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',error:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',google:'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>'};
+const icons={spinner:'<div class="spinner"></div>',check:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',error:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',google:'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.07 5.07 0 01-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>'};
+let isResetMode=false,selectedCategory='gym',currentPage='dashboard';
+const D={bizName:'',ownerName:'',bizPhone:'',bizAddress:''};
+const clr=c=>c==='purple'?'--primary':c==='pink'?'--accent':c==='green'?'--success':c==='blue'?'--info':c==='orange'?'--warning':c==='red'?'--error':c==='teal'?'--info':'--primary';
 
-// ================= AUTH LOGIC =================
-let isResetMode = false;
-
-document.addEventListener('DOMContentLoaded', function() {
-    const signupPassInput = document.getElementById('signupPass');
-    if (signupPassInput) {
-        signupPassInput.addEventListener('input', checkPasswordStrength);
-    }
+document.addEventListener('DOMContentLoaded',()=>{
+document.getElementById('signupPass')?.addEventListener('input',checkPw);
+document.getElementById('step1Next').addEventListener('click',()=>goToStep(2));
+document.getElementById('step2Back').addEventListener('click',()=>goToStep(1));
+document.getElementById('step2Next').addEventListener('click',()=>goToStep(3));
+document.getElementById('step2Skip').addEventListener('click',()=>{document.querySelectorAll('.plan-card').forEach(c=>c.classList.remove('selected'));goToStep(3)});
+document.getElementById('step3Back').addEventListener('click',()=>goToStep(2));
+document.getElementById('completeBtn').addEventListener('click',handleComplete);
+document.getElementById('categoryTabs').addEventListener('click',e=>{if(e.target.classList.contains('slider-tab')){document.querySelectorAll('#categoryTabs .slider-tab').forEach(t=>t.classList.remove('active'));e.target.classList.add('active');selectedCategory=e.target.dataset.cat}});
+document.getElementById('plansContainer').addEventListener('click',e=>{const c=e.target.closest('.plan-card');if(c){c.classList.contains('selected')?c.classList.remove('selected'):(document.querySelectorAll('.plan-card').forEach(x=>x.classList.remove('selected')),c.classList.add('selected'))}});
+document.getElementById('menuToggle').addEventListener('click',()=>{document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('show')});
+document.getElementById('sidebarOverlay').addEventListener('click',closeSB);
+document.getElementById('modalOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
 });
 
-function checkPasswordStrength(e) {
-    const val = e.target.value;
-    const container = document.getElementById('strengthContainer');
-    const bar = document.getElementById('strengthBar');
-    const text = document.getElementById('strengthText');
-    
-    if (!val) {
-        container.classList.remove('active');
-        return;
-    }
-    container.classList.add('active');
-    
-    let strength = 0;
-    if (val.length >= 8) strength += 1;
-    if (val.match(/[A-Z]/) && val.match(/[a-z]/)) strength += 1;
-    if (val.match(/[0-9]/)) strength += 1;
-    if (val.match(/[^A-Za-z0-9]/)) strength += 1;
-    
-    bar.className = 'strength-bar-fill';
-    text.className = 'strength-text';
-    
-    if (strength <= 1 || val.length < 6) {
-        bar.style.width = '33%';
-        bar.classList.add('strength-weak');
-        text.textContent = 'WEAK';
-        text.classList.add('text-weak');
-    } else if (strength === 2 || strength === 3) {
-        bar.style.width = '66%';
-        bar.classList.add('strength-medium');
-        text.textContent = 'MEDIUM';
-        text.classList.add('text-medium');
-    } else if (strength === 4) {
-        bar.style.width = '100%';
-        bar.classList.add('strength-strong');
-        text.textContent = 'STRONG';
-        text.classList.add('text-strong');
-    }
-}
+function checkPw(e){const v=e.target.value,c=document.getElementById('strengthContainer'),b=document.getElementById('strengthBar'),t=document.getElementById('strengthText');if(!v){c.classList.remove('active');return}c.classList.add('active');let s=0;if(v.length>=8)s++;if(v.match(/[A-Z]/)&&v.match(/[a-z]/))s++;if(v.match(/[0-9]/))s++;if(v.match(/[^A-Za-z0-9]/))s++;b.className='strength-bar-fill';t.className='strength-text';if(s<=1||v.length<6){b.style.width='33%';b.classList.add('strength-weak');t.textContent='WEAK';t.classList.add('text-weak')}else if(s<=3){b.style.width='66%';b.classList.add('strength-medium');t.textContent='MEDIUM';t.classList.add('text-medium')}else{b.style.width='100%';b.classList.add('strength-strong');t.textContent='STRONG';t.classList.add('text-strong')}}
+function toggleResetMode(){isResetMode=!isResetMode;const p=document.getElementById('passwordGroup'),b=document.getElementById('loginBtn'),f=document.getElementById('forgotLink'),t=document.getElementById('loginHeaderTitle'),lp=document.getElementById('loginPass');if(isResetMode){p.classList.add('collapsed');setBS(b,'idle','RESET');f.textContent='BACK TO LOGIN';t.textContent='RESET PASSWORD';lp.removeAttribute('required')}else{p.classList.remove('collapsed');setBS(b,'idle','SIGN IN');f.textContent='FORGOT PASSWORD?';t.textContent='WELCOME BACK';lp.setAttribute('required','true')}}
+function handleForgotClick(){toggleResetMode()}
+function switchTab(tab){if(isResetMode&&tab==='signup')toggleResetMode();document.querySelectorAll('#authView .slider-tabs .slider-tab').forEach((t,i)=>t.classList.toggle('active',i===(tab==='login'?0:1)));document.querySelectorAll('.form-section').forEach(f=>f.classList.remove('active'));document.getElementById(tab+'Form').classList.add('active');resetBtns()}
+function togglePassword(id){const el=document.getElementById(id);el.type=el.type==='password'?'text':'password'}
+function setBS(btn,st,txt,isG=false){btn.disabled=st!=='idle';btn.classList.remove('btn-success','btn-error','btn-shake');const w=`<span>${txt}</span>`;if(st==='loading')btn.innerHTML=icons.spinner+w;else if(st==='success'){btn.classList.add('btn-success');btn.innerHTML=icons.check+w}else if(st==='error'){btn.classList.add('btn-error','btn-shake');btn.innerHTML=icons.error+w}else btn.innerHTML=(isG?icons.google:'')+w}
+function resetBtns(){setBS(document.getElementById('loginBtn'),'idle',isResetMode?'RESET':'SIGN IN');setBS(document.getElementById('signupBtn'),'idle','CREATE ACCOUNT');setBS(document.getElementById('googleLoginBtn'),'idle','CONTINUE WITH GOOGLE',true);setBS(document.getElementById('googleSignupBtn'),'idle','CONTINUE WITH GOOGLE',true)}
+function handleLogin(e){e.preventDefault();const b=document.getElementById('loginBtn');if(isResetMode){if(!document.getElementById('loginEmail').value){setBS(b,'error','ENTER EMAIL');setTimeout(()=>setBS(b,'idle','RESET'),2000);return}setBS(b,'loading','SENDING...');setTimeout(()=>{setBS(b,'success','LINK SENT!');setTimeout(()=>{toggleResetMode();document.getElementById('loginEmail').value=''},1500)},1200);return}setBS(b,'loading','SIGNING IN...');setTimeout(()=>{setBS(b,'success','SUCCESS!');setTimeout(transTo,1000)},1000)}
+function handleSignup(e){e.preventDefault();setBS(document.getElementById('signupBtn'),'loading','CREATING...');setTimeout(()=>{setBS(document.getElementById('signupBtn'),'success','CREATED!');setTimeout(transTo,1000)},1000)}
+function handleGoogleAuth(t){const b=document.getElementById(t==='login'?'googleLoginBtn':'googleSignupBtn');setBS(b,'loading','CONNECTING...');setTimeout(()=>{setBS(b,'success','SUCCESS!');setTimeout(transTo,1000)},1000)}
+function transTo(){const a=document.getElementById('authView'),l=document.getElementById('loadingView'),o=document.getElementById('onboardingView');document.getElementById('loadingText').textContent='PREPARING WORKSPACE...';a.style.opacity='0';setTimeout(()=>{a.classList.add('hidden');l.classList.remove('hidden');setTimeout(()=>l.style.opacity='1',50);setTimeout(()=>{l.style.opacity='0';setTimeout(()=>{l.classList.add('hidden');o.classList.remove('hidden');setTimeout(()=>o.style.opacity='1',50);goToStep(1)},400)},2000)},400)}
 
-function toggleResetMode() {
-    isResetMode = !isResetMode;
-    const passGroup = document.getElementById('passwordGroup'), loginBtn = document.getElementById('loginBtn'), forgotLink = document.getElementById('forgotLink'), formTitle = document.getElementById('loginHeaderTitle'), loginPass = document.getElementById('loginPass');
-    if (isResetMode) { passGroup.classList.add('collapsed'); setButtonState(loginBtn, 'idle', 'RESET'); forgotLink.textContent = 'BACK TO LOGIN'; formTitle.textContent = 'RESET PASSWORD'; loginPass.removeAttribute('required'); } 
-    else { passGroup.classList.remove('collapsed'); setButtonState(loginBtn, 'idle', 'SIGN IN'); forgotLink.textContent = 'FORGOT PASSWORD?'; formTitle.textContent = 'WELCOME BACK'; loginPass.setAttribute('required', 'true'); }
-}
-function handleForgotClick() { toggleResetMode(); }
-function switchTab(tab){
-    let index = tab === 'login' ? 0 : 1;
-    if(isResetMode && tab === 'signup') { toggleResetMode(); }
-    const authTabs = document.querySelectorAll('#authView .slider-tab');
-    authTabs.forEach(t=>t.classList.remove('active')); authTabs[index].classList.add('active');
-    document.querySelectorAll('.form-section').forEach(f=>f.classList.remove('active'));
-    document.getElementById(tab+'Form').classList.add('active'); resetButtons();
-}
-function togglePassword(id){ const input=document.getElementById(id); input.type=input.type==='password'?'text':'password'; }
-function setButtonState(btn,state,text,isGoogle=false){
-    btn.disabled=state!=='idle'; btn.classList.remove('btn-success','btn-error','btn-shake'); const innerWrap = `<span>${text}</span>`;
-    if(state==='loading') btn.innerHTML=icons.spinner+innerWrap; else if(state==='success') { btn.classList.add('btn-success'); btn.innerHTML=icons.check+innerWrap; } else if(state==='error') { btn.classList.add('btn-error','btn-shake'); btn.innerHTML=icons.error+innerWrap; } else btn.innerHTML=(isGoogle?icons.google:'')+innerWrap;
-}
-function resetButtons(){ setButtonState(document.getElementById('loginBtn'), 'idle', isResetMode ? 'RESET' : 'SIGN IN'); setButtonState(document.getElementById('signupBtn'),'idle','CREATE ACCOUNT'); setButtonState(document.getElementById('googleLoginBtn'),'idle','CONTINUE WITH GOOGLE',true); setButtonState(document.getElementById('googleSignupBtn'),'idle','CONTINUE WITH GOOGLE',true); }
-function markInputError(ids){ ids.forEach(id=>{ const el=document.getElementById(id); if(el){ el.classList.add('input-error'); el.addEventListener('input',()=>el.classList.remove('input-error'),{once:true}) } }) }
+let currentStep=1;
+function goToStep(n){if(n<1||n>3)return;if(n===3)populateSummary();document.querySelector('.step.active')?.classList.remove('active');currentStep=n;setTimeout(()=>{document.querySelector(`.step[data-step="${n}"]`)?.classList.add('active');updateProg()},50)}
+function updateProg(){document.querySelectorAll('.progress-step').forEach((s,i)=>{const n=i+1;s.classList.remove('active','completed');if(n<currentStep){s.classList.add('completed');s.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'}else{s.classList.toggle('active',n===currentStep);s.textContent=n}});document.querySelectorAll('.progress-line').forEach((l,i)=>l.classList.toggle('active',i<currentStep-1));document.getElementById('progressText').textContent=`STEP ${currentStep} OF 3 • ${['PROFILE','LEGAL & PLAN','CONFIRM'][currentStep-1]}`}
+function populateSummary(){const ac=document.querySelector('#categoryTabs .slider-tab.active');selectedCategory=ac?.dataset.cat||'gym';document.getElementById('sumCategory').textContent=ac?.textContent||'N/A';document.getElementById('sumName').textContent=document.getElementById('bizName').value||'NOT PROVIDED';document.getElementById('sumPhone').textContent=document.getElementById('bizPhone').value||'NOT PROVIDED';document.getElementById('sumAddress').textContent=document.getElementById('bizAddress').value||'NOT PROVIDED';document.getElementById('sumOwner').textContent=document.getElementById('ownerName').value||'NOT PROVIDED';document.getElementById('sumGst').textContent=document.getElementById('gstNumber').value||'NOT PROVIDED';const sp=document.querySelector('.plan-card.selected');document.getElementById('sumPlan').textContent=sp?sp.dataset.plan:'NONE'}
 
-function handleLogin(e){
-    e.preventDefault(); const btn=document.getElementById('loginBtn'), email=document.getElementById('loginEmail').value;
-    if (isResetMode) { if(!email){ setButtonState(btn,'error','ENTER EMAIL'); markInputError(['loginEmail']); setTimeout(()=>setButtonState(btn,'idle','RESET'),2000); return; } setButtonState(btn,'loading','SENDING...'); setTimeout(()=>{ setButtonState(btn,'success','LINK SENT!'); setTimeout(() => { toggleResetMode(); document.getElementById('loginEmail').value = ''; }, 1500); },1200); return; }
-    const pass=document.getElementById('loginPass').value; setButtonState(btn,'loading','SIGNING IN...');
-    setTimeout(()=>{ setButtonState(btn,'success','LOGIN SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1000); },1000)
-}
-function handleSignup(e){ e.preventDefault(); const btn=document.getElementById('signupBtn'); setButtonState(btn,'loading','CREATING ACCOUNT...'); setTimeout(()=>{ setButtonState(btn,'success','ACCOUNT CREATED!'); setTimeout(()=>transitionToOnboarding(),1000); },1000) }
-function handleGoogleAuth(type){ const btn=document.getElementById(type==='login'?'googleLoginBtn':'googleSignupBtn'); setButtonState(btn,'loading','CONNECTING...'); setTimeout(()=>{ setButtonState(btn,'success','AUTH SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1000); },1000) }
+function handleComplete(){const b=document.getElementById('completeBtn');b.disabled=true;b.innerHTML='<div class="spinner"></div><span>SETTING UP...</span>';const o=document.getElementById('onboardingView'),l=document.getElementById('loadingView'),d=document.getElementById('dashboardView');document.getElementById('loadingText').textContent='BUILDING YOUR DASHBOARD...';setTimeout(()=>{o.style.opacity='0';setTimeout(()=>{o.classList.add('hidden');l.classList.remove('hidden');setTimeout(()=>l.style.opacity='1',50);D.bizName=document.getElementById('bizName').value||(selectedCategory==='gym'?'FITPRO GYM':'CITY LIBRARY');D.ownerName=document.getElementById('ownerName').value||'ADMIN';D.bizPhone=document.getElementById('bizPhone').value||'+91 9876543210';D.bizAddress=document.getElementById('bizAddress').value||'123 Main St';buildDash();setTimeout(()=>{l.style.opacity='0';setTimeout(()=>{l.classList.add('hidden');d.classList.remove('hidden');setTimeout(()=>{d.style.opacity='1';runAnims()},50)},400)},2500)},400)},600)}
 
-function transitionToOnboarding() {
-    const authView = document.getElementById('authView');
-    const loadingView = document.getElementById('loadingView');
-    const onbView = document.getElementById('onboardingView');
-    
-    // Fade out Auth View
-    authView.style.opacity = '0';
-    
-    setTimeout(() => {
-        authView.classList.add('hidden');
-        
-        // Fade in Loading View
-        loadingView.classList.remove('hidden');
-        setTimeout(() => loadingView.style.opacity = '1', 50);
-        
-        // Show Loading Screen for exactly 2 seconds
-        setTimeout(() => {
-            // Fade out Loading View
-            loadingView.style.opacity = '0';
-            
-            setTimeout(() => {
-                loadingView.classList.add('hidden');
-                
-                // Fade in Onboarding View
-                onbView.classList.remove('hidden');
-                setTimeout(() => onbView.style.opacity = '1', 50);
-                goToStep(1); // Ensure it starts on step 1
-            }, 400); // Wait for Loading view to fade out
-        }, 2000);
-        
-    }, 400); // Wait for Auth view to fade out
-}
+function buildDash(){const isG=selectedCategory==='gym',init=D.ownerName.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();document.getElementById('sidebarCategory').textContent=isG?'GYM MANAGEMENT':'LIBRARY MANAGEMENT';document.getElementById('userName').textContent=D.ownerName.toUpperCase();document.getElementById('userAvatar').textContent=init;document.getElementById('searchInput').placeholder=isG?'Search members...':'Search books...';buildSB();navTo('dashboard')}
 
-// ================= ONBOARDING LOGIC =================
-let currentStep = 1;
-const totalSteps = 3;
-const stepNames = ['PROFILE', 'LEGAL & PLAN', 'CONFIRM'];
-const progressText = document.getElementById('progressText'), skipBtn = document.getElementById('skipBtn');
+function buildSB(){const isG=selectedCategory==='gym';const items=isG?[
+{id:'dashboard',icon:'fa-th-large',label:'DASHBOARD',section:'MAIN'},
+{id:'members',icon:'fa-users',label:'MEMBERS',badge:'248',section:'MAIN'},
+{id:'staff',icon:'fa-id-badge',label:'STAFF',badge:'6',section:'MANAGE'},
+{id:'payments',icon:'fa-credit-card',label:'PAYMENTS',badge:'5',section:'MANAGE'},
+{id:'analytics',icon:'fa-chart-line',label:'ANALYTICS',section:'REPORTS'},
+{id:'settings',icon:'fa-cog',label:'SETTINGS',section:'SYSTEM'},
+]:[
+{id:'dashboard',icon:'fa-th-large',label:'DASHBOARD',section:'MAIN'},
+{id:'catalog',icon:'fa-book',label:'CATALOG',badge:'1.2K',section:'MAIN'},
+{id:'members',icon:'fa-users',label:'MEMBERS',badge:'380',section:'MAIN'},
+{id:'staff',icon:'fa-id-badge',label:'STAFF',badge:'5',section:'MANAGE'},
+{id:'circulation',icon:'fa-exchange-alt',label:'CIRCULATION',section:'MANAGE'},
+{id:'overdue',icon:'fa-clock',label:'OVERDUE',badge:'12',section:'MANAGE'},
+{id:'reports',icon:'fa-chart-bar',label:'REPORTS',section:'REPORTS'},
+{id:'settings',icon:'fa-cog',label:'SETTINGS',section:'SYSTEM'},
+];let html='',last='';items.forEach(it=>{if(it.section!==last){html+=`<div class="nav-section-label">${it.section}</div>`;last=it.section}html+=`<div class="nav-item${it.id==='dashboard'?' active':''}" data-page="${it.id}"><i class="fas ${it.icon}"></i><span>${it.label}</span>${it.badge?`<span class="nav-badge">${it.badge}</span>`:''}</div>`});document.getElementById('sidebarNav').innerHTML=html;document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',function(){document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));this.classList.add('active');navTo(this.dataset.page);if(window.innerWidth<1024)closeSB()}))}
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Nav Listeners
-    document.getElementById('step1Next').addEventListener('click', () => goToStep(2));
-    
-    document.getElementById('step2Back').addEventListener('click', () => goToStep(1));
-    document.getElementById('step2Next').addEventListener('click', () => goToStep(3));
-    document.getElementById('step2Skip').addEventListener('click', () => { 
-        document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-        goToStep(3);
-    });
-    
-    document.getElementById('step3Back').addEventListener('click', () => goToStep(2));
-    document.getElementById('completeBtn').addEventListener('click', () => alert('Demo: Redirecting to Dashboard...'));
-    
-    // UI Interactions
-    document.getElementById('categoryTabs').addEventListener('click', e => { 
-        if (e.target.classList.contains('slider-tab')) { 
-            document.querySelectorAll('#categoryTabs .slider-tab').forEach(t => t.classList.remove('active')); 
-            e.target.classList.add('active'); 
-        }
-    });
-    
-    document.getElementById('plansContainer').addEventListener('click', e => { 
-        const card = e.target.closest('.plan-card'); 
-        if (card) { 
-            if(card.classList.contains('selected')) {
-                card.classList.remove('selected');
-            } else {
-                document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected')); 
-                card.classList.add('selected'); 
-            }
-        } 
-    });
-});
+function navTo(pg){currentPage=pg;const isG=selectedCategory==='gym';const titles={dashboard:D.bizName.toUpperCase(),members:'MEMBERS',staff:'STAFF',payments:'PAYMENTS',analytics:'ANALYTICS',settings:'SETTINGS',catalog:'BOOK CATALOG',circulation:'CIRCULATION',overdue:'OVERDUE BOOKS',reports:'REPORTS'};document.getElementById('pageTitle').textContent=titles[pg]||pg.toUpperCase();const dc=document.getElementById('dashContent');dc.style.opacity='0';setTimeout(()=>{dc.innerHTML=getPage(pg,isG);dc.style.opacity='1';dc.style.transition='opacity .3s';dc.scrollTop=0;runAnims()},150)}
 
-function goToStep(stepNum) {
-    if (stepNum < 1 || stepNum > totalSteps) return;
-    
-    if (stepNum === 3) populateSummary();
-    
-    const currentStepEl = document.querySelector('.step.active');
-    const newStepEl = document.querySelector(`.step[data-step="${stepNum}"]`);
-    if (!currentStepEl || !newStepEl) return;
-    
-    // Smooth Fade Transition
-    currentStepEl.classList.remove('active');
-    currentStep = stepNum;
-    
-    setTimeout(() => { 
-        newStepEl.classList.add('active'); 
-        updateProgress(); 
-    }, 50); // Slight delay for smoother DOM paint during opacity transition
-}
+function getPage(p,isG){const m={dashboard:()=>isG?gymDash():libDash(),members:()=>membersPage(isG),staff:()=>staffPage(isG),payments:()=>paymentsPage(isG),analytics:()=>analyticsPage(isG),settings:()=>settingsPage(),catalog:()=>libCatalog(),circulation:()=>libCirculation(),overdue:()=>libOverdue(),reports:()=>analyticsPage(isG)};return(m[p]||m.dashboard)()}
 
-function updateProgress() {
-    const steps = document.querySelectorAll('.progress-step'), lines = document.querySelectorAll('.progress-line');
-    steps.forEach((step, i) => {
-        const stepNum = i + 1; step.classList.remove('active', 'completed');
-        if (stepNum < currentStep) { step.classList.add('completed'); step.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'; }
-        else if (stepNum === currentStep) { step.classList.add('active'); step.textContent = stepNum; }
-        else { step.textContent = stepNum; }
-    });
-    
-    lines.forEach((line, i) => { if (i < currentStep - 1) line.classList.add('active'); else line.classList.remove('active'); });
-    progressText.textContent = 'STEP ' + currentStep + ' OF ' + totalSteps + ' • ' + stepNames[currentStep - 1];
-}
+// ===== MEMBER DATA =====
+function getGymMembers(){return[
+{name:'RAHUL SHARMA',plan:'YEARLY',fee:8999,paid:8999,phone:'+91 98765',joined:'JAN 2024',expires:'MAR 2026',daysLeft:420,totalDays:730,color:'purple',checkins:[1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1]},
+{name:'PRIYA PATEL',plan:'MONTHLY',fee:999,paid:999,phone:'+91 87654',joined:'DEC 2024',expires:'JAN 2025',daysLeft:12,totalDays:30,color:'pink',checkins:[1,1,0,1,1,0,0,1,1,1,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1]},
+{name:'AMIT KUMAR',plan:'MONTHLY',fee:999,paid:0,phone:'+91 76543',joined:'NOV 2024',expires:'DEC 2024',daysLeft:0,totalDays:30,color:'orange',checkins:[1,0,0,1,1,0,0,1,1,0,1,1,0,0,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1]},
+{name:'SANJAY MEHTA',plan:'YEARLY',fee:8999,paid:8999,phone:'+91 65432',joined:'JUN 2023',expires:'JUL 2025',daysLeft:180,totalDays:730,color:'green',checkins:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
+{name:'NEHA KAPOOR',plan:'MONTHLY',fee:999,paid:500,phone:'+91 54321',joined:'JAN 2025',expires:'FEB 2025',daysLeft:28,totalDays:30,color:'blue',checkins:[1,1,1,0,1,0,0,1,1,1,0,1,0,0,1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1]},
+{name:'DEEPAK GUPTA',plan:'QUARTERLY',fee:2499,paid:2499,phone:'+91 43210',joined:'NOV 2024',expires:'FEB 2025',daysLeft:45,totalDays:90,color:'teal',checkins:[1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1]},
+]}
+function getLibMembers(){return[
+{name:'MEERA SINGH',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 98765',joined:'JAN 2024',booksOut:2,maxBooks:5,color:'purple'},
+{name:'VIKRAM RAO',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 87654',joined:'MAR 2024',booksOut:3,maxBooks:5,color:'blue'},
+{name:'ARUN PATEL',plan:'MONTHLY',fee:200,paid:0,phone:'+91 76543',joined:'FEB 2024',booksOut:1,maxBooks:3,color:'orange'},
+{name:'DEEPA KAPOOR',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 65432',joined:'JUN 2023',booksOut:0,maxBooks:5,color:'green'},
+{name:'ROHIT KUMAR',plan:'ANNUAL',fee:1200,paid:600,phone:'+91 54321',joined:'DEC 2024',booksOut:2,maxBooks:5,color:'pink'},
+{name:'SNEHA SHARMA',plan:'MONTHLY',fee:200,paid:200,phone:'+91 43210',joined:'APR 2024',booksOut:1,maxBooks:3,color:'teal'},
+]}
 
-function populateSummary() {
-    const activeCategory = document.querySelector('#categoryTabs .slider-tab.active');
-    document.getElementById('sumCategory').textContent = activeCategory ? activeCategory.textContent : 'N/A';
-    document.getElementById('sumName').textContent = document.getElementById('bizName').value || 'NOT PROVIDED';
-    document.getElementById('sumPhone').textContent = document.getElementById('bizPhone').value || 'NOT PROVIDED';
-    document.getElementById('sumAddress').textContent = document.getElementById('bizAddress').value || 'NOT PROVIDED';
-    document.getElementById('sumOwner').textContent = document.getElementById('ownerName').value || 'NOT PROVIDED';
-    document.getElementById('sumGst').textContent = document.getElementById('gstNumber').value || 'NOT PROVIDED';
-    
-    const selectedPlan = document.querySelector('.plan-card.selected');
-    document.getElementById('sumPlan').textContent = selectedPlan ? selectedPlan.dataset.plan : 'NONE SELECTED';
-}
+// ===== MEMBERS PAGE =====
+function membersPage(isG){
+const members=isG?getGymMembers():getLibMembers();
+const active=members.filter(m=>m.paid>=m.fee).length;
+const expired=members.filter(m=>isG?(m.daysLeft===0):(m.paid===0)).length;
+const pending=members.length-active-expired;
+const totalRev=members.reduce((a,m)=>a+m.paid,0);
+
+return `
+<div class="page-actions">
+<button class="btn btn-primary btn-sm" onclick="showModal('addMember')"><i class="fas fa-plus"></i> ADD MEMBER</button>
+<button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> EXPORT</button>
+</div>
+<div class="stats-row">
+${statCard('fas fa-users','purple',members.length.toString(),'TOTAL MEMBERS','','up')}
+${statCard('fas fa-user-check','green',active.toString(),'ACTIVE','+8%','up')}
+${statCard('fas fa-rupee-sign','blue','₹'+totalRev.toLocaleString('en-IN'),'COLLECTED','','up')}
+${statCard('fas fa-exclamation-triangle','orange',(expired+pending).toString(),'EXPIRED/PENDING','','down')}
+</div>
+<div class="filter-bar">
+<button class="filter-chip active">ALL (${members.length})</button>
+<button class="filter-chip">ACTIVE (${active})</button>
+<button class="filter-chip">EXPIRED (${expired})</button>
+<button class="filter-chip">PENDING (${pending})</button>
+</div>
+<div class="person-cards">
+${members.map((m,i)=>{
+const init=m.name.split(' ').map(w=>w[0]).join('');
+const pct=Math.round((m.paid/m.fee)*100);
+const payStatus=pct>=100?'paid':pct>0?'partial':'unpaid';
+const payColor=pct>=100?'green':pct>0?'orange':'red';
+
+if(isG){
+const planPct=m.totalDays>0?Math.round((m.daysLeft/m.totalDays)*100):0;
+const planColor=m.daysLeft>30?'purple':m.daysLeft>7?'orange':'red';
+const present=m.checkins.filter(c=>c===1).length;
+const memberStatus=m.daysLeft===0?'expired':m.paid<m.fee?'pending':'active';
+const memberStatusLabel=m.daysLeft===0?'EXPIRED':m.paid<m.fee?'PENDING':'ACTIVE';
+return `<div class="person-card clay" style="animation-delay:${i*.06}s">
+<div class="person-card-top">
+<div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(m.color)}),rgba(255,255,255,.2))">${init}</div>
+<div class="person-info"><div class="person-name">${m.name}</div><div class="person-role">${m.plan} • ${m.phone}</div></div>
+<span class="status-badge status-${memberStatus}">${memberStatusLabel}</span>
+</div>
+<div class="person-details">
+<div class="person-detail"><div class="person-detail-label">FEE</div><div class="person-detail-value">₹${m.fee.toLocaleString('en-IN')}</div></div>
+<div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payColor==='green'?'--success':payColor==='orange'?'--warning':'--error'})">₹${m.paid.toLocaleString('en-IN')}</div></div>
+<div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${m.joined}</div></div>
+<div class="person-detail"><div class="person-detail-label">EXPIRES</div><div class="person-detail-value">${m.expires}</div></div>
+</div>
+<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PAYMENT</div>
+<div class="prog-bar-bg"><div class="prog-bar-fill ${payColor}" data-width="${pct}" style="width:0%"></div></div>
+<div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(m.fee-m.paid).toLocaleString('en-IN')} DUE</span></div></div>
+<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PLAN REMAINING (${m.daysLeft} DAYS)</div>
+<div class="prog-bar-bg"><div class="prog-bar-fill ${planColor}" data-width="${planPct}" style="width:0%"></div></div>
+<div class="prog-bar-labels"><span>${planPct}%</span><span>${m.daysLeft}/${m.totalDays} DAYS</span></div></div>
+<div><div class="person-detail-label" style="margin-bottom:.2rem">CHECK-INS (${present}/30 DAYS)</div>
+<div class="att-dots">${m.checkins.map((c,di)=>`<div class="att-dot ${c?'present':'absent'}" title="Day ${di+1}"></div>`).join('')}</div></div>
+<div class="person-actions">
+<button class="btn btn-sm btn-primary" onclick="showModal('collectPayment')"><i class="fas fa-rupee-sign"></i> COLLECT</button>
+<button class="btn btn-sm btn-outline" onclick="showModal('editMember')"><i class="fas fa-edit"></i> EDIT</button>
+<button class="btn btn-sm btn-info" onclick="showModal('checkin')"><i class="fas fa-qrcode"></i></button>
+</div></div>`}
+else{
+const bookPct=Math.round((m.booksOut/m.maxBooks)*100);
+const bookColor=bookPct<60?'blue':bookPct<90?'orange':'red';
+const memberStatus=m.paid===0?'expired':m.paid<m.fee?'pending':'active';
+const memberStatusLabel=m.paid===0?'EXPIRED':m.paid<m.fee?'PENDING':'ACTIVE';
+return `<div class="person-card clay" style="animation-delay:${i*.06}s">
+<div class="person-card-top">
+<div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(m.color)}),rgba(255,255,255,.2))">${init}</div>
+<div class="person-info"><div class="person-name">${m.name}</div><div class="person-role">${m.plan} • ${m.phone}</div></div>
+<span class="status-badge status-${memberStatus}">${memberStatusLabel}</span>
+</div>
+<div class="person-details">
+<div class="person-detail"><div class="person-detail-label">FEE</div><div class="person-detail-value">₹${m.fee.toLocaleString('en-IN')}</div></div>
+<div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payColor==='green'?'--success':payColor==='orange'?'--warning':'--error'})">₹${m.paid.toLocaleString('en-IN')}</div></div>
+<div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${m.joined}</div></div>
+<div class="person-detail"><div class="person-detail-label">BOOKS OUT</div><div class="person-detail-value">${m.booksOut}/${m.maxBooks}</div></div>
+</div>
+<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PAYMENT</div>
+<div class="prog-bar-bg"><div class="prog-bar-fill ${payColor}" data-width="${pct}" style="width:0%"></div></div>
+<div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(m.fee-m.paid).toLocaleString('en-IN')} DUE</span></div></div>
+<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">BOOK SLOTS USED</div>
+<div class="prog-bar-bg"><div class="prog-bar-fill ${bookColor}" data-width="${bookPct}" style="width:0%"></div></div>
+<div class="prog-bar-labels"><span>${m.booksOut} ISSUED</span><span>${m.maxBooks-m.booksOut} AVAILABLE</span></div></div>
+<div class="person-actions">
+<button class="btn btn-sm btn-primary" onclick="showModal('collectPayment')"><i class="fas fa-rupee-sign"></i> COLLECT</button>
+<button class="btn btn-sm btn-outline" onclick="showModal('editMember')"><i class="fas fa-edit"></i> EDIT</button>
+<button class="btn btn-sm btn-info" onclick="showModal('issueBook')"><i class="fas fa-book"></i></button>
+</div></div>`}
+}).join('')}
+</div>`}
+
+// ===== STAFF PAGE =====
+function staffPage(isG){
+const staff=isG?[
+{name:'RAJESH KUMAR',role:'HEAD TRAINER',salary:35000,paid:35000,phone:'+91 98765',joined:'JAN 2023',color:'purple',att:[1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1]},
+{name:'PRIYA SHARMA',role:'YOGA INSTRUCTOR',salary:25000,paid:25000,phone:'+91 87654',joined:'MAR 2023',color:'pink',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
+{name:'AMIT PATEL',role:'FITNESS TRAINER',salary:28000,paid:20000,phone:'+91 76543',joined:'JUN 2023',color:'blue',att:[1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1]},
+{name:'SANJAY MEHTA',role:'RECEPTIONIST',salary:18000,paid:18000,phone:'+91 65432',joined:'SEP 2023',color:'green',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
+{name:'DEEPA NAIR',role:'HELPER',salary:15000,paid:15000,phone:'+91 54321',joined:'NOV 2023',color:'orange',att:[1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0,1,1,0,0,1,1,1,1,0,0,0,1,1]},
+{name:'RAVI SINGH',role:'SWEEPER',salary:12000,paid:0,phone:'+91 43210',joined:'FEB 2024',color:'teal',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
+]:[
+{name:'ANITA DESAI',role:'HEAD LIBRARIAN',salary:32000,paid:32000,phone:'+91 98765',joined:'JAN 2022',color:'purple',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
+{name:'VIKRAM RAO',role:'ASST LIBRARIAN',salary:22000,paid:22000,phone:'+91 87654',joined:'MAY 2022',color:'blue',att:[1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1]},
+{name:'MEERA JOSHI',role:'CATALOGER',salary:20000,paid:15000,phone:'+91 76543',joined:'AUG 2023',color:'pink',att:[1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1]},
+{name:'SUNIL PATIL',role:'HELPER',salary:14000,paid:14000,phone:'+91 65432',joined:'OCT 2023',color:'green',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
+{name:'KAVITA DEVI',role:'SWEEPER',salary:11000,paid:0,phone:'+91 54321',joined:'DEC 2023',color:'orange',att:[1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1]},
+];
+const totalS=staff.reduce((a,s)=>a+s.salary,0),totalP=staff.reduce((a,s)=>a+s.paid,0),fp=staff.filter(s=>s.paid>=s.salary).length;
+return `
+<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('addStaff')"><i class="fas fa-plus"></i> ADD STAFF</button><button class="btn btn-info btn-sm" onclick="showModal('paySalary')"><i class="fas fa-money-bill-wave"></i> PAY SALARY</button><button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> EXPORT</button></div>
+<div class="stats-row">
+${statCard('fas fa-id-badge','purple',staff.length.toString(),'TOTAL STAFF','','up')}
+${statCard('fas fa-rupee-sign','green','₹'+totalP.toLocaleString('en-IN'),'PAID','','up')}
+${statCard('fas fa-clock','orange','₹'+(totalS-totalP).toLocaleString('en-IN'),'PENDING','','down')}
+${statCard('fas fa-check-double','blue',fp+'/'+staff.length,'FULLY PAID','','up')}
+</div>
+<div class="filter-bar"><button class="filter-chip active">ALL (${staff.length})</button><button class="filter-chip">${isG?'TRAINERS':'LIBRARIANS'}</button><button class="filter-chip">HELPERS</button><button class="filter-chip">UNPAID</button></div>
+<div class="person-cards">
+${staff.map((s,i)=>{const init=s.name.split(' ').map(w=>w[0]).join('');const pct=Math.round((s.paid/s.salary)*100);const payC=pct>=100?'green':pct>0?'orange':'red';const present=s.att.filter(a=>a===1).length;
+return `<div class="person-card clay" style="animation-delay:${i*.06}s">
+<div class="person-card-top">
+<div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(s.color)}),rgba(255,255,255,.2))">${init}</div>
+<div class="person-info"><div class="person-name">${s.name}</div><div class="person-role">${s.role}</div></div>
+<span class="status-badge status-${pct>=100?'paid':pct>0?'partial':'unpaid'}">${pct>=100?'PAID':pct>0?'PARTIAL':'UNPAID'}</span>
+</div>
+<div class="person-details">
+<div class="person-detail"><div class="person-detail-label">SALARY</div><div class="person-detail-value">₹${s.salary.toLocaleString('en-IN')}</div></div>
+<div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payC==='green'?'--success':payC==='orange'?'--warning':'--error'})">₹${s.paid.toLocaleString('en-IN')}</div></div>
+<div class="person-detail"><div class="person-detail-label">PHONE</div><div class="person-detail-value">${s.phone}</div></div>
+<div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${s.joined}</div></div>
+</div>
+<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">SALARY</div>
+<div class="prog-bar-bg"><div class="prog-bar-fill ${payC}" data-width="${pct}" style="width:0%"></div></div>
+<div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(s.salary-s.paid).toLocaleString('en-IN')} DUE</span></div></div>
+<div><div class="person-detail-label" style="margin-bottom:.2rem">ATTENDANCE (${present}/30)</div>
+<div class="att-dots">${s.att.map((a,di)=>`<div class="att-dot ${a?'present':'absent'}" title="Day ${di+1}"></div>`).join('')}</div></div>
+<div class="person-actions">
+<button class="btn btn-sm btn-primary" onclick="showModal('paySalary')"><i class="fas fa-rupee-sign"></i> PAY</button>
+<button class="btn btn-sm btn-outline" onclick="showModal('editStaff')"><i class="fas fa-edit"></i> EDIT</button>
+<button class="btn btn-sm btn-outline" onclick="showModal('staffAtt')"><i class="fas fa-calendar-check"></i></button>
+</div></div>`}).join('')}
+</div>`}
+
+// ===== GYM DASHBOARD =====
+function gymDash(){return `
+<div class="stats-row">
+${statCard('fas fa-users','purple','248','TOTAL MEMBERS','+12%','up')}
+${statCard('fas fa-user-check','green','186','ACTIVE','+8%','up')}
+${statCard('fas fa-rupee-sign','pink','₹84,500','REVENUE','+23%','up')}
+${statCard('fas fa-exclamation-triangle','orange','32','EXPIRING','-5%','down')}
+</div>
+${quickAct([{icon:'fa-user-plus',color:'purple',label:'ADD MEMBER',action:"showModal('addMember')"},{icon:'fa-money-bill-wave',color:'green',label:'PAYMENT',action:"showModal('collectPayment')"},{icon:'fa-qrcode',color:'blue',label:'CHECK-IN',action:"showModal('checkin')"},{icon:'fa-id-badge',color:'orange',label:'ADD STAFF',action:"showModal('addStaff')"}])}
+<div class="chart-row">
+${chartCard('WEEKLY CHECK-INS',[{h:55,l:'MON'},{h:78,l:'TUE',a:1},{h:62,l:'WED'},{h:88,l:'THU',a:1},{h:45,l:'FRI'},{h:92,l:'SAT',a:1},{h:30,l:'SUN'}])}
+${actCard([{c:'green',t:'RAHUL checked in',time:'2 MIN AGO'},{c:'purple',t:'New member PRIYA',time:'15 MIN AGO'},{c:'pink',t:'₹999 from AMIT',time:'1 HR AGO'},{c:'orange',t:'Staff salary paid',time:'2 HR AGO'},{c:'green',t:'SANJAY renewed',time:'3 HR AGO'}])}
+</div>`}
+
+// ===== LIBRARY DASHBOARD =====
+function libDash(){return `
+<div class="stats-row">
+${statCard('fas fa-book','purple','1,247','TOTAL BOOKS','+45','up')}
+${statCard('fas fa-book-reader','blue','380','MEMBERS','+6%','up')}
+${statCard('fas fa-exchange-alt','green','156','ISSUED','+18%','up')}
+${statCard('fas fa-exclamation-circle','orange','12','OVERDUE','+3','down')}
+</div>
+${quickAct([{icon:'fa-book-open',color:'purple',label:'ISSUE BOOK',action:"showModal('issueBook')"},{icon:'fa-undo',color:'green',label:'RETURN',action:"showModal('returnBook')"},{icon:'fa-plus-circle',color:'blue',label:'ADD BOOK',action:"showModal('addBook')"},{icon:'fa-id-badge',color:'orange',label:'ADD STAFF',action:"showModal('addStaff')"}])}
+<div class="chart-row">
+${chartCard('WEEKLY CIRCULATION',[{h:40,l:'MON'},{h:65,l:'TUE',a:1},{h:52,l:'WED'},{h:75,l:'THU',a:1},{h:58,l:'FRI'},{h:85,l:'SAT',a:1},{h:25,l:'SUN'}])}
+${actCard([{c:'green',t:'"ALCHEMIST" returned',time:'5 MIN AGO'},{c:'purple',t:'"ATOMIC HABITS" issued',time:'20 MIN AGO'},{c:'orange',t:'3 books overdue',time:'1 HR AGO'},{c:'pink',t:'New member DEEPA',time:'2 HR AGO'},{c:'blue',t:'Staff salary paid',time:'3 HR AGO'}])}
+</div>`}
+
+function libCatalog(){return `
+<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('addBook')"><i class="fas fa-plus"></i> ADD BOOK</button></div>
+<div class="filter-bar"><button class="filter-chip active">ALL (1,247)</button><button class="filter-chip">AVAILABLE</button><button class="filter-chip">ISSUED</button></div>
+${tblCard('CATALOG','1,247',['TITLE','AUTHOR','ISBN','STATUS'],[['📖','ATOMIC HABITS','purple','JAMES CLEAR','978-073521','available','AVAILABLE'],['📚','SAPIENS','pink','YUVAL HARARI','978-006231','issued','ISSUED'],['📕','DEEP WORK','orange','CAL NEWPORT','978-145558','overdue','OVERDUE'],['📗','THE ALCHEMIST','green','PAULO COELHO','978-006231','available','AVAILABLE'],['📘','THINKING FAST','blue','D. KAHNEMAN','978-037453','available','AVAILABLE']])}`}
+
+function libCirculation(){return `
+<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('issueBook')"><i class="fas fa-book-open"></i> ISSUE</button><button class="btn btn-success btn-sm" onclick="showModal('returnBook')"><i class="fas fa-undo"></i> RETURN</button></div>
+<div class="stats-row">${statCard('fas fa-arrow-right','blue','156','ISSUED','','up')}${statCard('fas fa-arrow-left','green','89','RETURNED','','up')}${statCard('fas fa-clock','orange','12','OVERDUE','','down')}${statCard('fas fa-calendar','purple','23','DUE TODAY','','down')}</div>
+${tblCard('CIRCULATION','245',['BOOK','MEMBER','DUE DATE','STATUS'],[['📖','ATOMIC HABITS','purple','VIKRAM R.','JAN 15','issued','ISSUED'],['📚','SAPIENS','pink','PRIYA M.','JAN 11','issued','ISSUED'],['📕','DEEP WORK','orange','ARUN P.','DEC 28','overdue','OVERDUE'],['📗','THE ALCHEMIST','green','MEERA S.','JAN 05','available','RETURNED']])}`}
+
+function libOverdue(){return `
+<div class="stats-row">${statCard('fas fa-exclamation-circle','red','12','OVERDUE','','down')}${statCard('fas fa-rupee-sign','orange','₹1,450','FINES','','down')}${statCard('fas fa-clock','purple','8.5','AVG DAYS LATE','','down')}${statCard('fas fa-bell','blue','8','NOTIFIED','','up')}</div>
+<div class="page-actions"><button class="btn btn-warning btn-sm"><i class="fas fa-bell"></i> SEND REMINDERS</button></div>
+${tblCard('OVERDUE','12',['BOOK','MEMBER','DUE','DAYS LATE','STATUS'],[['📕','DEEP WORK','red','ARUN P.','DEC 28','12 DAYS','overdue','OVERDUE'],['📙','PSYCHOLOGY 101','orange','RAVI M.','DEC 30','10 DAYS','overdue','OVERDUE'],['📓','THINK & GROW','orange','SUNIL K.','JAN 02','7 DAYS','overdue','OVERDUE']])}`}
+
+function paymentsPage(isG){return `
+<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('collectPayment')"><i class="fas fa-plus"></i> RECORD PAYMENT</button></div>
+<div class="stats-row">${statCard('fas fa-rupee-sign','green',isG?'₹84,500':'₹45,200','THIS MONTH','+23%','up')}${statCard('fas fa-check-double','blue',isG?'142':'89','PAID','','up')}${statCard('fas fa-clock','orange',isG?'28':'15','PENDING','','down')}${statCard('fas fa-times','red',isG?'15':'8','OVERDUE','','down')}</div>
+${tblCard('PAYMENTS','185',['MEMBER','AMOUNT','DATE','METHOD','STATUS'],[['RS','RAHUL SHARMA','purple','₹8,999','JAN 05','UPI','paid','PAID'],['PP','PRIYA PATEL','pink','₹999','JAN 03','CASH','paid','PAID'],['AK','AMIT KUMAR','orange','₹999','DEC 28','—','unpaid','OVERDUE'],['SM','SANJAY MEHTA','green','₹8,999','JAN 01','CARD','paid','PAID']])}`}
+
+function analyticsPage(isG){return `
+<div class="stats-row">${statCard('fas fa-chart-line','purple',isG?'23%':'18%','GROWTH','+5%','up')}${statCard('fas fa-arrow-up','green',isG?'92%':'88%','RETENTION','','up')}${statCard('fas fa-users','blue',isG?'34':'52','NEW','','up')}${statCard('fas fa-star','orange',isG?'4.7':'4.5','RATING','','up')}</div>
+<div class="chart-row">
+${chartCard(isG?'MONTHLY REGISTRATIONS':'MONTHLY CIRCULATION',[{h:35,l:'JUL'},{h:48,l:'AUG',a:1},{h:55,l:'SEP'},{h:62,l:'OCT',a:1},{h:70,l:'NOV'},{h:78,l:'DEC',a:1},{h:85,l:'JAN'}])}
+${chartCard('REVENUE TREND',[{h:45,l:'JUL',c:'green'},{h:55,l:'AUG',c:'green'},{h:50,l:'SEP',c:'green'},{h:68,l:'OCT',c:'green'},{h:72,l:'NOV',c:'green'},{h:80,l:'DEC',c:'green'},{h:88,l:'JAN',c:'green'}])}
+</div>
+<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">${isG?'POPULAR TIMESLOTS':'POPULAR GENRES'}</span></div>
+<div class="info-grid">${isG?'<div class="info-item clay-sm"><div class="info-item-label">MORNING 6-9 AM</div><div class="info-item-value">38%</div></div><div class="info-item clay-sm"><div class="info-item-label">EVENING 5-8 PM</div><div class="info-item-value">45%</div></div><div class="info-item clay-sm"><div class="info-item-label">AFTERNOON</div><div class="info-item-value">12%</div></div><div class="info-item clay-sm"><div class="info-item-label">NIGHT</div><div class="info-item-value">5%</div></div>':'<div class="info-item clay-sm"><div class="info-item-label">FICTION</div><div class="info-item-value">32%</div></div><div class="info-item clay-sm"><div class="info-item-label">SELF-HELP</div><div class="info-item-value">28%</div></div><div class="info-item clay-sm"><div class="info-item-label">SCIENCE</div><div class="info-item-value">18%</div></div><div class="info-item clay-sm"><div class="info-item-label">HISTORY</div><div class="info-item-value">12%</div></div>'}</div></div>`}
+
+function settingsPage(){return `
+<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">BUSINESS PROFILE</span><button class="dash-card-action" onclick="showModal('editProfile')">EDIT</button></div>
+<div class="info-grid"><div class="info-item"><div class="info-item-label">BUSINESS</div><div class="info-item-value">${D.bizName.toUpperCase()}</div></div><div class="info-item"><div class="info-item-label">OWNER</div><div class="info-item-value">${D.ownerName.toUpperCase()}</div></div><div class="info-item"><div class="info-item-label">PHONE</div><div class="info-item-value">${D.bizPhone}</div></div><div class="info-item"><div class="info-item-label">CATEGORY</div><div class="info-item-value">${selectedCategory.toUpperCase()}</div></div></div></div>
+<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">PREFERENCES</span></div>
+<div style="display:flex;flex-direction:column">${sToggle('fa-bell','purple','NOTIFICATIONS','Receive alerts',true)}${sToggle('fa-envelope','blue','EMAIL REPORTS','Weekly summary',true)}${sToggle('fa-moon','pink','DARK MODE','Coming soon',false)}${sToggle('fa-lock','green','2FA','Extra security',false)}</div></div>
+<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">DANGER ZONE</span></div><div style="display:flex;gap:.75rem;flex-wrap:wrap"><button class="btn btn-warning btn-sm"><i class="fas fa-download"></i> EXPORT</button><button class="btn btn-error btn-sm"><i class="fas fa-trash"></i> DELETE</button></div></div>`}
+
+// BUILDERS
+function statCard(ic,co,val,lab,tr,dir){return `<div class="stat-card clay"><div class="stat-card-header"><div class="stat-icon ${co}"><i class="${ic}"></i></div>${tr?`<span class="stat-trend ${dir}">${tr}</span>`:''}</div><div class="stat-value">${val}</div><div class="stat-label">${lab}</div></div>`}
+function quickAct(items){return `<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title"><span class="live-dot"></span>QUICK ACTIONS</span></div><div class="quick-actions">${items.map(i=>`<button class="quick-action-btn clay" onclick="${i.action}"><div class="quick-action-icon stat-icon ${i.color}"><i class="fas ${i.icon}"></i></div><span class="quick-action-label">${i.label}</span></button>`).join('')}</div></div>`}
+function chartCard(t,bars){return `<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">${t}</span></div><div class="chart-area"><div class="chart-bars">${bars.map(b=>`<div class="chart-bar-group"><div class="chart-bar${b.a?' accent':''}${b.c?' '+b.c:''}" data-height="${b.h}"></div><span class="chart-bar-label">${b.l}</span></div>`).join('')}</div></div></div>`}
+function actCard(items){return `<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">RECENT ACTIVITY</span></div><div class="activity-feed">${items.map(i=>`<div class="activity-item"><div class="activity-dot ${i.c}"></div><div><div class="activity-text">${i.t}</div><div class="activity-time">${i.time}</div></div></div>`).join('')}</div></div>`}
+function tblCard(t,cnt,h,rows){return `<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">${t}</span><button class="dash-card-action">ALL ${cnt}</button></div><div class="table-wrapper"><table class="data-table"><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>{let c='';c+=`<td><div class="member-cell"><div class="member-avatar" style="background:linear-gradient(135deg,var(${clr(r[2])}),rgba(255,255,255,.2))">${r[0]}</div><span>${r[1]}</span></div></td>`;for(let i=3;i<r.length-2;i++)c+=`<td>${r[i]}</td>`;c+=`<td><span class="status-badge status-${r[r.length-2]}">${r[r.length-1]}</span></td>`;return`<tr>${c}</tr>`}).join('')}</tbody></table></div></div>`}
+function sToggle(ic,co,t,d,ch){return `<div class="settings-item"><div class="settings-item-left"><div class="settings-item-icon stat-icon ${co}"><i class="fas ${ic}"></i></div><div class="settings-item-text"><div class="settings-item-title">${t}</div><div class="settings-item-desc">${d}</div></div></div><label class="toggle-switch"><input type="checkbox" ${ch?'checked':''}><span class="toggle-slider"></span></label></div>`}
+
+// MODAL
+function showModal(type){document.getElementById('modalContent').innerHTML=getModal(type);document.getElementById('modalOverlay').classList.add('show')}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('show')}
+function mw(t,b,bc,bt){return `<div class="modal-header"><h3 class="modal-title gradient-text">${t}</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body">${b}<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">CANCEL</button><button class="btn ${bc}" onclick="closeModal()">${bt}</button></div></div>`}
+function getModal(type){
+const isG=selectedCategory==='gym';
+const m={
+addMember:mw('ADD MEMBER',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Full name"></div><div class="form-group"><label class="form-label">EMAIL</label><input class="form-input" type="email" placeholder="email@example.com"></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" type="tel" placeholder="+91 XXXXX"></div><div class="form-group"><label class="form-label">PLAN</label><select class="form-input"><option>MONTHLY</option><option>QUARTERLY</option><option>YEARLY</option></select></div><div class="form-group"><label class="form-label">FEE (₹)</label><input class="form-input" type="number" placeholder="999"></div>`,'btn-primary','ADD MEMBER'),
+editMember:mw('EDIT MEMBER',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Full name"></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" placeholder="+91 XXXXX"></div><div class="form-group"><label class="form-label">PLAN</label><select class="form-input"><option>MONTHLY</option><option>QUARTERLY</option><option>YEARLY</option></select></div>`,'btn-primary','SAVE'),
+collectPayment:mw('COLLECT PAYMENT',`<div class="form-group"><label class="form-label">MEMBER</label><input class="form-input" placeholder="Search member..."></div><div class="form-group"><label class="form-label">AMOUNT (₹)</label><input class="form-input" type="number" placeholder="0"></div><div class="form-group"><label class="form-label">METHOD</label><select class="form-input"><option>UPI</option><option>CASH</option><option>CARD</option><option>BANK TRANSFER</option></select></div><div class="form-group"><label class="form-label">NOTE</label><textarea class="form-input" placeholder="Payment note..."></textarea></div>`,'btn-success','CONFIRM PAYMENT'),
+checkin:mw('CHECK-IN',`<div class="form-group"><label class="form-label">MEMBER ID / NAME</label><input class="form-input" placeholder="Scan or type..."></div><div style="text-align:center;padding:2rem;color:var(--text-muted)"><i class="fas fa-qrcode" style="font-size:3rem;opacity:.3"></i><div style="margin-top:.75rem;font-size:.8rem;font-weight:700;font-family:var(--font-ui)">SCAN QR CODE</div></div>`,'btn-primary','CHECK IN'),
+addStaff:mw('ADD STAFF',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Full name"></div><div class="form-group"><label class="form-label">ROLE</label><select class="form-input">${isG?'<option>HEAD TRAINER</option><option>FITNESS TRAINER</option><option>YOGA INSTRUCTOR</option><option>RECEPTIONIST</option><option>HELPER</option><option>SWEEPER</option>':'<option>HEAD LIBRARIAN</option><option>ASST LIBRARIAN</option><option>CATALOGER</option><option>HELPER</option><option>SWEEPER</option>'}</select></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" type="tel" placeholder="+91 XXXXX"></div><div class="form-group"><label class="form-label">SALARY (₹)</label><input class="form-input" type="number" placeholder="15000"></div><div class="form-group"><label class="form-label">AADHAR / ID</label><input class="form-input" placeholder="XXXX-XXXX-XXXX"></div><div class="form-group"><label class="form-label">JOIN DATE</label><input class="form-input" type="date"></div>`,'btn-primary','ADD STAFF'),
+editStaff:mw('EDIT STAFF',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Name"></div><div class="form-group"><label class="form-label">ROLE</label><select class="form-input"><option>HEAD TRAINER</option><option>HELPER</option><option>SWEEPER</option></select></div><div class="form-group"><label class="form-label">SALARY (₹)</label><input class="form-input" type="number"></div>`,'btn-primary','SAVE'),
+paySalary:mw('PAY SALARY',`<div class="form-group"><label class="form-label">STAFF</label><select class="form-input"><option>SELECT...</option><option>RAJESH - ₹35,000</option><option>PRIYA - ₹25,000</option><option>AMIT - ₹8,000 DUE</option><option>RAVI - ₹12,000 UNPAID</option></select></div><div class="form-group"><label class="form-label">AMOUNT (₹)</label><input class="form-input" type="number" placeholder="Amount"></div><div class="form-group"><label class="form-label">METHOD</label><select class="form-input"><option>BANK TRANSFER</option><option>UPI</option><option>CASH</option></select></div><div class="form-group"><label class="form-label">MONTH</label><select class="form-input"><option>JANUARY 2025</option><option>DECEMBER 2024</option></select></div>`,'btn-success','PAY NOW'),
+staffAtt:mw('MARK ATTENDANCE',`<div class="form-group"><label class="form-label">DATE</label><input class="form-input" type="date"></div><div class="form-group"><label class="form-label">STAFF</label><select class="form-input"><option>ALL STAFF</option><option>RAJESH KUMAR</option><option>PRIYA SHARMA</option></select></div><div class="form-group"><label class="form-label">STATUS</label><select class="form-input"><option>PRESENT</option><option>ABSENT</option><option>HALF DAY</option><option>LEAVE</option></select></div>`,'btn-primary','MARK'),
+issueBook:mw('ISSUE BOOK',`<div class="form-group"><label class="form-label">BOOK</label><input class="form-input" placeholder="Search book..."></div><div class="form-group"><label class="form-label">MEMBER</label><input class="form-input" placeholder="Search member..."></div><div class="form-group"><label class="form-label">DUE DATE</label><input class="form-input" type="date"></div>`,'btn-primary','ISSUE'),
+returnBook:mw('RETURN BOOK',`<div class="form-group"><label class="form-label">BOOK</label><input class="form-input" placeholder="Search issued book..."></div><div class="form-group"><label class="form-label">CONDITION</label><select class="form-input"><option>GOOD</option><option>FAIR</option><option>DAMAGED</option></select></div><div class="form-group"><label class="form-label">FINE (₹)</label><input class="form-input" type="number" placeholder="0"></div>`,'btn-success','RETURN'),
+addBook:mw('ADD BOOK',`<div class="form-group"><label class="form-label">TITLE</label><input class="form-input" placeholder="Book title"></div><div class="form-group"><label class="form-label">AUTHOR</label><input class="form-input" placeholder="Author"></div><div class="form-group"><label class="form-label">ISBN</label><input class="form-input" placeholder="978-XXX"></div><div class="form-group"><label class="form-label">CATEGORY</label><select class="form-input"><option>FICTION</option><option>NON-FICTION</option><option>SCIENCE</option><option>HISTORY</option></select></div>`,'btn-primary','ADD'),
+editProfile:mw('EDIT PROFILE',`<div class="form-group"><label class="form-label">BUSINESS NAME</label><input class="form-input" value="${D.bizName}"></div><div class="form-group"><label class="form-label">OWNER</label><input class="form-input" value="${D.ownerName}"></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" value="${D.bizPhone}"></div>`,'btn-primary','SAVE'),
+};return m[type]||m.addMember}
+
+function runAnims(){document.querySelectorAll('.chart-bar').forEach((b,i)=>{const h=b.dataset.height;b.style.height='4px';setTimeout(()=>b.style.height=h+'%',200+i*100)});document.querySelectorAll('.prog-bar-fill').forEach((b,i)=>{const w=b.dataset.width;b.style.width='0%';setTimeout(()=>b.style.width=w+'%',300+i*80)});document.querySelectorAll('.stat-card,.person-card').forEach((c,i)=>{c.style.animation='none';c.offsetHeight;c.style.animation=`cardUp .5s ease-out ${i*.06}s both`})}
+function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show')}
 </script>
 </body>
 </html>
