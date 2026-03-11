@@ -61,7 +61,6 @@ body, input, select, textarea {
 
 button, label, .btn-text { font-family: var(--font-ui); text-transform: uppercase; }
 h1, h2, h3, .form-title, .brand-text { font-family: var(--font-display); letter-spacing: 1px; }
-.form-subtitle, .step-description { text-transform: none; font-family: var(--font-body); }
 #loginPass, #signupPass, textarea { text-transform: none; }
 
 /* Utilities */
@@ -83,55 +82,12 @@ h1, h2, h3, .form-title, .brand-text { font-family: var(--font-display); letter-
     box-shadow: inset 4px 4px 10px rgba(166,180,200,0.5), inset -4px -4px 10px rgba(255,255,255,0.9);
 }
 
-/* ===== FLOATING CRM BACKGROUND ===== */
-.floating-bg {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
-.floating-icon { position: absolute; opacity: 0.08; color: var(--primary); animation: floatIcon 20s ease-in-out infinite; }
-.floating-icon svg { width: 100%; height: 100%; }
-.floating-icon:nth-child(1) { top: 5%; left: 5%; width: 80px; height: 80px; animation-duration: 25s; }
-.floating-icon:nth-child(2) { top: 15%; right: 10%; width: 60px; height: 60px; animation-delay: -3s; animation-duration: 22s; }
-.floating-icon:nth-child(3) { top: 35%; left: 8%; width: 70px; height: 70px; animation-delay: -5s; animation-duration: 28s; }
-.floating-icon:nth-child(4) { top: 55%; right: 5%; width: 90px; height: 90px; animation-delay: -8s; animation-duration: 24s; }
-.floating-icon:nth-child(5) { top: 75%; left: 12%; width: 55px; height: 55px; animation-delay: -2s; animation-duration: 26s; }
-.floating-icon:nth-child(6) { top: 85%; right: 15%; width: 65px; height: 65px; animation-delay: -6s; animation-duration: 23s; }
-.floating-line { position: absolute; background: linear-gradient(90deg, transparent, var(--primary), transparent); opacity: 0.04; animation: floatLine 15s ease-in-out infinite; }
-.floating-line:nth-child(7) { top: 20%; left: 0; width: 40%; height: 2px; }
-.floating-line:nth-child(8) { top: 50%; right: 0; width: 35%; height: 2px; animation-delay: -3s; transform: rotate(-5deg); }
-.floating-orb { position: absolute; border-radius: 50%; animation: floatOrb 18s ease-in-out infinite; }
-.floating-orb:nth-child(9) { top: 15%; left: 25%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%); }
-.floating-orb:nth-child(10) { top: 60%; right: 20%; width: 250px; height: 250px; background: radial-gradient(circle, rgba(244,114,182,0.05) 0%, transparent 70%); animation-delay: -5s; }
-.floating-dot { position: absolute; width: 6px; height: 6px; background: var(--primary); border-radius: 50%; opacity: 0.15; animation: floatDot 12s ease-in-out infinite; }
-.floating-dot:nth-child(11) { top: 12%; left: 35%; }
-.floating-dot:nth-child(12) { top: 62%; right: 40%; animation-delay: -1s; }
-
-@keyframes floatIcon { 0%, 100% { transform: translateY(0) rotate(0deg) scale(1); } 50% { transform: translateY(-10px) rotate(-3deg) scale(0.95); } }
-@keyframes floatLine { 0%, 100% { transform: translateX(0) scaleX(1); opacity: 0.04; } 50% { transform: translateX(20px) scaleX(1.1); opacity: 0.08; } }
-@keyframes floatOrb { 0%, 100% { transform: translate(0, 0) scale(1); opacity: 1; } 50% { transform: translate(30px, -20px) scale(1.1); opacity: 0.8; } }
-@keyframes floatDot { 0%, 100% { transform: translate(0, 0); opacity: 0.15; } 50% { transform: translate(10px, -15px); opacity: 0.25; } }
-
 /* ===== Views Management ===== */
-.view-container {
-    display: flex; height: 100%; width: 100%;
-    justify-content: center; align-items: center;
-    position: absolute; top: 0; left: 0;
-    z-index: 1; transition: opacity 0.4s ease, visibility 0.4s ease;
-}
-.view-container.hidden {
-    opacity: 0; visibility: hidden; pointer-events: none;
-}
-.view-wrapper {
-    width: 100%; max-width: 100%; margin: 0 auto;
-    display: flex; flex-direction: column;
-    height: 100%; overflow-y: auto;
-    padding: 1.5rem 1rem 1rem; position: relative;
-    justify-content: flex-start; z-index: 2;
-}
+.view-container { display: flex; height: 100%; width: 100%; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 1; transition: opacity 0.4s ease, visibility 0.4s ease; }
+.view-container.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.view-wrapper { width: 100%; max-width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: 100%; overflow-y: auto; padding: 1.5rem 1rem 1rem; position: relative; justify-content: flex-start; z-index: 2; }
+/* Lock body scroll in all views to let internal grids scroll smoothly */
+.view-wrapper { overflow-y: hidden; }
 
 /* Base Form Elements */
 .mobile-brand { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; flex-shrink: 0; }
@@ -142,19 +98,20 @@ h1, h2, h3, .form-title, .brand-text { font-family: var(--font-display); letter-
 
 .form-header, .step-header { margin-bottom: 1.5rem; text-align: center; flex-shrink: 0; }
 .form-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; }
-.form-body { flex: 1; display: flex; flex-direction: column; }
-.form-grid { display: grid; gap: 1rem; }
+.form-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-right: 0; }
+.form-grid { display: grid; gap: 1rem; flex: 1; overflow-y: auto; min-height: 0; align-content: start; padding-right: 0.25rem; margin-bottom: 0.5rem; }
 .form-cols { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
 .form-label { font-size: 0.75rem; font-weight: 700; color: var(--text); letter-spacing: 0.5px; }
+.form-input:placeholder-shown + .password-toggle {
+    display: none;
+}
+/* Inner scrolling hide scrollbars */
+.form-grid::-webkit-scrollbar, .summary-container::-webkit-scrollbar { display: none; }
+.form-grid, .summary-container { -ms-overflow-style: none; scrollbar-width: none; }
 
 .input-wrapper { position: relative; }
-.form-input {
-    width: 100%; padding: calc(0.75rem - 0.5px) 1rem;
-    background: linear-gradient(145deg, #dde4f6, #f5f8ff);
-    border-radius: var(--radius); border: 2px solid transparent; color: var(--text); font-size: 0.875rem; transition: all 0.3s; outline: none;
-    box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9);
-}
+.form-input { width: 100%; padding: calc(0.75rem - 0.5px) 1rem; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); border: 2px solid transparent; color: var(--text); font-size: 0.875rem; transition: all 0.3s; outline: none; box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9); }
 .form-input:focus { border-color: var(--secondary); }
 .form-input.input-error { border-color: var(--error); box-shadow: inset 3px 3px 8px rgba(239,68,68,0.2), inset -3px -3px 8px rgba(255,255,255,0.9); }
 .form-input::placeholder { color: var(--text-muted); font-family: var(--font-body); text-transform: none; }
@@ -164,10 +121,7 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 .input-wrapper .form-input { padding-left: 2.5rem; }
 
 /* Buttons */
-.btn {
-    width: 100%; padding: 0.75rem 1rem; border: none; border-radius: var(--radius); font-size: 0.875rem;
-    font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; font-family: var(--font-ui);
-}
+.btn { width: 100%; padding: 0.75rem 1rem; border: none; border-radius: var(--radius); font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; font-family: var(--font-ui); }
 .btn-primary { background: linear-gradient(145deg, #8b5cf6, #6d28d9); color: white; box-shadow: 5px 5px 12px rgba(109,40,217,0.3), -5px -5px 12px rgba(255,255,255,0.9); }
 .btn-primary:active:not(:disabled) { box-shadow: inset 4px 4px 10px rgba(0,0,0,0.2), inset -4px -4px 10px rgba(255,255,255,0.2); }
 .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
@@ -190,7 +144,7 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 @keyframes fadeTab { 0% { opacity: 0; transform: scale(0.96); } 100% { opacity: 1; transform: scale(1); } }
 
 .form-section { display: none; flex: 1; }
-.form-section.active { display: flex; flex-direction: column; animation: fadeIn 0.3s ease; }
+.form-section.active { display: flex; flex-direction: column; animation: fadeIn 0.3s ease; overflow: hidden; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
 
 .password-transition { transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease; max-height: 150px; opacity: 1; overflow: hidden; margin-top: 0; }
@@ -202,16 +156,17 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 .checkbox-wrapper input { width: 14px; height: 14px; accent-color: var(--primary); cursor: pointer; }
 .checkbox-wrapper label { font-size: 0.75rem; color: var(--text-secondary); cursor: pointer; font-weight: 600; }
 .forgot-link { font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: 700; font-family: var(--font-ui); }
-.divider { display: flex; align-items: center; margin: 1.25rem 0; gap: 0.75rem; }
+.divider { display: flex; align-items: center; margin: 0.75rem 0; gap: 0.75rem; flex-shrink: 0; }
 .divider::before, .divider::after { content: ''; flex: 1; height: 2px; background: var(--card-bg); box-shadow: inset 1px 1px 2px rgba(166,180,200,0.3); }
 .divider span { color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); }
 
 /* ===== Onboarding Specific ===== */
-.onboarding-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-shrink: 0; }
-.skip-btn { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); cursor: pointer; padding: 0.5rem; transition: color 0.3s; visibility: hidden; pointer-events: none; } /* Hidden global skip to use step-specific skips */
+.onboarding-header { order: 1; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-shrink: 0; }
+.skip-btn { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); cursor: pointer; padding: 0.5rem; transition: color 0.3s; visibility: hidden; pointer-events: none; } 
 
-.progress-container { margin-bottom: 1.5rem; flex-shrink: 0; }
-.progress-steps { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+/* Progress Bar Ordered Flex Logic */
+.progress-container { order: 3; flex-shrink: 0; }
+.progress-steps { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
 .progress-step { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; font-family: var(--font-ui); transition: all 0.4s ease; background: linear-gradient(145deg, #dde4f6, #f5f8ff); box-shadow: inset 3px 3px 8px rgba(166,180,200,0.5), inset -3px -3px 8px rgba(255,255,255,0.9); color: var(--text-muted); }
 .progress-step.active { background: linear-gradient(145deg, #8b5cf6, #6d28d9); box-shadow: 3px 3px 8px rgba(109,40,217,0.3), -3px -3px 8px rgba(255,255,255,0.9); color: white; }
 .progress-step.completed { background: linear-gradient(145deg, #10b981, #059669); box-shadow: 3px 3px 8px rgba(16,185,129,0.3), -3px -3px 8px rgba(255,255,255,0.9); color: white; }
@@ -221,26 +176,30 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 .progress-line { flex: 1; max-width: 60px; height: 4px; background: linear-gradient(145deg, #dde4f6, #f5f8ff); box-shadow: inset 1px 1px 3px rgba(166,180,200,0.4); border-radius: var(--radius); position: relative; overflow: hidden; }
 .progress-line::after { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 0%; background: linear-gradient(135deg, #7c3aed, #a78bfa); transition: width 0.5s ease-in-out; }
 .progress-line.active::after { width: 100%; }
-.progress-text { text-align: center; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; }
+.progress-text { text-align: center; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 0.75rem; }
 
-.steps-container { flex: 1; overflow: hidden; position: relative; min-height: 380px; }
-.step { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: none; flex-direction: column; opacity: 0; transform: translateX(30px); transition: opacity 0.4s ease, transform 0.4s ease; overflow-y: auto; padding: 0 0.25rem 1rem 0; }
-.step.active { display: flex; opacity: 1; transform: translateX(0); }
-.step.slide-left { transform: translateX(-30px); }
-.step.slide-right { transform: translateX(30px); }
+.steps-container { order: 2; flex: 1; overflow: hidden; position: relative; min-height: 0; display: flex; flex-direction: column; }
+.step { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; opacity: 0; transform: translateX(30px); transition: opacity 0.4s ease, transform 0.4s ease; overflow: hidden; padding: 0; }
+.step.active { opacity: 1; transform: translateX(0); z-index: 5; }
+.step.slide-left { transform: translateX(-30px); z-index: 1; }
+.step.slide-right { transform: translateX(30px); z-index: 1; }
 
-.step-icon { width: 64px; height: 64px; margin: 0 auto 1rem; background: linear-gradient(145deg, #ffffff, #e8eeff); border-radius: 50%; box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; }
+/* Uniform Static Sized Icons for all steps */
+.step-icon, .completion-icon { width: 56px; height: 56px; margin: 0 auto 0.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-icon { background: linear-gradient(145deg, #ffffff, #e8eeff); box-shadow: 6px 6px 16px rgba(166,180,200,0.5), -6px -6px 16px rgba(255,255,255,0.9); }
+.step-icon.gradient-icon { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%); box-shadow: 6px 6px 16px rgba(124,58,237,0.3), -6px -6px 16px rgba(255,255,255,0.9); }
+.completion-icon { background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 6px 6px 16px rgba(16,185,129,0.3), -6px -6px 16px rgba(255,255,255,0.9); }
+
 .step-icon svg { width: 28px; height: 28px; color: var(--primary); }
-.step-icon.gradient-icon { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #f472b6 100%); }
-.step-icon.gradient-icon svg { color: white; }
-.step-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-.step-description { font-size: 0.875rem; color: var(--text-secondary); max-width: 300px; margin: 0 auto; line-height: 1.6; }
+.step-icon.gradient-icon svg, .completion-icon svg { width: 28px; height: 28px; color: white; }
+.step-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; text-align: center; }
 
-.nav-buttons { display: flex; gap: 0.75rem; margin-top: auto; padding-top: 1rem; flex-shrink: 0; }
+/* Sticky Mobile Nav Action Buttons */
+.nav-buttons { display: flex; gap: 0.75rem; margin-top: auto; padding-top: 0.5rem; flex-shrink: 0; position: relative; z-index: 10; }
 .nav-buttons .btn { flex: 1; }
 
-/* Plan Cards */
-.plans-container { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.25rem; }
+/* Plan Cards (Stacked on small screens) */
+.plans-container { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 0.25rem; }
 .plan-card { background: linear-gradient(145deg, #ffffff, #e8eeff); border-radius: var(--radius); box-shadow: 4px 4px 12px rgba(166,180,200,0.5), -4px -4px 12px rgba(255,255,255,0.9); padding: 1rem; border: 2px solid transparent; transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; gap: 0.5rem; }
 .plan-card:hover { transform: translateY(-2px); }
 .plan-card.selected { border-color: var(--primary); background: linear-gradient(145deg, #f5f3ff, #ede9fe); }
@@ -250,45 +209,62 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 .plan-features { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .plan-feature { font-size: 0.65rem; padding: 0.25rem 0.5rem; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); color: var(--text-secondary); }
 
-/* Summary Grid */
-.summary-container { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem; margin-bottom: 1rem; text-align: left; }
-.summary-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid rgba(166,180,200,0.4); padding-bottom: 0.5rem; }
+/* Summary Grid (Inner scrollable) */
+.summary-container { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem; margin-bottom: 0.5rem; text-align: left; flex: 1; overflow-y: auto; min-height: 0; }
+.summary-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid rgba(166,180,200,0.4); padding-bottom: 0.5rem; flex-shrink: 0; }
 .summary-row:last-child { border-bottom: none; padding-bottom: 0; }
 .summary-label { font-size: 0.75rem; color: var(--text-secondary); font-weight: 700; white-space: nowrap; }
 .summary-val { font-size: 0.875rem; color: var(--text); font-weight: 600; text-align: right; word-break: break-word; text-transform: uppercase; }
 
-.completion-icon { width: 80px; height: 80px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 50%; box-shadow: 8px 8px 20px rgba(16,185,129,0.4), -8px -8px 20px rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; animation: completePulse 2s ease-in-out infinite; }
-.completion-icon svg { width: 40px; height: 40px; color: white; }
-@keyframes completePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+/* Mobile / Tablet precise margins */
+@media(max-width: 1023px) {
+    .progress-container { margin: 3px 0 !important; padding: 0 !important; }
+    .progress-steps { margin: 0 !important; }
+    .nav-buttons { padding-top: 0.5rem; padding-bottom: 3px; margin-bottom: 1.5rem; }
+}
+
+@media(max-width: 767px) {
+    .nav-buttons::before {
+        content: ''; position: absolute; top: 0; left: -1rem; right: -1rem; bottom: -1.5rem;
+        background: linear-gradient(to bottom, transparent, rgba(240, 244, 255, 0.95) 30%, rgba(240, 244, 255, 1));
+        backdrop-filter: blur(5px); z-index: -1; pointer-events: none;
+    }
+    .progress-text { display: none; }
+}
 
 /* Desktop Responsiveness */
-@media(min-width:480px){ .form-cols{grid-template-columns:1fr 1fr} }
+@media(min-width:480px){ 
+    .form-cols{grid-template-columns:1fr 1fr} 
+    .plans-container { grid-template-columns: 1fr 1fr; }
+}
 @media(min-width:768px){
-    .floating-bg {
-        display: block;
-        -webkit-mask-image: linear-gradient(to right, black 0%, black calc(50% - 340px), transparent calc(50% - 280px), transparent calc(50% + 280px), black calc(50% + 340px), black 100%);
-        mask-image: linear-gradient(to right, black 0%, black calc(50% - 340px), transparent calc(50% - 280px), transparent calc(50% + 280px), black calc(50% + 340px), black 100%);
-    }
-    .view-wrapper { width: 100%; max-width: 520px; padding: 2rem 3rem; background: transparent; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; }
+    /* Widened Desktop Container */
+    .view-wrapper { width: 100%; max-width: 680px; padding: 2.5rem 3.5rem; background: transparent; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; }
+    
+    .progress-container { order: 2; margin: 3px 0 1.5rem !important; }
+    .steps-container { order: 3; min-height: 420px; }
+    .nav-buttons { position: relative; bottom: auto; background: none; margin-bottom: 0; }
+    .nav-buttons::before { display: none; }
+
     .mobile-brand { margin-bottom: 2rem; }
     .mobile-brand h1 { font-size: 2.25rem; }
     .mobile-brand h1 svg { width: 36px; height: 36px; }
     .slider-tabs { margin-bottom: 2rem; }
     .form-title { font-size: 2rem; }
-    .form-subtitle { font-size: 0.875rem; }
-    .step-icon { width: 80px; height: 80px; }
-    .step-icon svg { width: 36px; height: 36px; }
+    
+    .step-icon, .completion-icon { width: 64px; height: 64px; }
+    .step-icon svg, .completion-icon svg, .step-icon.gradient-icon svg { width: 32px; height: 32px; }
+    
     .step-title { font-size: 1.75rem; }
     .progress-step { width: 40px; height: 40px; font-size: 0.875rem; }
     .progress-line { max-width: 80px; }
-    .steps-container { min-height: 420px; }
 }
 
 @media(min-width:1024px){
-    .view-wrapper { padding: 3rem 4rem; max-width: 520px; }
+    /* Further widened for large desktop */
+    .view-wrapper { padding: 3rem 4rem; max-width: 760px; }
     .mobile-brand h1 { font-size: 2.5rem; }
     .mobile-brand h1 svg { width: 40px; height: 40px; }
-    .floating-icon { opacity: 0.1; }
 }
 
 @media(max-height:700px){
@@ -296,23 +272,12 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
     .form-grid { gap: 0.75rem; }
     .divider { margin: 1rem 0; }
     .slider-tabs { margin-bottom: 1rem; }
-    .step-icon { width: 48px; height: 48px; }
-    .step-icon svg { width: 22px; height: 22px; }
-    .completion-icon { width: 60px; height: 60px; }
-    .completion-icon svg { width: 30px; height: 30px; }
+    .step-icon, .completion-icon { width: 48px; height: 48px; }
+    .step-icon svg, .completion-icon svg, .step-icon.gradient-icon svg { width: 24px; height: 24px; }
 }
 </style>
 </head>
 <body>
-
-<div class="floating-bg">
-    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
-    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg></div>
-    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/></svg></div>
-    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C7.58 3 4 4.79 4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7c0-2.21-3.58-4-8-4zm0 2c3.87 0 6 1.5 6 2s-2.13 2-6 2-6-1.5-6-2 2.13-2 6-2zm6 12c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V17zm0-5c0 .5-2.13 2-6 2s-6-1.5-6-2V9.77C7.61 10.55 9.72 11 12 11s4.39-.45 6-1.23V12z"/></svg></div>
-    <div class="floating-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg></div>
-    <div class="floating-line"></div><div class="floating-line"></div><div class="floating-orb"></div><div class="floating-orb"></div><div class="floating-dot"></div><div class="floating-dot"></div>
-</div>
 
 <div class="view-container" id="authView">
     <div class="view-wrapper">
@@ -341,8 +306,12 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                     <div class="form-row"><div class="checkbox-wrapper"><input type="checkbox" id="remember"><label for="remember">REMEMBER ME</label></div><a href="#" class="forgot-link" id="forgotLink" onclick="handleForgotClick();return false">FORGOT PASSWORD?</a></div>
                     <button type="submit" class="btn btn-primary btn-text" id="loginBtn"><span>SIGN IN</span></button>
                 </div>
+                
                 <div class="divider"><span>OR</span></div>
-                <button type="button" class="btn btn-outline btn-text" id="googleLoginBtn" onclick="handleGoogleAuth('login')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
+                
+                <div class="nav-buttons" style="margin-top: 0; padding-top: 0;">
+                    <button type="button" class="btn btn-outline btn-text" id="googleLoginBtn" onclick="handleGoogleAuth('login')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
+                </div>
             </form>
         </div>
 
@@ -356,8 +325,12 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                     
                     <button type="submit" class="btn btn-primary btn-text" id="signupBtn"><span>CREATE ACCOUNT</span></button>
                 </div>
+                
                 <div class="divider"><span>OR</span></div>
-                <button type="button" class="btn btn-outline btn-text" id="googleSignupBtn" onclick="handleGoogleAuth('signup')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
+                
+                <div class="nav-buttons" style="margin-top: 0; padding-top: 0;">
+                    <button type="button" class="btn btn-outline btn-text" id="googleSignupBtn" onclick="handleGoogleAuth('signup')"><svg viewBox="0 0 24 24" class="google-icon"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>CONTINUE WITH GOOGLE</span></button>
+                </div>
             </form>
         </div>
     </div>
@@ -394,11 +367,11 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                         </svg>
                     </div>
                     <h2 class="step-title gradient-text">BUSINESS DETAILS</h2>
-                    <p class="step-description">Tell us what you run and the basics of your business.</p>
                 </div>
                 
                 <div class="form-grid">
                     <div class="form-group">
+                        <label class="form-label">BUSINESS CATEGORY</label>
                         <div class="slider-tabs clay-inset" id="categoryTabs" style="margin-bottom:0;">
                             <button type="button" class="slider-tab active" data-cat="gym">GYM</button>
                             <button type="button" class="slider-tab" data-cat="library">LIBRARY</button>
@@ -431,7 +404,6 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     </div>
                     <h2 class="step-title gradient-text">LEGAL & PLAN</h2>
-                    <p class="step-description">Set up your owner details and optional default membership.</p>
                 </div>
                 
                 <div class="form-grid">
@@ -448,13 +420,9 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                     <div class="form-group">
                         <label class="form-label">CHOOSE A DEFAULT PLAN (OPTIONAL)</label>
                         <div class="plans-container" id="plansContainer">
-                            <div class="plan-card" data-plan="MONTHLY (₹999)">
+                            <div class="plan-card" data-plan="MONTHLY (₹199)">
                                 <div class="plan-header"><span class="plan-name">MONTHLY</span><span class="plan-price">₹999</span></div>
                                 <div class="plan-features"><span class="plan-feature">30 DAYS</span></div>
-                            </div>
-                            <div class="plan-card" data-plan="QUARTERLY (₹2499)">
-                                <div class="plan-header"><span class="plan-name">QUARTERLY</span><span class="plan-price">₹2,499</span></div>
-                                <div class="plan-features"><span class="plan-feature">90 DAYS</span></div>
                             </div>
                             <div class="plan-card" data-plan="YEARLY (₹8999)">
                                 <div class="plan-header"><span class="plan-name">YEARLY</span><span class="plan-price">₹8,999</span></div>
@@ -475,7 +443,6 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                 <div class="step-header">
                     <div class="completion-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                     <h2 class="step-title gradient-text">REVIEW & CONFIRM</h2>
-                    <p class="step-description">Verify the details you've entered before we create your workspace.</p>
                 </div>
                 
                 <div class="summary-container clay-inset">
@@ -488,9 +455,9 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                     <div class="summary-row"><span class="summary-label">PLAN:</span> <span id="sumPlan" class="summary-val"></span></div>
                 </div>
                 
-                <div class="nav-buttons" style="margin-top: 1rem;">
+                <div class="nav-buttons">
                     <button type="button" class="btn btn-outline" id="step3Back" style="flex: 0.5;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-                    <button type="button" class="btn btn-success" id="completeBtn" style="flex: 2;">GO TO DASHBOARD</button>
+                    <button type="button" class="btn btn-success" id="completeBtn" style="flex: 2;">CONFIRM</button>
                 </div>
             </div>
         </div>
@@ -574,7 +541,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('plansContainer').addEventListener('click', e => { 
         const card = e.target.closest('.plan-card'); 
         if (card) { 
-            // Optional toggling: if clicked again, deselect
             if(card.classList.contains('selected')) {
                 card.classList.remove('selected');
             } else {
@@ -588,7 +554,6 @@ document.addEventListener('DOMContentLoaded', function() {
 function goToStep(stepNum) {
     if (stepNum < 1 || stepNum > totalSteps) return;
     
-    // If going to Step 3, populate summary
     if (stepNum === 3) populateSummary();
     
     const currentStepEl = document.querySelector('.step.active'), newStepEl = document.querySelector(`.step[data-step="${stepNum}"]`);
@@ -613,14 +578,11 @@ function updateProgress() {
 }
 
 function populateSummary() {
-    // Step 1
     const activeCategory = document.querySelector('#categoryTabs .slider-tab.active');
     document.getElementById('sumCategory').textContent = activeCategory ? activeCategory.textContent : 'N/A';
     document.getElementById('sumName').textContent = document.getElementById('bizName').value || 'NOT PROVIDED';
     document.getElementById('sumPhone').textContent = document.getElementById('bizPhone').value || 'NOT PROVIDED';
     document.getElementById('sumAddress').textContent = document.getElementById('bizAddress').value || 'NOT PROVIDED';
-    
-    // Step 2
     document.getElementById('sumOwner').textContent = document.getElementById('ownerName').value || 'NOT PROVIDED';
     document.getElementById('sumGst').textContent = document.getElementById('gstNumber').value || 'NOT PROVIDED';
     
