@@ -12,20 +12,54 @@
 button::-moz-focus-inner{border:0}
 :root{
 --primary:#7c3aed;--secondary:#a78bfa;--accent:#f472b6;
---bg:#f0f4ff;--card-bg:#e8eeff;
+--bg:#f0f4ff;--card-bg:#e8eeff;--card-top:#ffffff;--card-bot:#e8eeff;
+--inset-top:#dde4f6;--inset-bot:#f5f8ff;
+--shadow-dark:rgba(166,180,200,.5);--shadow-light:rgba(255,255,255,.9);
+--inset-shadow-dark:rgba(166,180,200,.5);--inset-shadow-light:rgba(255,255,255,.9);
 --text:#1e1b4b;--text-secondary:#475569;--text-muted:#94a3b8;
 --error:#ef4444;--success:#10b981;--warning:#f59e0b;--info:#3b82f6;
+--border-line:rgba(166,180,200,.3);
 --radius:5px;
 --font-display:'Iceland',cursive;--font-mono:'JetBrains Mono',monospace;
 --font-body:'Space Grotesk',sans-serif;--font-ui:'Play',sans-serif;
---sidebar-width:260px
+--sidebar-width:260px;
+--bg-grad-1:#f0f4ff;--bg-grad-2:#e8eeff;--bg-grad-3:#fdf2f8;--bg-grad-4:#f5f3ff;
+--topbar-bg:rgba(255,255,255,.5);
+--sidebar-1:#1e1b4b;--sidebar-2:#312e81;--sidebar-3:#3b0764;
+--sidebar-text:rgba(255,255,255,.6);--sidebar-text-hover:rgba(255,255,255,.9);
+--sidebar-active-bg:rgba(124,58,237,.3);--sidebar-border:rgba(255,255,255,.1);
+--sidebar-cat:rgba(167,139,250,.8);--sidebar-section:rgba(255,255,255,.3);
+--btn-primary-top:#8b5cf6;--btn-primary-bot:#6d28d9;--btn-primary-shadow:rgba(109,40,217,.3);
+--table-hover:rgba(124,58,237,.03);
+--modal-overlay:rgba(0,0,0,.5);
+--modal-bg:#ffffff;--modal-border:rgba(166,180,200,.2)
+}
+[data-theme="dark"]{
+--primary:#a78bfa;--secondary:#7c3aed;--accent:#f472b6;
+--bg:#0f0a1a;--card-bg:#1a1230;--card-top:#1e1640;--card-bot:#140e28;
+--inset-top:#120c22;--inset-bot:#1e1640;
+--shadow-dark:rgba(0,0,0,.6);--shadow-light:rgba(40,30,70,.4);
+--inset-shadow-dark:rgba(0,0,0,.5);--inset-shadow-light:rgba(40,30,70,.3);
+--text:#e2e0f0;--text-secondary:#a09cb8;--text-muted:#6b6880;
+--error:#f87171;--success:#34d399;--warning:#fbbf24;--info:#60a5fa;
+--border-line:rgba(80,60,120,.4);
+--bg-grad-1:#0f0a1a;--bg-grad-2:#1a1230;--bg-grad-3:#1a0e20;--bg-grad-4:#150e2a;
+--topbar-bg:rgba(20,14,40,.8);
+--sidebar-1:#0a0612;--sidebar-2:#120c22;--sidebar-3:#1a0e28;
+--sidebar-text:rgba(200,190,230,.5);--sidebar-text-hover:rgba(230,220,255,.9);
+--sidebar-active-bg:rgba(124,58,237,.35);--sidebar-border:rgba(100,80,150,.2);
+--sidebar-cat:rgba(167,139,250,.7);--sidebar-section:rgba(200,190,230,.25);
+--btn-primary-top:#7c3aed;--btn-primary-bot:#5b21b6;--btn-primary-shadow:rgba(90,30,180,.4);
+--table-hover:rgba(124,58,237,.06);
+--modal-overlay:rgba(0,0,0,.7);
+--modal-bg:#1a1230;--modal-border:rgba(80,60,120,.3)
 }
 html,body{height:100%;overflow:hidden;overscroll-behavior:none;margin:0}
 ::-webkit-scrollbar{display:none}
 *{-ms-overflow-style:none;scrollbar-width:none}
 body,input,select,textarea{
 font-family:var(--font-body);text-transform:uppercase;
-background:linear-gradient(-45deg,#f0f4ff,#e8eeff,#fdf2f8,#f5f3ff);
+background:linear-gradient(-45deg,var(--bg-grad-1),var(--bg-grad-2),var(--bg-grad-3),var(--bg-grad-4));
 background-size:400% 400%;animation:smoothBg 15s ease infinite;
 color:var(--text);line-height:1.5
 }
@@ -33,10 +67,10 @@ color:var(--text);line-height:1.5
 button,label,.btn-text{font-family:var(--font-ui);text-transform:uppercase}
 h1,h2,h3,.form-title,.brand-text{font-family:var(--font-display);letter-spacing:1px}
 #loginPass,#signupPass,textarea{text-transform:none}
-.gradient-text{background:linear-gradient(135deg,#7c3aed,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.clay{background:linear-gradient(145deg,#ffffff,#e8eeff);border-radius:var(--radius);box-shadow:6px 6px 16px rgba(166,180,200,.5),-6px -6px 16px rgba(255,255,255,.9)}
-.clay-sm{background:linear-gradient(145deg,#ffffff,#e8eeff);border-radius:var(--radius);box-shadow:4px 4px 10px rgba(166,180,200,.4),-4px -4px 10px rgba(255,255,255,.9)}
-.clay-inset{background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);box-shadow:inset 4px 4px 10px rgba(166,180,200,.5),inset -4px -4px 10px rgba(255,255,255,.9)}
+.gradient-text{background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.clay{background:linear-gradient(145deg,var(--card-top),var(--card-bot));border-radius:var(--radius);box-shadow:6px 6px 16px var(--shadow-dark),-6px -6px 16px var(--shadow-light)}
+.clay-sm{background:linear-gradient(145deg,var(--card-top),var(--card-bot));border-radius:var(--radius);box-shadow:4px 4px 10px var(--shadow-dark),-4px -4px 10px var(--shadow-light)}
+.clay-inset{background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));border-radius:var(--radius);box-shadow:inset 4px 4px 10px var(--inset-shadow-dark),inset -4px -4px 10px var(--inset-shadow-light)}
 .view-container{display:flex;flex-direction:column;height:100%;width:100%;justify-content:center;align-items:center;position:absolute;top:0;left:0;z-index:1;transition:opacity .4s,visibility .4s}
 .view-container.hidden{opacity:0;visibility:hidden;pointer-events:none}
 .view-wrapper{width:100%;max-width:100%;margin:0 auto;display:flex;flex-direction:column;height:100%;overflow-y:hidden;padding:1.5rem 1rem 1rem;position:relative;justify-content:flex-start;z-index:2}
@@ -52,7 +86,7 @@ h1,h2,h3,.form-title,.brand-text{font-family:var(--font-display);letter-spacing:
 .form-group{display:flex;flex-direction:column;gap:.35rem}
 .form-label{font-size:.75rem;font-weight:700;color:var(--text);letter-spacing:.5px}
 .input-wrapper{position:relative}
-.form-input{width:100%;padding:calc(.75rem - .5px) 1rem;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);border:2px solid transparent;color:var(--text);font-size:.875rem;transition:all .3s;outline:none;box-shadow:inset 3px 3px 8px rgba(166,180,200,.5),inset -3px -3px 8px rgba(255,255,255,.9)}
+.form-input{width:100%;padding:calc(.75rem - .5px) 1rem;background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));border-radius:var(--radius);border:2px solid transparent;color:var(--text);font-size:.875rem;transition:all .3s;outline:none;box-shadow:inset 3px 3px 8px var(--inset-shadow-dark),inset -3px -3px 8px var(--inset-shadow-light)}
 .form-input:focus{border-color:var(--secondary)}
 .form-input::placeholder{color:var(--text-muted);font-family:var(--font-body);text-transform:none}
 textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
@@ -62,18 +96,18 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .form-input:placeholder-shown+.password-toggle{display:none}
 .password-strength{display:none;flex-direction:column;gap:.35rem;margin-top:.5rem;padding:0 .25rem}
 .password-strength.active{display:flex;animation:fadeIn .3s ease}
-.strength-bar-bg{height:4px;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);overflow:hidden}
+.strength-bar-bg{height:4px;background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));border-radius:var(--radius);overflow:hidden}
 .strength-bar-fill{height:100%;width:0;border-radius:var(--radius);transition:width .4s,background-color .4s}
 .strength-text{font-size:.65rem;font-weight:700;font-family:var(--font-ui);text-align:right}
 .strength-weak{background-color:var(--error)}.strength-medium{background-color:var(--warning)}.strength-strong{background-color:var(--success)}
 .text-weak{color:var(--error)}.text-medium{color:var(--warning)}.text-strong{color:var(--success)}
 .btn{width:100%;padding:.75rem 1rem;border:none;border-radius:var(--radius);font-size:.875rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;min-height:44px;font-family:var(--font-ui)}
-.btn-primary{background:linear-gradient(145deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:5px 5px 12px rgba(109,40,217,.3),-5px -5px 12px rgba(255,255,255,.9)}
-.btn-primary:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(0,0,0,.2),inset -4px -4px 10px rgba(255,255,255,.2)}
+.btn-primary{background:linear-gradient(145deg,var(--btn-primary-top),var(--btn-primary-bot));color:#fff;box-shadow:5px 5px 12px var(--btn-primary-shadow),-5px -5px 12px var(--shadow-light)}
+.btn-primary:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(0,0,0,.2),inset -4px -4px 10px rgba(255,255,255,.1)}
 .btn-primary:disabled{opacity:.7;cursor:not-allowed}
-.btn-outline{background:linear-gradient(145deg,#fff,#e8eeff);color:var(--text);box-shadow:5px 5px 12px rgba(166,180,200,.5),-5px -5px 12px rgba(255,255,255,.9)}
-.btn-outline:active:not(:disabled){box-shadow:inset 4px 4px 10px rgba(166,180,200,.5),inset -4px -4px 10px rgba(255,255,255,.9)}
-.btn-success{background:linear-gradient(145deg,#10b981,#059669)!important;color:#fff!important;box-shadow:5px 5px 12px rgba(16,185,129,.3),-5px -5px 12px rgba(255,255,255,.9)!important}
+.btn-outline{background:linear-gradient(145deg,var(--card-top),var(--card-bot));color:var(--text);box-shadow:5px 5px 12px var(--shadow-dark),-5px -5px 12px var(--shadow-light)}
+.btn-outline:active:not(:disabled){box-shadow:inset 4px 4px 10px var(--inset-shadow-dark),inset -4px -4px 10px var(--inset-shadow-light)}
+.btn-success{background:linear-gradient(145deg,#10b981,#059669)!important;color:#fff!important;box-shadow:5px 5px 12px rgba(16,185,129,.3),-5px -5px 12px var(--shadow-light)!important}
 .btn-error{background:linear-gradient(145deg,#ef4444,#dc2626)!important;color:#fff!important}
 .btn-warning{background:linear-gradient(145deg,#f59e0b,#d97706)!important;color:#fff!important}
 .btn-info{background:linear-gradient(145deg,#3b82f6,#2563eb)!important;color:#fff!important}
@@ -86,7 +120,7 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .large-spinner{width:56px;height:56px;border:4px solid rgba(124,58,237,.2);border-radius:50%;border-top-color:var(--primary);animation:spin 1s ease-in-out infinite;margin-bottom:1.5rem}
 .slider-tabs{display:flex;position:relative;border-radius:var(--radius);padding:.3rem;margin-bottom:1.5rem;flex-shrink:0}
 .slider-tab{flex:1;padding:.6rem 1rem;border:none;background:transparent;color:var(--text-secondary);font-size:.875rem;font-weight:700;cursor:pointer;border-radius:calc(var(--radius) - 2px);transition:color .3s;font-family:var(--font-ui);position:relative;z-index:2}
-.slider-tab.active{color:var(--primary);background:linear-gradient(145deg,#fff,#e8eeff);box-shadow:2px 2px 6px rgba(166,180,200,.4),-2px -2px 6px rgba(255,255,255,.8);animation:fadeTab .3s ease-out forwards}
+.slider-tab.active{color:var(--primary);background:linear-gradient(145deg,var(--card-top),var(--card-bot));box-shadow:2px 2px 6px var(--shadow-dark),-2px -2px 6px var(--shadow-light);animation:fadeTab .3s ease-out forwards}
 @keyframes fadeTab{0%{opacity:0;transform:scale(.96)}100%{opacity:1;transform:scale(1)}}
 .form-section{display:none;flex:1}
 .form-section.active{display:flex;flex-direction:column;animation:fadeIn .3s ease;overflow:hidden}
@@ -107,11 +141,11 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .skip-btn{background:none;border:none;color:var(--text-muted);font-size:.75rem;font-weight:700;font-family:var(--font-ui);cursor:pointer;padding:.5rem;visibility:hidden;pointer-events:none}
 .progress-container{order:3;flex-shrink:0}
 .progress-steps{display:flex;align-items:center;justify-content:center;gap:.5rem}
-.progress-step{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:var(--font-ui);transition:all .4s;background:linear-gradient(145deg,#dde4f6,#f5f8ff);box-shadow:inset 3px 3px 8px rgba(166,180,200,.5),inset -3px -3px 8px rgba(255,255,255,.9);color:var(--text-muted)}
-.progress-step.active{background:linear-gradient(145deg,#8b5cf6,#6d28d9);box-shadow:3px 3px 8px rgba(109,40,217,.3),-3px -3px 8px rgba(255,255,255,.9);color:#fff}
-.progress-step.completed{background:linear-gradient(145deg,#10b981,#059669);box-shadow:3px 3px 8px rgba(16,185,129,.3),-3px -3px 8px rgba(255,255,255,.9);color:#fff}
+.progress-step{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;font-family:var(--font-ui);transition:all .4s;background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));box-shadow:inset 3px 3px 8px var(--inset-shadow-dark),inset -3px -3px 8px var(--inset-shadow-light);color:var(--text-muted)}
+.progress-step.active{background:linear-gradient(145deg,var(--btn-primary-top),var(--btn-primary-bot));box-shadow:3px 3px 8px var(--btn-primary-shadow),-3px -3px 8px var(--shadow-light);color:#fff}
+.progress-step.completed{background:linear-gradient(145deg,#10b981,#059669);box-shadow:3px 3px 8px rgba(16,185,129,.3),-3px -3px 8px var(--shadow-light);color:#fff}
 .progress-step svg{width:14px;height:14px}
-.progress-line{flex:1;max-width:60px;height:4px;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);position:relative;overflow:hidden}
+.progress-line{flex:1;max-width:60px;height:4px;background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));border-radius:var(--radius);position:relative;overflow:hidden}
 .progress-line::after{content:'';position:absolute;top:0;left:0;height:100%;width:0;background:linear-gradient(135deg,#7c3aed,#a78bfa);transition:width .5s ease-in-out}
 .progress-line.active::after{width:100%}
 .progress-text{text-align:center;font-size:.7rem;color:var(--text-muted);font-weight:600;margin-top:.75rem}
@@ -119,45 +153,45 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .step{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow:hidden;z-index:1}
 .step.active{opacity:1;visibility:visible;z-index:5}
 .step-icon,.completion-icon{width:56px;height:56px;margin:0 auto .75rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.step-icon{background:linear-gradient(145deg,#fff,#e8eeff);box-shadow:6px 6px 16px rgba(166,180,200,.5),-6px -6px 16px rgba(255,255,255,.9)}
-.step-icon.gradient-icon{background:linear-gradient(135deg,#7c3aed,#a78bfa,#f472b6);box-shadow:6px 6px 16px rgba(124,58,237,.3),-6px -6px 16px rgba(255,255,255,.9)}
-.completion-icon{background:linear-gradient(135deg,#10b981,#059669);box-shadow:6px 6px 16px rgba(16,185,129,.3),-6px -6px 16px rgba(255,255,255,.9)}
+.step-icon{background:linear-gradient(145deg,var(--card-top),var(--card-bot));box-shadow:6px 6px 16px var(--shadow-dark),-6px -6px 16px var(--shadow-light)}
+.step-icon.gradient-icon{background:linear-gradient(135deg,#7c3aed,#a78bfa,#f472b6);box-shadow:6px 6px 16px var(--btn-primary-shadow),-6px -6px 16px var(--shadow-light)}
+.completion-icon{background:linear-gradient(135deg,#10b981,#059669);box-shadow:6px 6px 16px rgba(16,185,129,.3),-6px -6px 16px var(--shadow-light)}
 .step-icon svg{width:28px;height:28px;color:var(--primary)}
 .step-icon.gradient-icon svg,.completion-icon svg{width:28px;height:28px;color:#fff}
 .step-title{font-size:1.5rem;font-weight:700;margin-bottom:.5rem;text-align:center}
 .nav-buttons{display:flex;gap:.75rem;margin-top:auto;padding-top:.5rem;flex-shrink:0;position:relative;z-index:10}
 .nav-buttons .btn{flex:1}
 .plans-container{display:grid;grid-template-columns:1fr;gap:.75rem;margin-top:.25rem}
-.plan-card{background:linear-gradient(145deg,#fff,#e8eeff);border-radius:var(--radius);box-shadow:4px 4px 12px rgba(166,180,200,.5),-4px -4px 12px rgba(255,255,255,.9);padding:1rem;border:2px solid transparent;transition:all .3s;cursor:pointer;display:flex;flex-direction:column;gap:.5rem}
+.plan-card{background:linear-gradient(145deg,var(--card-top),var(--card-bot));border-radius:var(--radius);box-shadow:4px 4px 12px var(--shadow-dark),-4px -4px 12px var(--shadow-light);padding:1rem;border:2px solid transparent;transition:all .3s;cursor:pointer;display:flex;flex-direction:column;gap:.5rem}
 .plan-card:hover{transform:translateY(-2px)}
-.plan-card.selected{border-color:var(--primary);background:linear-gradient(145deg,#f5f3ff,#ede9fe)}
+.plan-card.selected{border-color:var(--primary)}
+[data-theme="dark"] .plan-card.selected{background:linear-gradient(145deg,#2a1f50,#1e1640)}
 .plan-header{display:flex;justify-content:space-between;align-items:center}
 .plan-name{font-size:.875rem;font-weight:700;font-family:var(--font-ui)}
 .plan-price{font-size:1rem;font-weight:700;color:var(--primary);font-family:var(--font-mono)}
 .plan-features{display:flex;gap:.5rem;flex-wrap:wrap}
-.plan-feature{font-size:.65rem;padding:.25rem .5rem;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);color:var(--text-secondary)}
+.plan-feature{font-size:.65rem;padding:.25rem .5rem;background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));border-radius:var(--radius);color:var(--text-secondary)}
 .summary-container{display:flex;flex-direction:column;gap:.75rem;padding:1.25rem;margin-bottom:.5rem;text-align:left;flex:1;overflow-y:auto;min-height:0}
-.summary-row{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;border-bottom:1px solid rgba(166,180,200,.4);padding-bottom:.5rem;flex-shrink:0}
+.summary-row{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;border-bottom:1px solid var(--border-line);padding-bottom:.5rem;flex-shrink:0}
 .summary-row:last-child{border-bottom:none;padding-bottom:0}
 .summary-label{font-size:.75rem;color:var(--text-secondary);font-weight:700;white-space:nowrap}
 .summary-val{font-size:.875rem;color:var(--text);font-weight:600;text-align:right;word-break:break-word}
 
-/* DASHBOARD */
 #dashboardView{z-index:100}
 .dashboard-layout{display:flex;height:100%;width:100%;overflow:hidden}
-.sidebar{width:var(--sidebar-width);height:100%;background:linear-gradient(180deg,#1e1b4b,#312e81,#3b0764);display:flex;flex-direction:column;transition:all .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;z-index:50;overflow:hidden}
-.sidebar-header{padding:1.25rem 1rem;display:flex;align-items:center;gap:.75rem;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0}
+.sidebar{width:var(--sidebar-width);height:100%;background:linear-gradient(180deg,var(--sidebar-1),var(--sidebar-2),var(--sidebar-3));display:flex;flex-direction:column;transition:all .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;z-index:50;overflow:hidden}
+.sidebar-header{padding:1.25rem 1rem;display:flex;align-items:center;gap:.75rem;border-bottom:1px solid var(--sidebar-border);flex-shrink:0}
 .sidebar-logo{width:36px;height:36px;flex-shrink:0}
 .sidebar-brand{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:#fff;white-space:nowrap}
-.sidebar-category{font-size:.6rem;font-family:var(--font-mono);color:rgba(167,139,250,.8);padding:.25rem .75rem;margin:.75rem 1rem 0;letter-spacing:2px;white-space:nowrap}
+.sidebar-category{font-size:.6rem;font-family:var(--font-mono);color:var(--sidebar-cat);padding:.25rem .75rem;margin:.75rem 1rem 0;letter-spacing:2px;white-space:nowrap}
 .sidebar-nav{flex:1;padding:.5rem 0;overflow-y:auto}
-.nav-section-label{font-size:.6rem;font-family:var(--font-mono);color:rgba(255,255,255,.3);padding:.75rem 1.25rem .35rem;letter-spacing:2px}
-.nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.25rem;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;border-left:3px solid transparent;white-space:nowrap;font-family:var(--font-ui);font-size:.78rem;font-weight:600;letter-spacing:.5px}
-.nav-item:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.05)}
-.nav-item.active{color:#fff;background:rgba(124,58,237,.3);border-left-color:var(--accent)}
+.nav-section-label{font-size:.6rem;font-family:var(--font-mono);color:var(--sidebar-section);padding:.75rem 1.25rem .35rem;letter-spacing:2px}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.25rem;color:var(--sidebar-text);cursor:pointer;transition:all .2s;border-left:3px solid transparent;white-space:nowrap;font-family:var(--font-ui);font-size:.78rem;font-weight:600;letter-spacing:.5px}
+.nav-item:hover{color:var(--sidebar-text-hover);background:rgba(255,255,255,.05)}
+.nav-item.active{color:#fff;background:var(--sidebar-active-bg);border-left-color:var(--accent)}
 .nav-item i{width:20px;text-align:center;font-size:.95rem;flex-shrink:0}
 .nav-item .nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:.55rem;padding:.1rem .4rem;border-radius:10px;font-family:var(--font-mono);font-weight:700}
-.sidebar-footer{padding:1rem;border-top:1px solid rgba(255,255,255,.1);flex-shrink:0}
+.sidebar-footer{padding:1rem;border-top:1px solid var(--sidebar-border);flex-shrink:0}
 .user-profile{display:flex;align-items:center;gap:.75rem;cursor:pointer;padding:.5rem;border-radius:var(--radius);transition:background .2s}
 .user-profile:hover{background:rgba(255,255,255,.05)}
 .user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f472b6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.875rem;flex-shrink:0}
@@ -165,18 +199,10 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .user-name{font-size:.8rem;font-weight:700;color:#fff;font-family:var(--font-ui);white-space:nowrap}
 .user-role{font-size:.65rem;color:rgba(255,255,255,.5);font-family:var(--font-mono);white-space:nowrap}
 .main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;flex-shrink:0;gap:1rem;background:rgba(255,255,255,.5);backdrop-filter:blur(10px);border-bottom:1px solid rgba(166,180,200,.3)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.25rem;flex-shrink:0;gap:1rem;background:var(--topbar-bg);backdrop-filter:blur(10px);border-bottom:1px solid var(--border-line)}
 .topbar-left{display:flex;align-items:center;gap:1rem}
 .menu-toggle{background:none;border:none;color:var(--text);font-size:1.25rem;cursor:pointer;padding:.5rem;border-radius:var(--radius);display:none;width:auto;min-height:auto}
 .page-title{font-family:var(--font-display);font-size:1.5rem;font-weight:700}
-.topbar-right{display:flex;align-items:center;gap:.75rem}
-.topbar-btn{background:linear-gradient(145deg,#fff,#e8eeff);border:none;width:38px;height:38px;min-height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);font-size:1rem;box-shadow:3px 3px 8px rgba(166,180,200,.4),-3px -3px 8px rgba(255,255,255,.9);position:relative}
-.topbar-btn:active{box-shadow:inset 2px 2px 5px rgba(166,180,200,.5),inset -2px -2px 5px rgba(255,255,255,.9)}
-.topbar-btn .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--error);border-radius:50%;border:2px solid #fff}
-.search-bar{display:flex;align-items:center;gap:.5rem;background:linear-gradient(145deg,#dde4f6,#f5f8ff);border-radius:var(--radius);padding:.5rem 1rem;box-shadow:inset 3px 3px 8px rgba(166,180,200,.4),inset -3px -3px 8px rgba(255,255,255,.9);flex:1;max-width:320px}
-.search-bar i{color:var(--text-muted);font-size:.875rem}
-.search-bar input{background:none;border:none;font-size:.8rem;color:var(--text);width:100%;font-family:var(--font-body);box-shadow:none}
-.search-bar input::placeholder{color:var(--text-muted)}
 .dash-content{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:1.25rem}
 .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:1rem}
 .stat-card{padding:1.1rem;display:flex;flex-direction:column;gap:.6rem;transition:transform .2s;animation:cardUp .5s ease-out both}
@@ -211,9 +237,9 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .chart-bar.green{background:linear-gradient(180deg,#10b981,#34d399)}
 .chart-bar-label{font-size:.6rem;color:var(--text-muted);font-family:var(--font-mono);font-weight:600}
 .data-table{width:100%;border-collapse:collapse}
-.data-table th{font-size:.68rem;font-weight:700;font-family:var(--font-ui);color:var(--text-muted);padding:.7rem;text-align:left;border-bottom:2px solid rgba(166,180,200,.3)}
-.data-table td{font-size:.78rem;padding:.7rem;border-bottom:1px solid rgba(166,180,200,.2);color:var(--text);font-family:var(--font-body)}
-.data-table tbody tr:hover{background:rgba(124,58,237,.03)}
+.data-table th{font-size:.68rem;font-weight:700;font-family:var(--font-ui);color:var(--text-muted);padding:.7rem;text-align:left;border-bottom:2px solid var(--border-line)}
+.data-table td{font-size:.78rem;padding:.7rem;border-bottom:1px solid var(--border-line);color:var(--text);font-family:var(--font-body)}
+.data-table tbody tr:hover{background:var(--table-hover)}
 .member-cell{display:flex;align-items:center;gap:.6rem}
 .member-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;color:#fff;flex-shrink:0}
 .status-badge{font-size:.6rem;font-weight:700;font-family:var(--font-ui);padding:.18rem .5rem;border-radius:10px;white-space:nowrap}
@@ -221,20 +247,21 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .status-expired{background:rgba(239,68,68,.15);color:var(--error)}
 .status-pending{background:rgba(245,158,11,.15);color:var(--warning)}
 .status-available{background:rgba(16,185,129,.15);color:var(--success)}
-.status-issued{background:rgba(59,130,246,.15);color:#3b82f6}
+.status-issued{background:rgba(59,130,246,.15);color:var(--info)}
 .status-overdue{background:rgba(239,68,68,.15);color:var(--error)}
 .status-paid{background:rgba(16,185,129,.15);color:var(--success)}
 .status-unpaid{background:rgba(239,68,68,.15);color:var(--error)}
 .status-partial{background:rgba(245,158,11,.15);color:var(--warning)}
+.status-refunded{background:rgba(124,58,237,.15);color:var(--primary)}
 .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.75rem}
 .quick-action-btn{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1.1rem .5rem;border:none;cursor:pointer;transition:all .2s;font-family:var(--font-ui);width:auto;min-height:auto}
 .quick-action-btn:hover{transform:translateY(-2px)}
-.quick-action-btn:active{box-shadow:inset 3px 3px 8px rgba(166,180,200,.5),inset -3px -3px 8px rgba(255,255,255,.9)}
+.quick-action-btn:active{box-shadow:inset 3px 3px 8px var(--inset-shadow-dark),inset -3px -3px 8px var(--inset-shadow-light)}
 .quick-action-icon{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem}
 .quick-action-label{font-size:.65rem;font-weight:700;color:var(--text);text-align:center}
 .table-wrapper{overflow-x:auto;margin:0 -.5rem;padding:0 .5rem}
 .activity-feed{display:flex;flex-direction:column}
-.activity-item{display:flex;align-items:flex-start;gap:.75rem;padding:.65rem 0;border-bottom:1px solid rgba(166,180,200,.2)}
+.activity-item{display:flex;align-items:flex-start;gap:.75rem;padding:.65rem 0;border-bottom:1px solid var(--border-line)}
 .activity-item:last-child{border-bottom:none}
 .activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:.4rem}
 .activity-dot.purple{background:var(--primary)}.activity-dot.green{background:var(--success)}.activity-dot.pink{background:var(--accent)}.activity-dot.orange{background:var(--warning)}.activity-dot.blue{background:var(--info)}
@@ -245,19 +272,19 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .page-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.25rem}
 .filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
 .filter-chip{padding:.35rem .75rem;border-radius:20px;font-size:.7rem;font-weight:700;font-family:var(--font-ui);cursor:pointer;border:none;transition:all .2s}
-.filter-chip.active{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;box-shadow:2px 2px 6px rgba(124,58,237,.3)}
-.filter-chip:not(.active){background:linear-gradient(145deg,#fff,#e8eeff);color:var(--text-secondary);box-shadow:2px 2px 6px rgba(166,180,200,.3),-2px -2px 6px rgba(255,255,255,.8)}
+.filter-chip.active{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;box-shadow:2px 2px 6px var(--btn-primary-shadow)}
+.filter-chip:not(.active){background:linear-gradient(145deg,var(--card-top),var(--card-bot));color:var(--text-secondary);box-shadow:2px 2px 6px var(--shadow-dark),-2px -2px 6px var(--shadow-light)}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
 .info-item{display:flex;flex-direction:column;gap:.25rem;padding:.75rem}
 .info-item-label{font-size:.65rem;color:var(--text-muted);font-weight:700;font-family:var(--font-ui)}
 .info-item-value{font-size:.85rem;color:var(--text);font-weight:600}
 .toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0}
 .toggle-switch input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:linear-gradient(145deg,#dde4f6,#c8d0e8);border-radius:24px;transition:.3s}
+.toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));border-radius:24px;transition:.3s;box-shadow:inset 2px 2px 4px var(--inset-shadow-dark),inset -2px -2px 4px var(--inset-shadow-light)}
 .toggle-slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;box-shadow:1px 1px 3px rgba(0,0,0,.15)}
-.toggle-switch input:checked+.toggle-slider{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+.toggle-switch input:checked+.toggle-slider{background:linear-gradient(135deg,#7c3aed,#a78bfa);box-shadow:inset 2px 2px 4px rgba(90,30,180,.3),inset -2px -2px 4px rgba(167,139,250,.2)}
 .toggle-switch input:checked+.toggle-slider:before{transform:translateX(20px)}
-.settings-item{display:flex;align-items:center;justify-content:space-between;padding:.85rem 0;border-bottom:1px solid rgba(166,180,200,.2)}
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:.85rem 0;border-bottom:1px solid var(--border-line)}
 .settings-item:last-child{border-bottom:none}
 .settings-item-left{display:flex;align-items:center;gap:.75rem}
 .settings-item-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
@@ -266,8 +293,6 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .settings-item-desc{font-size:.65rem;color:var(--text-muted);text-transform:none}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:pulse 2s ease-in-out infinite;display:inline-block;margin-right:.35rem}
-
-/* CARD GRID for members & staff */
 .person-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
 .person-card{padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;transition:transform .2s;animation:cardUp .5s ease-out both}
 .person-card:hover{transform:translateY(-3px)}
@@ -282,11 +307,9 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .person-detail-value{font-size:.78rem;color:var(--text);font-weight:600;font-family:var(--font-mono)}
 .person-actions{display:flex;gap:.5rem;margin-top:.15rem}
 .person-actions .btn-sm{flex:1;font-size:.63rem;padding:.4rem .5rem;min-height:30px}
-
-/* Progress bars for salary/plan */
 .prog-bar-wrap{margin-top:.15rem}
-.prog-bar-bg{height:6px;border-radius:3px;background:linear-gradient(145deg,#dde4f6,#f5f8ff);box-shadow:inset 1px 1px 3px rgba(166,180,200,.4);overflow:hidden}
-.prog-bar-fill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.prog-bar-bg{height:6px;border-radius:3px;background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));box-shadow:inset 1px 1px 3px var(--inset-shadow-dark);overflow:hidden}
+.prog-bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.25,.8,.25,1)}
 .prog-bar-fill.green{background:linear-gradient(90deg,#10b981,#34d399)}
 .prog-bar-fill.orange{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
 .prog-bar-fill.red{background:linear-gradient(90deg,#ef4444,#f87171);width:0!important}
@@ -294,24 +317,27 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .prog-bar-fill.blue{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
 .prog-bar-labels{display:flex;justify-content:space-between;margin-top:.2rem}
 .prog-bar-labels span{font-size:.58rem;font-family:var(--font-mono);color:var(--text-muted)}
-
-/* Attendance dots */
 .att-dots{display:flex;gap:3px;flex-wrap:wrap;margin-top:.1rem}
 .att-dot{width:8px;height:8px;border-radius:50%;transition:transform .2s}
 .att-dot.present{background:var(--success)}
 .att-dot.absent{background:var(--error)}
 .att-dot.half{background:var(--warning)}
 .att-dot:hover{transform:scale(1.6)}
+.payment-method-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.payment-method-icon.upi{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff}
+.payment-method-icon.cash{background:linear-gradient(135deg,#10b981,#34d399);color:#fff}
+.payment-method-icon.card{background:linear-gradient(135deg,#3b82f6,#60a5fa);color:#fff}
+.payment-method-icon.bank{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff}
+.payment-method-icon.none{background:linear-gradient(145deg,var(--inset-top),var(--inset-bot));color:var(--text-muted);box-shadow:inset 2px 2px 4px var(--inset-shadow-dark)}
+.payment-amount-large{font-size:1.35rem;font-weight:700;font-family:var(--font-mono);line-height:1}
+.payment-id{font-size:.55rem;font-family:var(--font-mono);color:var(--text-muted);letter-spacing:1px}
 
-/* Days remaining ring */
-.days-ring{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
-.days-ring-text{font-size:.6rem;font-weight:700;font-family:var(--font-mono);z-index:2;line-height:1;text-align:center}
-.days-ring-text span{display:block;font-size:.45rem;color:var(--text-muted);font-weight:600}
-
-/* Modal */
-.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;opacity:0;transition:opacity .3s}
+/* MODAL - flat, no glow */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--modal-overlay);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;opacity:0;transition:opacity .3s}
 .modal-overlay.show{display:flex;opacity:1}
-.modal{width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:1.5rem;animation:modalIn .3s ease}
+.modal{width:100%;max-width:500px;max-height:90vh;overflow-y:auto;padding:1.5rem;animation:modalIn .3s ease;
+background:var(--modal-bg);border-radius:var(--radius);border:1px solid var(--modal-border);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+[data-theme="dark"] .modal{box-shadow:0 20px 60px rgba(0,0,0,.5)}
 @keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
 .modal-title{font-family:var(--font-display);font-size:1.25rem;font-weight:700}
@@ -319,17 +345,33 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .modal-body{display:flex;flex-direction:column;gap:1rem}
 .modal-actions{display:flex;gap:.75rem;margin-top:.5rem}
 .modal-actions .btn{flex:1}
+/* Modal inner elements - flat style */
+.modal .form-input{box-shadow:inset 2px 2px 6px var(--inset-shadow-dark),inset -2px -2px 6px var(--inset-shadow-light)}
+.modal .clay-inset{box-shadow:inset 2px 2px 6px var(--inset-shadow-dark),inset -2px -2px 6px var(--inset-shadow-light)}
+.modal .btn-primary{box-shadow:none}
+.modal .btn-primary:active:not(:disabled){box-shadow:inset 3px 3px 6px rgba(0,0,0,.2)}
+.modal .btn-outline{box-shadow:none;border:1px solid var(--border-line)}
+.modal .btn-outline:active:not(:disabled){box-shadow:inset 2px 2px 6px var(--inset-shadow-dark)}
+.modal .btn-success{box-shadow:none!important}
+.modal .btn-error{box-shadow:none!important}
+.modal .btn-warning{box-shadow:none!important}
+.modal .btn-info{box-shadow:none!important}
+.modal .stat-icon{box-shadow:none}
+.modal .summary-container{box-shadow:inset 2px 2px 6px var(--inset-shadow-dark),inset -2px -2px 6px var(--inset-shadow-light)}
+
+/* Theme transition */
+html{transition:background .4s ease}
+html *{transition:background-color .3s ease,color .3s ease,box-shadow .3s ease,border-color .3s ease}
+html .chart-bar,html .prog-bar-fill,html .att-dot,html .stat-icon,html .person-avatar,html .member-avatar,html .payment-method-icon,html .user-avatar{transition:none}
 
 @media(max-width:1023px){
 .sidebar{position:fixed;left:-280px;top:0;height:100%;z-index:50;transition:left .3s cubic-bezier(.4,0,.2,1)}
 .sidebar.open{left:0}
 .menu-toggle{display:flex}
-.search-bar{max-width:200px}
 .progress-container{margin:3px 0!important}
 .nav-buttons{padding-top:.5rem;padding-bottom:3px;margin-bottom:1.5rem}
 }
 @media(max-width:767px){
-.search-bar{display:none}
 .stats-row{grid-template-columns:repeat(2,1fr)}
 .quick-actions{grid-template-columns:repeat(2,1fr)}
 .topbar{padding:.75rem 1rem}
@@ -338,7 +380,7 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 .stat-card{padding:.9rem}
 .chart-area{height:160px}
 .page-title{font-size:1.25rem}
-.nav-buttons::before{content:'';position:absolute;top:0;left:-1rem;right:-1rem;bottom:-1.5rem;background:linear-gradient(to bottom,transparent,rgba(240,244,255,.95) 30%,rgba(240,244,255,1));backdrop-filter:blur(5px);z-index:-1;pointer-events:none}
+.nav-buttons::before{content:'';position:absolute;top:0;left:-1rem;right:-1rem;bottom:-1.5rem;background:linear-gradient(to bottom,transparent,var(--bg) 30%);backdrop-filter:blur(5px);z-index:-1;pointer-events:none}
 .progress-text{display:none}
 .info-grid{grid-template-columns:1fr 1fr}
 .person-cards{grid-template-columns:1fr}
@@ -430,19 +472,22 @@ textarea.form-input{min-height:80px;resize:none;padding:.75rem 1rem}
 <nav class="sidebar-nav" id="sidebarNav"></nav>
 <div class="sidebar-footer"><div class="user-profile"><div class="user-avatar" id="userAvatar">JD</div><div class="user-info"><div class="user-name" id="userName">JOHN DOE</div><div class="user-role">ADMIN</div></div></div></div>
 </aside>
-<div class="main-content"><header class="topbar"><div class="topbar-left"><button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button><h1 class="page-title gradient-text" id="pageTitle">DASHBOARD</h1></div><div class="topbar-right"><div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="Search..." id="searchInput"></div><button class="topbar-btn"><i class="fas fa-bell"></i><span class="notif-dot"></span></button><button class="topbar-btn"><i class="fas fa-cog"></i></button></div></header>
+<div class="main-content"><header class="topbar"><div class="topbar-left"><button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button><h1 class="page-title gradient-text" id="pageTitle">DASHBOARD</h1></div></header>
 <div class="dash-content" id="dashContent"></div></div>
 </div></div>
 
-<div class="modal-overlay" id="modalOverlay"><div class="modal clay" id="modalContent"></div></div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
 
 <script>
 const icons={spinner:'<div class="spinner"></div>',check:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>',error:'<svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>',google:'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.07 5.07 0 01-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>'};
-let isResetMode=false,selectedCategory='gym',currentPage='dashboard';
+let isResetMode=false,selectedCategory='gym',currentPage='dashboard',isDark=false,animTimer=null;
 const D={bizName:'',ownerName:'',bizPhone:'',bizAddress:''};
 const clr=c=>c==='purple'?'--primary':c==='pink'?'--accent':c==='green'?'--success':c==='blue'?'--info':c==='orange'?'--warning':c==='red'?'--error':c==='teal'?'--info':'--primary';
 
+function setTheme(dark){isDark=dark;document.documentElement.setAttribute('data-theme',dark?'dark':'');localStorage.setItem('bizcrm-theme',dark?'dark':'light');if(currentPage==='settings'){const t=document.getElementById('darkModeToggle');if(t)t.checked=dark}}
+
 document.addEventListener('DOMContentLoaded',()=>{
+const saved=localStorage.getItem('bizcrm-theme');if(saved==='dark'){isDark=true;document.documentElement.setAttribute('data-theme','dark')}
 document.getElementById('signupPass')?.addEventListener('input',checkPw);
 document.getElementById('step1Next').addEventListener('click',()=>goToStep(2));
 document.getElementById('step2Back').addEventListener('click',()=>goToStep(1));
@@ -473,262 +518,51 @@ let currentStep=1;
 function goToStep(n){if(n<1||n>3)return;if(n===3)populateSummary();document.querySelector('.step.active')?.classList.remove('active');currentStep=n;setTimeout(()=>{document.querySelector(`.step[data-step="${n}"]`)?.classList.add('active');updateProg()},50)}
 function updateProg(){document.querySelectorAll('.progress-step').forEach((s,i)=>{const n=i+1;s.classList.remove('active','completed');if(n<currentStep){s.classList.add('completed');s.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'}else{s.classList.toggle('active',n===currentStep);s.textContent=n}});document.querySelectorAll('.progress-line').forEach((l,i)=>l.classList.toggle('active',i<currentStep-1));document.getElementById('progressText').textContent=`STEP ${currentStep} OF 3 • ${['PROFILE','LEGAL & PLAN','CONFIRM'][currentStep-1]}`}
 function populateSummary(){const ac=document.querySelector('#categoryTabs .slider-tab.active');selectedCategory=ac?.dataset.cat||'gym';document.getElementById('sumCategory').textContent=ac?.textContent||'N/A';document.getElementById('sumName').textContent=document.getElementById('bizName').value||'NOT PROVIDED';document.getElementById('sumPhone').textContent=document.getElementById('bizPhone').value||'NOT PROVIDED';document.getElementById('sumAddress').textContent=document.getElementById('bizAddress').value||'NOT PROVIDED';document.getElementById('sumOwner').textContent=document.getElementById('ownerName').value||'NOT PROVIDED';document.getElementById('sumGst').textContent=document.getElementById('gstNumber').value||'NOT PROVIDED';const sp=document.querySelector('.plan-card.selected');document.getElementById('sumPlan').textContent=sp?sp.dataset.plan:'NONE'}
-
 function handleComplete(){const b=document.getElementById('completeBtn');b.disabled=true;b.innerHTML='<div class="spinner"></div><span>SETTING UP...</span>';const o=document.getElementById('onboardingView'),l=document.getElementById('loadingView'),d=document.getElementById('dashboardView');document.getElementById('loadingText').textContent='BUILDING YOUR DASHBOARD...';setTimeout(()=>{o.style.opacity='0';setTimeout(()=>{o.classList.add('hidden');l.classList.remove('hidden');setTimeout(()=>l.style.opacity='1',50);D.bizName=document.getElementById('bizName').value||(selectedCategory==='gym'?'FITPRO GYM':'CITY LIBRARY');D.ownerName=document.getElementById('ownerName').value||'ADMIN';D.bizPhone=document.getElementById('bizPhone').value||'+91 9876543210';D.bizAddress=document.getElementById('bizAddress').value||'123 Main St';buildDash();setTimeout(()=>{l.style.opacity='0';setTimeout(()=>{l.classList.add('hidden');d.classList.remove('hidden');setTimeout(()=>{d.style.opacity='1';runAnims()},50)},400)},2500)},400)},600)}
+function buildDash(){const isG=selectedCategory==='gym',init=D.ownerName.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();document.getElementById('sidebarCategory').textContent=isG?'GYM MANAGEMENT':'LIBRARY MANAGEMENT';document.getElementById('userName').textContent=D.ownerName.toUpperCase();document.getElementById('userAvatar').textContent=init;buildSB();navTo('dashboard')}
+function buildSB(){const isG=selectedCategory==='gym';const items=isG?[{id:'dashboard',icon:'fa-th-large',label:'DASHBOARD',section:'MAIN'},{id:'members',icon:'fa-users',label:'MEMBERS',badge:'248',section:'MAIN'},{id:'staff',icon:'fa-id-badge',label:'STAFF',badge:'6',section:'MANAGE'},{id:'payments',icon:'fa-credit-card',label:'PAYMENTS',badge:'5',section:'MANAGE'},{id:'analytics',icon:'fa-chart-line',label:'ANALYTICS',section:'REPORTS'},{id:'settings',icon:'fa-cog',label:'SETTINGS',section:'SYSTEM'}]:[{id:'dashboard',icon:'fa-th-large',label:'DASHBOARD',section:'MAIN'},{id:'catalog',icon:'fa-book',label:'CATALOG',badge:'1.2K',section:'MAIN'},{id:'members',icon:'fa-users',label:'MEMBERS',badge:'380',section:'MAIN'},{id:'staff',icon:'fa-id-badge',label:'STAFF',badge:'5',section:'MANAGE'},{id:'circulation',icon:'fa-exchange-alt',label:'CIRCULATION',section:'MANAGE'},{id:'overdue',icon:'fa-clock',label:'OVERDUE',badge:'12',section:'MANAGE'},{id:'payments',icon:'fa-credit-card',label:'PAYMENTS',badge:'3',section:'MANAGE'},{id:'reports',icon:'fa-chart-bar',label:'REPORTS',section:'REPORTS'},{id:'settings',icon:'fa-cog',label:'SETTINGS',section:'SYSTEM'}];let html='',last='';items.forEach(it=>{if(it.section!==last){html+=`<div class="nav-section-label">${it.section}</div>`;last=it.section}html+=`<div class="nav-item${it.id==='dashboard'?' active':''}" data-page="${it.id}"><i class="fas ${it.icon}"></i><span>${it.label}</span>${it.badge?`<span class="nav-badge">${it.badge}</span>`:''}</div>`});document.getElementById('sidebarNav').innerHTML=html;document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',function(){document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));this.classList.add('active');navTo(this.dataset.page);if(window.innerWidth<1024)closeSB()}))}
 
-function buildDash(){const isG=selectedCategory==='gym',init=D.ownerName.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();document.getElementById('sidebarCategory').textContent=isG?'GYM MANAGEMENT':'LIBRARY MANAGEMENT';document.getElementById('userName').textContent=D.ownerName.toUpperCase();document.getElementById('userAvatar').textContent=init;document.getElementById('searchInput').placeholder=isG?'Search members...':'Search books...';buildSB();navTo('dashboard')}
-
-function buildSB(){const isG=selectedCategory==='gym';const items=isG?[
-{id:'dashboard',icon:'fa-th-large',label:'DASHBOARD',section:'MAIN'},
-{id:'members',icon:'fa-users',label:'MEMBERS',badge:'248',section:'MAIN'},
-{id:'staff',icon:'fa-id-badge',label:'STAFF',badge:'6',section:'MANAGE'},
-{id:'payments',icon:'fa-credit-card',label:'PAYMENTS',badge:'5',section:'MANAGE'},
-{id:'analytics',icon:'fa-chart-line',label:'ANALYTICS',section:'REPORTS'},
-{id:'settings',icon:'fa-cog',label:'SETTINGS',section:'SYSTEM'},
-]:[
-{id:'dashboard',icon:'fa-th-large',label:'DASHBOARD',section:'MAIN'},
-{id:'catalog',icon:'fa-book',label:'CATALOG',badge:'1.2K',section:'MAIN'},
-{id:'members',icon:'fa-users',label:'MEMBERS',badge:'380',section:'MAIN'},
-{id:'staff',icon:'fa-id-badge',label:'STAFF',badge:'5',section:'MANAGE'},
-{id:'circulation',icon:'fa-exchange-alt',label:'CIRCULATION',section:'MANAGE'},
-{id:'overdue',icon:'fa-clock',label:'OVERDUE',badge:'12',section:'MANAGE'},
-{id:'reports',icon:'fa-chart-bar',label:'REPORTS',section:'REPORTS'},
-{id:'settings',icon:'fa-cog',label:'SETTINGS',section:'SYSTEM'},
-];let html='',last='';items.forEach(it=>{if(it.section!==last){html+=`<div class="nav-section-label">${it.section}</div>`;last=it.section}html+=`<div class="nav-item${it.id==='dashboard'?' active':''}" data-page="${it.id}"><i class="fas ${it.icon}"></i><span>${it.label}</span>${it.badge?`<span class="nav-badge">${it.badge}</span>`:''}</div>`});document.getElementById('sidebarNav').innerHTML=html;document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',function(){document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));this.classList.add('active');navTo(this.dataset.page);if(window.innerWidth<1024)closeSB()}))}
-
-function navTo(pg){currentPage=pg;const isG=selectedCategory==='gym';const titles={dashboard:D.bizName.toUpperCase(),members:'MEMBERS',staff:'STAFF',payments:'PAYMENTS',analytics:'ANALYTICS',settings:'SETTINGS',catalog:'BOOK CATALOG',circulation:'CIRCULATION',overdue:'OVERDUE BOOKS',reports:'REPORTS'};document.getElementById('pageTitle').textContent=titles[pg]||pg.toUpperCase();const dc=document.getElementById('dashContent');dc.style.opacity='0';setTimeout(()=>{dc.innerHTML=getPage(pg,isG);dc.style.opacity='1';dc.style.transition='opacity .3s';dc.scrollTop=0;runAnims()},150)}
+function navTo(pg){currentPage=pg;if(animTimer)clearTimeout(animTimer);const isG=selectedCategory==='gym';const titles={dashboard:D.bizName.toUpperCase(),members:'MEMBERS',staff:'STAFF',payments:'PAYMENTS',analytics:'ANALYTICS',settings:'SETTINGS',catalog:'BOOK CATALOG',circulation:'CIRCULATION',overdue:'OVERDUE BOOKS',reports:'REPORTS'};document.getElementById('pageTitle').textContent=titles[pg]||pg.toUpperCase();const dc=document.getElementById('dashContent');dc.style.opacity='0';dc.style.transition='opacity .15s';setTimeout(()=>{dc.innerHTML=getPage(pg,isG);dc.style.opacity='1';dc.style.transition='opacity .3s';dc.scrollTop=0;animTimer=setTimeout(()=>runAnims(),80)},180)}
 
 function getPage(p,isG){const m={dashboard:()=>isG?gymDash():libDash(),members:()=>membersPage(isG),staff:()=>staffPage(isG),payments:()=>paymentsPage(isG),analytics:()=>analyticsPage(isG),settings:()=>settingsPage(),catalog:()=>libCatalog(),circulation:()=>libCirculation(),overdue:()=>libOverdue(),reports:()=>analyticsPage(isG)};return(m[p]||m.dashboard)()}
 
-// ===== MEMBER DATA =====
-function getGymMembers(){return[
-{name:'RAHUL SHARMA',plan:'YEARLY',fee:8999,paid:8999,phone:'+91 98765',joined:'JAN 2024',expires:'MAR 2026',daysLeft:420,totalDays:730,color:'purple',checkins:[1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1]},
-{name:'PRIYA PATEL',plan:'MONTHLY',fee:999,paid:999,phone:'+91 87654',joined:'DEC 2024',expires:'JAN 2025',daysLeft:12,totalDays:30,color:'pink',checkins:[1,1,0,1,1,0,0,1,1,1,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1]},
-{name:'AMIT KUMAR',plan:'MONTHLY',fee:999,paid:0,phone:'+91 76543',joined:'NOV 2024',expires:'DEC 2024',daysLeft:0,totalDays:30,color:'orange',checkins:[1,0,0,1,1,0,0,1,1,0,1,1,0,0,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1]},
-{name:'SANJAY MEHTA',plan:'YEARLY',fee:8999,paid:8999,phone:'+91 65432',joined:'JUN 2023',expires:'JUL 2025',daysLeft:180,totalDays:730,color:'green',checkins:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
-{name:'NEHA KAPOOR',plan:'MONTHLY',fee:999,paid:500,phone:'+91 54321',joined:'JAN 2025',expires:'FEB 2025',daysLeft:28,totalDays:30,color:'blue',checkins:[1,1,1,0,1,0,0,1,1,1,0,1,0,0,1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1]},
-{name:'DEEPAK GUPTA',plan:'QUARTERLY',fee:2499,paid:2499,phone:'+91 43210',joined:'NOV 2024',expires:'FEB 2025',daysLeft:45,totalDays:90,color:'teal',checkins:[1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1]},
-]}
-function getLibMembers(){return[
-{name:'MEERA SINGH',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 98765',joined:'JAN 2024',booksOut:2,maxBooks:5,color:'purple'},
-{name:'VIKRAM RAO',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 87654',joined:'MAR 2024',booksOut:3,maxBooks:5,color:'blue'},
-{name:'ARUN PATEL',plan:'MONTHLY',fee:200,paid:0,phone:'+91 76543',joined:'FEB 2024',booksOut:1,maxBooks:3,color:'orange'},
-{name:'DEEPA KAPOOR',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 65432',joined:'JUN 2023',booksOut:0,maxBooks:5,color:'green'},
-{name:'ROHIT KUMAR',plan:'ANNUAL',fee:1200,paid:600,phone:'+91 54321',joined:'DEC 2024',booksOut:2,maxBooks:5,color:'pink'},
-{name:'SNEHA SHARMA',plan:'MONTHLY',fee:200,paid:200,phone:'+91 43210',joined:'APR 2024',booksOut:1,maxBooks:3,color:'teal'},
-]}
+function getGymMembers(){return[{name:'RAHUL SHARMA',plan:'YEARLY',fee:8999,paid:8999,phone:'+91 98765',joined:'JAN 2024',expires:'MAR 2026',daysLeft:420,totalDays:730,color:'purple',checkins:[1,1,1,0,1,1,0,1,1,1,0,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1]},{name:'PRIYA PATEL',plan:'MONTHLY',fee:999,paid:999,phone:'+91 87654',joined:'DEC 2024',expires:'JAN 2025',daysLeft:12,totalDays:30,color:'pink',checkins:[1,1,0,1,1,0,0,1,1,1,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1]},{name:'AMIT KUMAR',plan:'MONTHLY',fee:999,paid:0,phone:'+91 76543',joined:'NOV 2024',expires:'DEC 2024',daysLeft:0,totalDays:30,color:'orange',checkins:[1,0,0,1,1,0,0,1,1,0,1,1,0,0,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1]},{name:'SANJAY MEHTA',plan:'YEARLY',fee:8999,paid:8999,phone:'+91 65432',joined:'JUN 2023',expires:'JUL 2025',daysLeft:180,totalDays:730,color:'green',checkins:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},{name:'NEHA KAPOOR',plan:'MONTHLY',fee:999,paid:500,phone:'+91 54321',joined:'JAN 2025',expires:'FEB 2025',daysLeft:28,totalDays:30,color:'blue',checkins:[1,1,1,0,1,0,0,1,1,1,0,1,0,0,1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1]},{name:'DEEPAK GUPTA',plan:'QUARTERLY',fee:2499,paid:2499,phone:'+91 43210',joined:'NOV 2024',expires:'FEB 2025',daysLeft:45,totalDays:90,color:'teal',checkins:[1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1]}]}
+function getLibMembers(){return[{name:'MEERA SINGH',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 98765',joined:'JAN 2024',booksOut:2,maxBooks:5,color:'purple'},{name:'VIKRAM RAO',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 87654',joined:'MAR 2024',booksOut:3,maxBooks:5,color:'blue'},{name:'ARUN PATEL',plan:'MONTHLY',fee:200,paid:0,phone:'+91 76543',joined:'FEB 2024',booksOut:1,maxBooks:3,color:'orange'},{name:'DEEPA KAPOOR',plan:'ANNUAL',fee:1200,paid:1200,phone:'+91 65432',joined:'JUN 2023',booksOut:0,maxBooks:5,color:'green'},{name:'ROHIT KUMAR',plan:'ANNUAL',fee:1200,paid:600,phone:'+91 54321',joined:'DEC 2024',booksOut:2,maxBooks:5,color:'pink'},{name:'SNEHA SHARMA',plan:'MONTHLY',fee:200,paid:200,phone:'+91 43210',joined:'APR 2024',booksOut:1,maxBooks:3,color:'teal'}]}
 
-// ===== MEMBERS PAGE =====
-function membersPage(isG){
-const members=isG?getGymMembers():getLibMembers();
-const active=members.filter(m=>m.paid>=m.fee).length;
-const expired=members.filter(m=>isG?(m.daysLeft===0):(m.paid===0)).length;
-const pending=members.length-active-expired;
-const totalRev=members.reduce((a,m)=>a+m.paid,0);
+function membersPage(isG){const members=isG?getGymMembers():getLibMembers();const active=members.filter(m=>m.paid>=m.fee).length;const expired=members.filter(m=>isG?(m.daysLeft===0):(m.paid===0)).length;const pending=members.length-active-expired;const totalRev=members.reduce((a,m)=>a+m.paid,0);
+return `<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('addMember')"><i class="fas fa-plus"></i> ADD MEMBER</button><button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> EXPORT</button></div>
+<div class="stats-row">${statCard('fas fa-users','purple',members.length.toString(),'TOTAL MEMBERS','','up')}${statCard('fas fa-user-check','green',active.toString(),'ACTIVE','+8%','up')}${statCard('fas fa-rupee-sign','blue','₹'+totalRev.toLocaleString('en-IN'),'COLLECTED','','up')}${statCard('fas fa-exclamation-triangle','orange',(expired+pending).toString(),'EXPIRED/PENDING','','down')}</div>
+<div class="filter-bar"><button class="filter-chip active">ALL (${members.length})</button><button class="filter-chip">ACTIVE (${active})</button><button class="filter-chip">EXPIRED (${expired})</button><button class="filter-chip">PENDING (${pending})</button></div>
+<div class="person-cards">${members.map((m,i)=>{const init=m.name.split(' ').map(w=>w[0]).join('');const pct=Math.round((m.paid/m.fee)*100);const payColor=pct>=100?'green':pct>0?'orange':'red';if(isG){const planPct=m.totalDays>0?Math.round((m.daysLeft/m.totalDays)*100):0;const planColor=m.daysLeft>30?'purple':m.daysLeft>7?'orange':'red';const present=m.checkins.filter(c=>c===1).length;const ms=m.daysLeft===0?'expired':m.paid<m.fee?'pending':'active';const ml=m.daysLeft===0?'EXPIRED':m.paid<m.fee?'PENDING':'ACTIVE';return `<div class="person-card clay" style="animation-delay:${i*.06}s"><div class="person-card-top"><div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(m.color)}),rgba(255,255,255,.2))">${init}</div><div class="person-info"><div class="person-name">${m.name}</div><div class="person-role">${m.plan} • ${m.phone}</div></div><span class="status-badge status-${ms}">${ml}</span></div><div class="person-details"><div class="person-detail"><div class="person-detail-label">FEE</div><div class="person-detail-value">₹${m.fee.toLocaleString('en-IN')}</div></div><div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payColor==='green'?'--success':payColor==='orange'?'--warning':'--error'})">₹${m.paid.toLocaleString('en-IN')}</div></div><div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${m.joined}</div></div><div class="person-detail"><div class="person-detail-label">EXPIRES</div><div class="person-detail-value">${m.expires}</div></div></div><div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PAYMENT</div><div class="prog-bar-bg"><div class="prog-bar-fill ${payColor}" data-width="${pct}" style="width:0%"></div></div><div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(m.fee-m.paid).toLocaleString('en-IN')} DUE</span></div></div><div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PLAN (${m.daysLeft} DAYS)</div><div class="prog-bar-bg"><div class="prog-bar-fill ${planColor}" data-width="${planPct}" style="width:0%"></div></div><div class="prog-bar-labels"><span>${planPct}%</span><span>${m.daysLeft}/${m.totalDays}</span></div></div><div><div class="person-detail-label" style="margin-bottom:.2rem">CHECK-INS (${present}/30)</div><div class="att-dots">${m.checkins.map((c,di)=>`<div class="att-dot ${c?'present':'absent'}" title="Day ${di+1}"></div>`).join('')}</div></div><div class="person-actions"><button class="btn btn-sm btn-primary" onclick="showModal('collectPayment')"><i class="fas fa-rupee-sign"></i> COLLECT</button><button class="btn btn-sm btn-outline" onclick="showModal('editMember')"><i class="fas fa-edit"></i> EDIT</button><button class="btn btn-sm btn-info" onclick="showModal('checkin')"><i class="fas fa-qrcode"></i></button></div></div>`}else{const bookPct=Math.round((m.booksOut/m.maxBooks)*100);const bookColor=bookPct<60?'blue':bookPct<90?'orange':'red';const ms=m.paid===0?'expired':m.paid<m.fee?'pending':'active';const ml=m.paid===0?'EXPIRED':m.paid<m.fee?'PENDING':'ACTIVE';return `<div class="person-card clay" style="animation-delay:${i*.06}s"><div class="person-card-top"><div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(m.color)}),rgba(255,255,255,.2))">${init}</div><div class="person-info"><div class="person-name">${m.name}</div><div class="person-role">${m.plan} • ${m.phone}</div></div><span class="status-badge status-${ms}">${ml}</span></div><div class="person-details"><div class="person-detail"><div class="person-detail-label">FEE</div><div class="person-detail-value">₹${m.fee.toLocaleString('en-IN')}</div></div><div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payColor==='green'?'--success':payColor==='orange'?'--warning':'--error'})">₹${m.paid.toLocaleString('en-IN')}</div></div><div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${m.joined}</div></div><div class="person-detail"><div class="person-detail-label">BOOKS OUT</div><div class="person-detail-value">${m.booksOut}/${m.maxBooks}</div></div></div><div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PAYMENT</div><div class="prog-bar-bg"><div class="prog-bar-fill ${payColor}" data-width="${pct}" style="width:0%"></div></div><div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(m.fee-m.paid).toLocaleString('en-IN')} DUE</span></div></div><div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">BOOK SLOTS</div><div class="prog-bar-bg"><div class="prog-bar-fill ${bookColor}" data-width="${bookPct}" style="width:0%"></div></div><div class="prog-bar-labels"><span>${m.booksOut} ISSUED</span><span>${m.maxBooks-m.booksOut} FREE</span></div></div><div class="person-actions"><button class="btn btn-sm btn-primary" onclick="showModal('collectPayment')"><i class="fas fa-rupee-sign"></i> COLLECT</button><button class="btn btn-sm btn-outline" onclick="showModal('editMember')"><i class="fas fa-edit"></i> EDIT</button><button class="btn btn-sm btn-info" onclick="showModal('issueBook')"><i class="fas fa-book"></i></button></div></div>`}}).join('')}</div>`}
 
-return `
-<div class="page-actions">
-<button class="btn btn-primary btn-sm" onclick="showModal('addMember')"><i class="fas fa-plus"></i> ADD MEMBER</button>
-<button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> EXPORT</button>
-</div>
-<div class="stats-row">
-${statCard('fas fa-users','purple',members.length.toString(),'TOTAL MEMBERS','','up')}
-${statCard('fas fa-user-check','green',active.toString(),'ACTIVE','+8%','up')}
-${statCard('fas fa-rupee-sign','blue','₹'+totalRev.toLocaleString('en-IN'),'COLLECTED','','up')}
-${statCard('fas fa-exclamation-triangle','orange',(expired+pending).toString(),'EXPIRED/PENDING','','down')}
-</div>
-<div class="filter-bar">
-<button class="filter-chip active">ALL (${members.length})</button>
-<button class="filter-chip">ACTIVE (${active})</button>
-<button class="filter-chip">EXPIRED (${expired})</button>
-<button class="filter-chip">PENDING (${pending})</button>
-</div>
-<div class="person-cards">
-${members.map((m,i)=>{
-const init=m.name.split(' ').map(w=>w[0]).join('');
-const pct=Math.round((m.paid/m.fee)*100);
-const payStatus=pct>=100?'paid':pct>0?'partial':'unpaid';
-const payColor=pct>=100?'green':pct>0?'orange':'red';
-
-if(isG){
-const planPct=m.totalDays>0?Math.round((m.daysLeft/m.totalDays)*100):0;
-const planColor=m.daysLeft>30?'purple':m.daysLeft>7?'orange':'red';
-const present=m.checkins.filter(c=>c===1).length;
-const memberStatus=m.daysLeft===0?'expired':m.paid<m.fee?'pending':'active';
-const memberStatusLabel=m.daysLeft===0?'EXPIRED':m.paid<m.fee?'PENDING':'ACTIVE';
-return `<div class="person-card clay" style="animation-delay:${i*.06}s">
-<div class="person-card-top">
-<div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(m.color)}),rgba(255,255,255,.2))">${init}</div>
-<div class="person-info"><div class="person-name">${m.name}</div><div class="person-role">${m.plan} • ${m.phone}</div></div>
-<span class="status-badge status-${memberStatus}">${memberStatusLabel}</span>
-</div>
-<div class="person-details">
-<div class="person-detail"><div class="person-detail-label">FEE</div><div class="person-detail-value">₹${m.fee.toLocaleString('en-IN')}</div></div>
-<div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payColor==='green'?'--success':payColor==='orange'?'--warning':'--error'})">₹${m.paid.toLocaleString('en-IN')}</div></div>
-<div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${m.joined}</div></div>
-<div class="person-detail"><div class="person-detail-label">EXPIRES</div><div class="person-detail-value">${m.expires}</div></div>
-</div>
-<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PAYMENT</div>
-<div class="prog-bar-bg"><div class="prog-bar-fill ${payColor}" data-width="${pct}" style="width:0%"></div></div>
-<div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(m.fee-m.paid).toLocaleString('en-IN')} DUE</span></div></div>
-<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PLAN REMAINING (${m.daysLeft} DAYS)</div>
-<div class="prog-bar-bg"><div class="prog-bar-fill ${planColor}" data-width="${planPct}" style="width:0%"></div></div>
-<div class="prog-bar-labels"><span>${planPct}%</span><span>${m.daysLeft}/${m.totalDays} DAYS</span></div></div>
-<div><div class="person-detail-label" style="margin-bottom:.2rem">CHECK-INS (${present}/30 DAYS)</div>
-<div class="att-dots">${m.checkins.map((c,di)=>`<div class="att-dot ${c?'present':'absent'}" title="Day ${di+1}"></div>`).join('')}</div></div>
-<div class="person-actions">
-<button class="btn btn-sm btn-primary" onclick="showModal('collectPayment')"><i class="fas fa-rupee-sign"></i> COLLECT</button>
-<button class="btn btn-sm btn-outline" onclick="showModal('editMember')"><i class="fas fa-edit"></i> EDIT</button>
-<button class="btn btn-sm btn-info" onclick="showModal('checkin')"><i class="fas fa-qrcode"></i></button>
-</div></div>`}
-else{
-const bookPct=Math.round((m.booksOut/m.maxBooks)*100);
-const bookColor=bookPct<60?'blue':bookPct<90?'orange':'red';
-const memberStatus=m.paid===0?'expired':m.paid<m.fee?'pending':'active';
-const memberStatusLabel=m.paid===0?'EXPIRED':m.paid<m.fee?'PENDING':'ACTIVE';
-return `<div class="person-card clay" style="animation-delay:${i*.06}s">
-<div class="person-card-top">
-<div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(m.color)}),rgba(255,255,255,.2))">${init}</div>
-<div class="person-info"><div class="person-name">${m.name}</div><div class="person-role">${m.plan} • ${m.phone}</div></div>
-<span class="status-badge status-${memberStatus}">${memberStatusLabel}</span>
-</div>
-<div class="person-details">
-<div class="person-detail"><div class="person-detail-label">FEE</div><div class="person-detail-value">₹${m.fee.toLocaleString('en-IN')}</div></div>
-<div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payColor==='green'?'--success':payColor==='orange'?'--warning':'--error'})">₹${m.paid.toLocaleString('en-IN')}</div></div>
-<div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${m.joined}</div></div>
-<div class="person-detail"><div class="person-detail-label">BOOKS OUT</div><div class="person-detail-value">${m.booksOut}/${m.maxBooks}</div></div>
-</div>
-<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PAYMENT</div>
-<div class="prog-bar-bg"><div class="prog-bar-fill ${payColor}" data-width="${pct}" style="width:0%"></div></div>
-<div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(m.fee-m.paid).toLocaleString('en-IN')} DUE</span></div></div>
-<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">BOOK SLOTS USED</div>
-<div class="prog-bar-bg"><div class="prog-bar-fill ${bookColor}" data-width="${bookPct}" style="width:0%"></div></div>
-<div class="prog-bar-labels"><span>${m.booksOut} ISSUED</span><span>${m.maxBooks-m.booksOut} AVAILABLE</span></div></div>
-<div class="person-actions">
-<button class="btn btn-sm btn-primary" onclick="showModal('collectPayment')"><i class="fas fa-rupee-sign"></i> COLLECT</button>
-<button class="btn btn-sm btn-outline" onclick="showModal('editMember')"><i class="fas fa-edit"></i> EDIT</button>
-<button class="btn btn-sm btn-info" onclick="showModal('issueBook')"><i class="fas fa-book"></i></button>
-</div></div>`}
-}).join('')}
-</div>`}
-
-// ===== STAFF PAGE =====
-function staffPage(isG){
-const staff=isG?[
-{name:'RAJESH KUMAR',role:'HEAD TRAINER',salary:35000,paid:35000,phone:'+91 98765',joined:'JAN 2023',color:'purple',att:[1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1]},
-{name:'PRIYA SHARMA',role:'YOGA INSTRUCTOR',salary:25000,paid:25000,phone:'+91 87654',joined:'MAR 2023',color:'pink',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
-{name:'AMIT PATEL',role:'FITNESS TRAINER',salary:28000,paid:20000,phone:'+91 76543',joined:'JUN 2023',color:'blue',att:[1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1]},
-{name:'SANJAY MEHTA',role:'RECEPTIONIST',salary:18000,paid:18000,phone:'+91 65432',joined:'SEP 2023',color:'green',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
-{name:'DEEPA NAIR',role:'HELPER',salary:15000,paid:15000,phone:'+91 54321',joined:'NOV 2023',color:'orange',att:[1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0,1,1,0,0,1,1,1,1,0,0,0,1,1]},
-{name:'RAVI SINGH',role:'SWEEPER',salary:12000,paid:0,phone:'+91 43210',joined:'FEB 2024',color:'teal',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
-]:[
-{name:'ANITA DESAI',role:'HEAD LIBRARIAN',salary:32000,paid:32000,phone:'+91 98765',joined:'JAN 2022',color:'purple',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
-{name:'VIKRAM RAO',role:'ASST LIBRARIAN',salary:22000,paid:22000,phone:'+91 87654',joined:'MAY 2022',color:'blue',att:[1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1]},
-{name:'MEERA JOSHI',role:'CATALOGER',salary:20000,paid:15000,phone:'+91 76543',joined:'AUG 2023',color:'pink',att:[1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1]},
-{name:'SUNIL PATIL',role:'HELPER',salary:14000,paid:14000,phone:'+91 65432',joined:'OCT 2023',color:'green',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},
-{name:'KAVITA DEVI',role:'SWEEPER',salary:11000,paid:0,phone:'+91 54321',joined:'DEC 2023',color:'orange',att:[1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1]},
-];
+function staffPage(isG){const staff=isG?[{name:'RAJESH KUMAR',role:'HEAD TRAINER',salary:35000,paid:35000,phone:'+91 98765',joined:'JAN 2023',color:'purple',att:[1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1,1,1,0,1,1,1,1,1,0,0,1,1]},{name:'PRIYA SHARMA',role:'YOGA INSTRUCTOR',salary:25000,paid:25000,phone:'+91 87654',joined:'MAR 2023',color:'pink',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},{name:'AMIT PATEL',role:'FITNESS TRAINER',salary:28000,paid:20000,phone:'+91 76543',joined:'JUN 2023',color:'blue',att:[1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1]},{name:'SANJAY MEHTA',role:'RECEPTIONIST',salary:18000,paid:18000,phone:'+91 65432',joined:'SEP 2023',color:'green',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},{name:'DEEPA NAIR',role:'HELPER',salary:15000,paid:15000,phone:'+91 54321',joined:'NOV 2023',color:'orange',att:[1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1,0,1,1,0,0,1,1,1,1,0,0,0,1,1]},{name:'RAVI SINGH',role:'SWEEPER',salary:12000,paid:0,phone:'+91 43210',joined:'FEB 2024',color:'teal',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]}]:[{name:'ANITA DESAI',role:'HEAD LIBRARIAN',salary:32000,paid:32000,phone:'+91 98765',joined:'JAN 2022',color:'purple',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},{name:'VIKRAM RAO',role:'ASST LIBRARIAN',salary:22000,paid:22000,phone:'+91 87654',joined:'MAY 2022',color:'blue',att:[1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,1]},{name:'MEERA JOSHI',role:'CATALOGER',salary:20000,paid:15000,phone:'+91 76543',joined:'AUG 2023',color:'pink',att:[1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,0,1,1]},{name:'SUNIL PATIL',role:'HELPER',salary:14000,paid:14000,phone:'+91 65432',joined:'OCT 2023',color:'green',att:[1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1]},{name:'KAVITA DEVI',role:'SWEEPER',salary:11000,paid:0,phone:'+91 54321',joined:'DEC 2023',color:'orange',att:[1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,1,1,1,1,0,0,1,0,1,1,1,0,0,1,1]}];
 const totalS=staff.reduce((a,s)=>a+s.salary,0),totalP=staff.reduce((a,s)=>a+s.paid,0),fp=staff.filter(s=>s.paid>=s.salary).length;
-return `
-<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('addStaff')"><i class="fas fa-plus"></i> ADD STAFF</button><button class="btn btn-info btn-sm" onclick="showModal('paySalary')"><i class="fas fa-money-bill-wave"></i> PAY SALARY</button><button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> EXPORT</button></div>
-<div class="stats-row">
-${statCard('fas fa-id-badge','purple',staff.length.toString(),'TOTAL STAFF','','up')}
-${statCard('fas fa-rupee-sign','green','₹'+totalP.toLocaleString('en-IN'),'PAID','','up')}
-${statCard('fas fa-clock','orange','₹'+(totalS-totalP).toLocaleString('en-IN'),'PENDING','','down')}
-${statCard('fas fa-check-double','blue',fp+'/'+staff.length,'FULLY PAID','','up')}
-</div>
+return `<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('addStaff')"><i class="fas fa-plus"></i> ADD STAFF</button><button class="btn btn-info btn-sm" onclick="showModal('paySalary')"><i class="fas fa-money-bill-wave"></i> PAY SALARY</button><button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> EXPORT</button></div>
+<div class="stats-row">${statCard('fas fa-id-badge','purple',staff.length.toString(),'TOTAL STAFF','','up')}${statCard('fas fa-rupee-sign','green','₹'+totalP.toLocaleString('en-IN'),'PAID','','up')}${statCard('fas fa-clock','orange','₹'+(totalS-totalP).toLocaleString('en-IN'),'PENDING','','down')}${statCard('fas fa-check-double','blue',fp+'/'+staff.length,'FULLY PAID','','up')}</div>
 <div class="filter-bar"><button class="filter-chip active">ALL (${staff.length})</button><button class="filter-chip">${isG?'TRAINERS':'LIBRARIANS'}</button><button class="filter-chip">HELPERS</button><button class="filter-chip">UNPAID</button></div>
-<div class="person-cards">
-${staff.map((s,i)=>{const init=s.name.split(' ').map(w=>w[0]).join('');const pct=Math.round((s.paid/s.salary)*100);const payC=pct>=100?'green':pct>0?'orange':'red';const present=s.att.filter(a=>a===1).length;
-return `<div class="person-card clay" style="animation-delay:${i*.06}s">
-<div class="person-card-top">
-<div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(s.color)}),rgba(255,255,255,.2))">${init}</div>
-<div class="person-info"><div class="person-name">${s.name}</div><div class="person-role">${s.role}</div></div>
-<span class="status-badge status-${pct>=100?'paid':pct>0?'partial':'unpaid'}">${pct>=100?'PAID':pct>0?'PARTIAL':'UNPAID'}</span>
-</div>
-<div class="person-details">
-<div class="person-detail"><div class="person-detail-label">SALARY</div><div class="person-detail-value">₹${s.salary.toLocaleString('en-IN')}</div></div>
-<div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payC==='green'?'--success':payC==='orange'?'--warning':'--error'})">₹${s.paid.toLocaleString('en-IN')}</div></div>
-<div class="person-detail"><div class="person-detail-label">PHONE</div><div class="person-detail-value">${s.phone}</div></div>
-<div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${s.joined}</div></div>
-</div>
-<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">SALARY</div>
-<div class="prog-bar-bg"><div class="prog-bar-fill ${payC}" data-width="${pct}" style="width:0%"></div></div>
-<div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(s.salary-s.paid).toLocaleString('en-IN')} DUE</span></div></div>
-<div><div class="person-detail-label" style="margin-bottom:.2rem">ATTENDANCE (${present}/30)</div>
-<div class="att-dots">${s.att.map((a,di)=>`<div class="att-dot ${a?'present':'absent'}" title="Day ${di+1}"></div>`).join('')}</div></div>
-<div class="person-actions">
-<button class="btn btn-sm btn-primary" onclick="showModal('paySalary')"><i class="fas fa-rupee-sign"></i> PAY</button>
-<button class="btn btn-sm btn-outline" onclick="showModal('editStaff')"><i class="fas fa-edit"></i> EDIT</button>
-<button class="btn btn-sm btn-outline" onclick="showModal('staffAtt')"><i class="fas fa-calendar-check"></i></button>
-</div></div>`}).join('')}
-</div>`}
+<div class="person-cards">${staff.map((s,i)=>{const init=s.name.split(' ').map(w=>w[0]).join('');const pct=Math.round((s.paid/s.salary)*100);const payC=pct>=100?'green':pct>0?'orange':'red';const present=s.att.filter(a=>a===1).length;return `<div class="person-card clay" style="animation-delay:${i*.06}s"><div class="person-card-top"><div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(s.color)}),rgba(255,255,255,.2))">${init}</div><div class="person-info"><div class="person-name">${s.name}</div><div class="person-role">${s.role}</div></div><span class="status-badge status-${pct>=100?'paid':pct>0?'partial':'unpaid'}">${pct>=100?'PAID':pct>0?'PARTIAL':'UNPAID'}</span></div><div class="person-details"><div class="person-detail"><div class="person-detail-label">SALARY</div><div class="person-detail-value">₹${s.salary.toLocaleString('en-IN')}</div></div><div class="person-detail"><div class="person-detail-label">PAID</div><div class="person-detail-value" style="color:var(${payC==='green'?'--success':payC==='orange'?'--warning':'--error'})">₹${s.paid.toLocaleString('en-IN')}</div></div><div class="person-detail"><div class="person-detail-label">PHONE</div><div class="person-detail-value">${s.phone}</div></div><div class="person-detail"><div class="person-detail-label">JOINED</div><div class="person-detail-value">${s.joined}</div></div></div><div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">SALARY</div><div class="prog-bar-bg"><div class="prog-bar-fill ${payC}" data-width="${pct}" style="width:0%"></div></div><div class="prog-bar-labels"><span>${pct}% PAID</span><span>₹${(s.salary-s.paid).toLocaleString('en-IN')} DUE</span></div></div><div><div class="person-detail-label" style="margin-bottom:.2rem">ATTENDANCE (${present}/30)</div><div class="att-dots">${s.att.map((a,di)=>`<div class="att-dot ${a?'present':'absent'}" title="Day ${di+1}"></div>`).join('')}</div></div><div class="person-actions"><button class="btn btn-sm btn-primary" onclick="showModal('paySalary')"><i class="fas fa-rupee-sign"></i> PAY</button><button class="btn btn-sm btn-outline" onclick="showModal('editStaff')"><i class="fas fa-edit"></i> EDIT</button><button class="btn btn-sm btn-outline" onclick="showModal('staffAtt')"><i class="fas fa-calendar-check"></i></button></div></div>`}).join('')}</div>`}
 
-// ===== GYM DASHBOARD =====
-function gymDash(){return `
-<div class="stats-row">
-${statCard('fas fa-users','purple','248','TOTAL MEMBERS','+12%','up')}
-${statCard('fas fa-user-check','green','186','ACTIVE','+8%','up')}
-${statCard('fas fa-rupee-sign','pink','₹84,500','REVENUE','+23%','up')}
-${statCard('fas fa-exclamation-triangle','orange','32','EXPIRING','-5%','down')}
-</div>
-${quickAct([{icon:'fa-user-plus',color:'purple',label:'ADD MEMBER',action:"showModal('addMember')"},{icon:'fa-money-bill-wave',color:'green',label:'PAYMENT',action:"showModal('collectPayment')"},{icon:'fa-qrcode',color:'blue',label:'CHECK-IN',action:"showModal('checkin')"},{icon:'fa-id-badge',color:'orange',label:'ADD STAFF',action:"showModal('addStaff')"}])}
-<div class="chart-row">
-${chartCard('WEEKLY CHECK-INS',[{h:55,l:'MON'},{h:78,l:'TUE',a:1},{h:62,l:'WED'},{h:88,l:'THU',a:1},{h:45,l:'FRI'},{h:92,l:'SAT',a:1},{h:30,l:'SUN'}])}
-${actCard([{c:'green',t:'RAHUL checked in',time:'2 MIN AGO'},{c:'purple',t:'New member PRIYA',time:'15 MIN AGO'},{c:'pink',t:'₹999 from AMIT',time:'1 HR AGO'},{c:'orange',t:'Staff salary paid',time:'2 HR AGO'},{c:'green',t:'SANJAY renewed',time:'3 HR AGO'}])}
-</div>`}
+function gymDash(){return `<div class="stats-row">${statCard('fas fa-users','purple','248','TOTAL MEMBERS','+12%','up')}${statCard('fas fa-user-check','green','186','ACTIVE','+8%','up')}${statCard('fas fa-rupee-sign','pink','₹84,500','REVENUE','+23%','up')}${statCard('fas fa-exclamation-triangle','orange','32','EXPIRING','-5%','down')}</div>${quickAct([{icon:'fa-user-plus',color:'purple',label:'ADD MEMBER',action:"showModal('addMember')"},{icon:'fa-money-bill-wave',color:'green',label:'PAYMENT',action:"showModal('collectPayment')"},{icon:'fa-qrcode',color:'blue',label:'CHECK-IN',action:"showModal('checkin')"},{icon:'fa-id-badge',color:'orange',label:'ADD STAFF',action:"showModal('addStaff')"}])}<div class="chart-row">${chartCard('WEEKLY CHECK-INS',[{h:55,l:'MON'},{h:78,l:'TUE',a:1},{h:62,l:'WED'},{h:88,l:'THU',a:1},{h:45,l:'FRI'},{h:92,l:'SAT',a:1},{h:30,l:'SUN'}])}${actCard([{c:'green',t:'RAHUL checked in',time:'2 MIN AGO'},{c:'purple',t:'New member PRIYA',time:'15 MIN AGO'},{c:'pink',t:'₹999 from AMIT',time:'1 HR AGO'},{c:'orange',t:'Staff salary paid',time:'2 HR AGO'},{c:'green',t:'SANJAY renewed',time:'3 HR AGO'}])}</div>`}
+function libDash(){return `<div class="stats-row">${statCard('fas fa-book','purple','1,247','TOTAL BOOKS','+45','up')}${statCard('fas fa-book-reader','blue','380','MEMBERS','+6%','up')}${statCard('fas fa-exchange-alt','green','156','ISSUED','+18%','up')}${statCard('fas fa-exclamation-circle','orange','12','OVERDUE','+3','down')}</div>${quickAct([{icon:'fa-book-open',color:'purple',label:'ISSUE BOOK',action:"showModal('issueBook')"},{icon:'fa-undo',color:'green',label:'RETURN',action:"showModal('returnBook')"},{icon:'fa-plus-circle',color:'blue',label:'ADD BOOK',action:"showModal('addBook')"},{icon:'fa-id-badge',color:'orange',label:'ADD STAFF',action:"showModal('addStaff')"}])}<div class="chart-row">${chartCard('WEEKLY CIRCULATION',[{h:40,l:'MON'},{h:65,l:'TUE',a:1},{h:52,l:'WED'},{h:75,l:'THU',a:1},{h:58,l:'FRI'},{h:85,l:'SAT',a:1},{h:25,l:'SUN'}])}${actCard([{c:'green',t:'"ALCHEMIST" returned',time:'5 MIN AGO'},{c:'purple',t:'"ATOMIC HABITS" issued',time:'20 MIN AGO'},{c:'orange',t:'3 books overdue',time:'1 HR AGO'},{c:'pink',t:'New member DEEPA',time:'2 HR AGO'},{c:'blue',t:'Staff salary paid',time:'3 HR AGO'}])}</div>`}
+function libCatalog(){return `<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('addBook')"><i class="fas fa-plus"></i> ADD BOOK</button></div><div class="filter-bar"><button class="filter-chip active">ALL (1,247)</button><button class="filter-chip">AVAILABLE</button><button class="filter-chip">ISSUED</button></div>${tblCard('CATALOG','1,247',['TITLE','AUTHOR','ISBN','STATUS'],[['📖','ATOMIC HABITS','purple','JAMES CLEAR','978-073521','available','AVAILABLE'],['📚','SAPIENS','pink','YUVAL HARARI','978-006231','issued','ISSUED'],['📕','DEEP WORK','orange','CAL NEWPORT','978-145558','overdue','OVERDUE'],['📗','THE ALCHEMIST','green','PAULO COELHO','978-006231','available','AVAILABLE'],['📘','THINKING FAST','blue','D. KAHNEMAN','978-037453','available','AVAILABLE']])}`}
+function libCirculation(){return `<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('issueBook')"><i class="fas fa-book-open"></i> ISSUE</button><button class="btn btn-success btn-sm" onclick="showModal('returnBook')"><i class="fas fa-undo"></i> RETURN</button></div><div class="stats-row">${statCard('fas fa-arrow-right','blue','156','ISSUED','','up')}${statCard('fas fa-arrow-left','green','89','RETURNED','','up')}${statCard('fas fa-clock','orange','12','OVERDUE','','down')}${statCard('fas fa-calendar','purple','23','DUE TODAY','','down')}</div>${tblCard('CIRCULATION','245',['BOOK','MEMBER','DUE DATE','STATUS'],[['📖','ATOMIC HABITS','purple','VIKRAM R.','JAN 15','issued','ISSUED'],['📚','SAPIENS','pink','PRIYA M.','JAN 11','issued','ISSUED'],['📕','DEEP WORK','orange','ARUN P.','DEC 28','overdue','OVERDUE'],['📗','THE ALCHEMIST','green','MEERA S.','JAN 05','available','RETURNED']])}`}
+function libOverdue(){return `<div class="stats-row">${statCard('fas fa-exclamation-circle','red','12','OVERDUE','','down')}${statCard('fas fa-rupee-sign','orange','₹1,450','FINES','','down')}${statCard('fas fa-clock','purple','8.5','AVG DAYS LATE','','down')}${statCard('fas fa-bell','blue','8','NOTIFIED','','up')}</div><div class="page-actions"><button class="btn btn-warning btn-sm"><i class="fas fa-bell"></i> SEND REMINDERS</button></div>${tblCard('OVERDUE','12',['BOOK','MEMBER','DUE','DAYS LATE','STATUS'],[['📕','DEEP WORK','red','ARUN P.','DEC 28','12 DAYS','overdue','OVERDUE'],['📙','PSYCHOLOGY 101','orange','RAVI M.','DEC 30','10 DAYS','overdue','OVERDUE'],['📓','THINK & GROW','orange','SUNIL K.','JAN 02','7 DAYS','overdue','OVERDUE']])}`}
 
-// ===== LIBRARY DASHBOARD =====
-function libDash(){return `
-<div class="stats-row">
-${statCard('fas fa-book','purple','1,247','TOTAL BOOKS','+45','up')}
-${statCard('fas fa-book-reader','blue','380','MEMBERS','+6%','up')}
-${statCard('fas fa-exchange-alt','green','156','ISSUED','+18%','up')}
-${statCard('fas fa-exclamation-circle','orange','12','OVERDUE','+3','down')}
-</div>
-${quickAct([{icon:'fa-book-open',color:'purple',label:'ISSUE BOOK',action:"showModal('issueBook')"},{icon:'fa-undo',color:'green',label:'RETURN',action:"showModal('returnBook')"},{icon:'fa-plus-circle',color:'blue',label:'ADD BOOK',action:"showModal('addBook')"},{icon:'fa-id-badge',color:'orange',label:'ADD STAFF',action:"showModal('addStaff')"}])}
-<div class="chart-row">
-${chartCard('WEEKLY CIRCULATION',[{h:40,l:'MON'},{h:65,l:'TUE',a:1},{h:52,l:'WED'},{h:75,l:'THU',a:1},{h:58,l:'FRI'},{h:85,l:'SAT',a:1},{h:25,l:'SUN'}])}
-${actCard([{c:'green',t:'"ALCHEMIST" returned',time:'5 MIN AGO'},{c:'purple',t:'"ATOMIC HABITS" issued',time:'20 MIN AGO'},{c:'orange',t:'3 books overdue',time:'1 HR AGO'},{c:'pink',t:'New member DEEPA',time:'2 HR AGO'},{c:'blue',t:'Staff salary paid',time:'3 HR AGO'}])}
-</div>`}
+function getPayments(isG){return isG?[{id:'PAY-2025-001',name:'RAHUL SHARMA',amount:8999,fee:8999,method:'upi',methodLabel:'UPI',date:'JAN 05, 2025',time:'10:32 AM',plan:'YEARLY',note:'Full yearly renewal',color:'purple',status:'paid',refId:'UPI-RS-84729'},{name:'PRIYA PATEL',id:'PAY-2025-002',amount:999,fee:999,method:'cash',methodLabel:'CASH',date:'JAN 03, 2025',time:'02:15 PM',plan:'MONTHLY',note:'Monthly fee - January',color:'pink',status:'paid',refId:'CASH-PP-38291'},{name:'DEEPAK GUPTA',id:'PAY-2025-003',amount:2499,fee:2499,method:'card',methodLabel:'CARD',date:'JAN 01, 2025',time:'11:00 AM',plan:'QUARTERLY',note:'Q1 2025 payment',color:'teal',status:'paid',refId:'CARD-DG-19283'},{name:'NEHA KAPOOR',id:'PAY-2025-004',amount:500,fee:999,method:'upi',methodLabel:'UPI',date:'JAN 02, 2025',time:'04:45 PM',plan:'MONTHLY',note:'Partial payment',color:'blue',status:'partial',refId:'UPI-NK-57382'},{name:'SANJAY MEHTA',id:'PAY-2024-098',amount:8999,fee:8999,method:'bank',methodLabel:'BANK',date:'DEC 28, 2024',time:'09:20 AM',plan:'YEARLY',note:'Renewal - auto debit',color:'green',status:'paid',refId:'NEFT-SM-92847'},{name:'AMIT KUMAR',id:'PAY-2024-097',amount:0,fee:999,method:'none',methodLabel:'—',date:'DEC 01, 2024',time:'—',plan:'MONTHLY',note:'Payment overdue since Dec',color:'orange',status:'unpaid',refId:'—'},{name:'RAJESH K.',id:'PAY-2024-096',amount:999,fee:999,method:'upi',methodLabel:'UPI',date:'DEC 15, 2024',time:'06:10 PM',plan:'MONTHLY',note:'Refunded - duplicate',color:'red',status:'refunded',refId:'REF-RK-10293'}]:[{id:'PAY-2025-001',name:'MEERA SINGH',amount:1200,fee:1200,method:'upi',methodLabel:'UPI',date:'JAN 04, 2025',time:'11:00 AM',plan:'ANNUAL',note:'Annual membership',color:'purple',status:'paid',refId:'UPI-MS-38291'},{name:'VIKRAM RAO',id:'PAY-2025-002',amount:1200,fee:1200,method:'cash',methodLabel:'CASH',date:'JAN 02, 2025',time:'03:30 PM',plan:'ANNUAL',note:'Annual renewal',color:'blue',status:'paid',refId:'CASH-VR-48291'},{name:'SNEHA SHARMA',id:'PAY-2025-003',amount:200,fee:200,method:'upi',methodLabel:'UPI',date:'JAN 01, 2025',time:'10:15 AM',plan:'MONTHLY',note:'January membership',color:'teal',status:'paid',refId:'UPI-SS-58372'},{name:'ROHIT KUMAR',id:'PAY-2024-099',amount:600,fee:1200,method:'card',methodLabel:'CARD',date:'DEC 20, 2024',time:'02:00 PM',plan:'ANNUAL',note:'Partial - balance ₹600',color:'pink',status:'partial',refId:'CARD-RK-29384'},{name:'ARUN PATEL',id:'PAY-2024-098',amount:0,fee:200,method:'none',methodLabel:'—',date:'DEC 01, 2024',time:'—',plan:'MONTHLY',note:'Fee overdue',color:'orange',status:'unpaid',refId:'—'},{name:'DEEPA KAPOOR',id:'PAY-2024-097',amount:1200,fee:1200,method:'bank',methodLabel:'BANK',date:'DEC 15, 2024',time:'09:45 AM',plan:'ANNUAL',note:'Annual membership',color:'green',status:'paid',refId:'NEFT-DK-83721'}]}
 
-function libCatalog(){return `
-<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('addBook')"><i class="fas fa-plus"></i> ADD BOOK</button></div>
-<div class="filter-bar"><button class="filter-chip active">ALL (1,247)</button><button class="filter-chip">AVAILABLE</button><button class="filter-chip">ISSUED</button></div>
-${tblCard('CATALOG','1,247',['TITLE','AUTHOR','ISBN','STATUS'],[['📖','ATOMIC HABITS','purple','JAMES CLEAR','978-073521','available','AVAILABLE'],['📚','SAPIENS','pink','YUVAL HARARI','978-006231','issued','ISSUED'],['📕','DEEP WORK','orange','CAL NEWPORT','978-145558','overdue','OVERDUE'],['📗','THE ALCHEMIST','green','PAULO COELHO','978-006231','available','AVAILABLE'],['📘','THINKING FAST','blue','D. KAHNEMAN','978-037453','available','AVAILABLE']])}`}
+function paymentsPage(isG){const payments=getPayments(isG);const totalCollected=payments.filter(p=>p.status==='paid'||p.status==='partial').reduce((a,p)=>a+p.amount,0);const paidCount=payments.filter(p=>p.status==='paid').length;const pendingCount=payments.filter(p=>p.status==='partial').length;const overdueCount=payments.filter(p=>p.status==='unpaid').length;const totalDue=payments.reduce((a,p)=>a+(p.fee-p.amount),0);const mb={upi:0,cash:0,card:0,bank:0};payments.filter(p=>p.status==='paid'||p.status==='partial').forEach(p=>{if(mb[p.method]!==undefined)mb[p.method]+=p.amount});
+return `<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('collectPayment')"><i class="fas fa-plus"></i> RECORD PAYMENT</button><button class="btn btn-success btn-sm" onclick="showModal('sendReminder')"><i class="fas fa-bell"></i> REMINDERS</button><button class="btn btn-outline btn-sm"><i class="fas fa-download"></i> EXPORT</button></div>
+<div class="stats-row">${statCard('fas fa-rupee-sign','green','₹'+totalCollected.toLocaleString('en-IN'),'COLLECTED','+23%','up')}${statCard('fas fa-check-circle','blue',paidCount.toString(),'PAID','','up')}${statCard('fas fa-clock','orange',pendingCount.toString(),'PARTIAL','','down')}${statCard('fas fa-times-circle','red','₹'+totalDue.toLocaleString('en-IN'),'OUTSTANDING','','down')}</div>
+<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title"><i class="fas fa-chart-pie" style="margin-right:.35rem;color:var(--primary)"></i>BY METHOD</span></div><div class="info-grid"><div class="info-item clay-sm"><div style="display:flex;align-items:center;gap:.5rem"><div class="payment-method-icon upi"><i class="fas fa-mobile-alt"></i></div><div><div class="info-item-label">UPI</div><div class="info-item-value">₹${mb.upi.toLocaleString('en-IN')}</div></div></div></div><div class="info-item clay-sm"><div style="display:flex;align-items:center;gap:.5rem"><div class="payment-method-icon cash"><i class="fas fa-money-bill"></i></div><div><div class="info-item-label">CASH</div><div class="info-item-value">₹${mb.cash.toLocaleString('en-IN')}</div></div></div></div><div class="info-item clay-sm"><div style="display:flex;align-items:center;gap:.5rem"><div class="payment-method-icon card"><i class="fas fa-credit-card"></i></div><div><div class="info-item-label">CARD</div><div class="info-item-value">₹${mb.card.toLocaleString('en-IN')}</div></div></div></div><div class="info-item clay-sm"><div style="display:flex;align-items:center;gap:.5rem"><div class="payment-method-icon bank"><i class="fas fa-university"></i></div><div><div class="info-item-label">BANK</div><div class="info-item-value">₹${mb.bank.toLocaleString('en-IN')}</div></div></div></div></div></div>
+<div class="filter-bar"><button class="filter-chip active">ALL (${payments.length})</button><button class="filter-chip">PAID (${paidCount})</button><button class="filter-chip">PARTIAL (${pendingCount})</button><button class="filter-chip">OVERDUE (${overdueCount})</button></div>
+<div class="person-cards">${payments.map((p,i)=>{const init=p.name.split(' ').map(w=>w[0]).join('');const pct=p.fee>0?Math.round((p.amount/p.fee)*100):0;const payColor=p.status==='paid'?'green':p.status==='partial'?'orange':p.status==='refunded'?'purple':'red';const mi=p.method==='upi'?'fa-mobile-alt':p.method==='cash'?'fa-money-bill':p.method==='card'?'fa-credit-card':p.method==='bank'?'fa-university':'fa-question';return `<div class="person-card clay" style="animation-delay:${i*.06}s"><div class="person-card-top"><div class="person-avatar" style="background:linear-gradient(135deg,var(${clr(p.color)}),rgba(255,255,255,.2))">${init}</div><div class="person-info"><div class="person-name">${p.name}</div><div class="person-role">${p.plan} • ${p.id}</div></div><span class="status-badge status-${p.status}">${p.status.toUpperCase()}</span></div><div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.5rem 0"><div><div class="person-detail-label">AMOUNT</div><div class="payment-amount-large" style="color:var(${payColor==='green'?'--success':payColor==='orange'?'--warning':payColor==='purple'?'--primary':'--error'})">₹${p.amount.toLocaleString('en-IN')}</div>${p.status==='partial'?`<div style="font-size:.6rem;font-family:var(--font-mono);color:var(--warning);margin-top:.15rem">OF ₹${p.fee.toLocaleString('en-IN')}</div>`:''}${p.status==='unpaid'?`<div style="font-size:.6rem;font-family:var(--font-mono);color:var(--error);margin-top:.15rem">₹${p.fee.toLocaleString('en-IN')} DUE</div>`:''}</div><div class="payment-method-icon ${p.method}" style="width:48px;height:48px;font-size:1.1rem"><i class="fas ${mi}"></i></div></div><div class="person-details"><div class="person-detail"><div class="person-detail-label">METHOD</div><div class="person-detail-value">${p.methodLabel}</div></div><div class="person-detail"><div class="person-detail-label">DATE</div><div class="person-detail-value">${p.date}</div></div><div class="person-detail"><div class="person-detail-label">TIME</div><div class="person-detail-value">${p.time}</div></div><div class="person-detail"><div class="person-detail-label">REF ID</div><div class="payment-id">${p.refId}</div></div></div>${p.status!=='refunded'?`<div class="prog-bar-wrap"><div class="person-detail-label" style="margin-bottom:.2rem">PAYMENT</div><div class="prog-bar-bg"><div class="prog-bar-fill ${payColor}" data-width="${pct}" style="width:0%"></div></div><div class="prog-bar-labels"><span>${pct}%</span><span>₹${(p.fee-p.amount).toLocaleString('en-IN')} ${p.status==='paid'?'':'REM'}</span></div></div>`:''}${p.note?`<div style="padding:.5rem .65rem;border-radius:var(--radius);font-size:.68rem;color:var(--text-secondary);font-style:italic;text-transform:none" class="clay-inset"><i class="fas fa-sticky-note" style="margin-right:.35rem;color:var(--text-muted)"></i>${p.note}</div>`:''}<div class="person-actions">${p.status==='unpaid'||p.status==='partial'?`<button class="btn btn-sm btn-primary" onclick="showModal('collectPayment')"><i class="fas fa-rupee-sign"></i> COLLECT</button>`:`<button class="btn btn-sm btn-outline" onclick="showModal('viewReceipt')"><i class="fas fa-receipt"></i> RECEIPT</button>`}<button class="btn btn-sm btn-outline" onclick="showModal('paymentHistory')"><i class="fas fa-history"></i> HISTORY</button></div></div>`}).join('')}</div>`}
 
-function libCirculation(){return `
-<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('issueBook')"><i class="fas fa-book-open"></i> ISSUE</button><button class="btn btn-success btn-sm" onclick="showModal('returnBook')"><i class="fas fa-undo"></i> RETURN</button></div>
-<div class="stats-row">${statCard('fas fa-arrow-right','blue','156','ISSUED','','up')}${statCard('fas fa-arrow-left','green','89','RETURNED','','up')}${statCard('fas fa-clock','orange','12','OVERDUE','','down')}${statCard('fas fa-calendar','purple','23','DUE TODAY','','down')}</div>
-${tblCard('CIRCULATION','245',['BOOK','MEMBER','DUE DATE','STATUS'],[['📖','ATOMIC HABITS','purple','VIKRAM R.','JAN 15','issued','ISSUED'],['📚','SAPIENS','pink','PRIYA M.','JAN 11','issued','ISSUED'],['📕','DEEP WORK','orange','ARUN P.','DEC 28','overdue','OVERDUE'],['📗','THE ALCHEMIST','green','MEERA S.','JAN 05','available','RETURNED']])}`}
+function analyticsPage(isG){return `<div class="stats-row">${statCard('fas fa-chart-line','purple',isG?'23%':'18%','GROWTH','+5%','up')}${statCard('fas fa-arrow-up','green',isG?'92%':'88%','RETENTION','','up')}${statCard('fas fa-users','blue',isG?'34':'52','NEW','','up')}${statCard('fas fa-star','orange',isG?'4.7':'4.5','RATING','','up')}</div><div class="chart-row">${chartCard(isG?'MONTHLY REGISTRATIONS':'MONTHLY CIRCULATION',[{h:35,l:'JUL'},{h:48,l:'AUG',a:1},{h:55,l:'SEP'},{h:62,l:'OCT',a:1},{h:70,l:'NOV'},{h:78,l:'DEC',a:1},{h:85,l:'JAN'}])}${chartCard('REVENUE TREND',[{h:45,l:'JUL',c:'green'},{h:55,l:'AUG',c:'green'},{h:50,l:'SEP',c:'green'},{h:68,l:'OCT',c:'green'},{h:72,l:'NOV',c:'green'},{h:80,l:'DEC',c:'green'},{h:88,l:'JAN',c:'green'}])}</div><div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">${isG?'POPULAR TIMESLOTS':'POPULAR GENRES'}</span></div><div class="info-grid">${isG?'<div class="info-item clay-sm"><div class="info-item-label">MORNING 6-9 AM</div><div class="info-item-value">38%</div></div><div class="info-item clay-sm"><div class="info-item-label">EVENING 5-8 PM</div><div class="info-item-value">45%</div></div><div class="info-item clay-sm"><div class="info-item-label">AFTERNOON</div><div class="info-item-value">12%</div></div><div class="info-item clay-sm"><div class="info-item-label">NIGHT</div><div class="info-item-value">5%</div></div>':'<div class="info-item clay-sm"><div class="info-item-label">FICTION</div><div class="info-item-value">32%</div></div><div class="info-item clay-sm"><div class="info-item-label">SELF-HELP</div><div class="info-item-value">28%</div></div><div class="info-item clay-sm"><div class="info-item-label">SCIENCE</div><div class="info-item-value">18%</div></div><div class="info-item clay-sm"><div class="info-item-label">HISTORY</div><div class="info-item-value">12%</div></div>'}</div></div>`}
 
-function libOverdue(){return `
-<div class="stats-row">${statCard('fas fa-exclamation-circle','red','12','OVERDUE','','down')}${statCard('fas fa-rupee-sign','orange','₹1,450','FINES','','down')}${statCard('fas fa-clock','purple','8.5','AVG DAYS LATE','','down')}${statCard('fas fa-bell','blue','8','NOTIFIED','','up')}</div>
-<div class="page-actions"><button class="btn btn-warning btn-sm"><i class="fas fa-bell"></i> SEND REMINDERS</button></div>
-${tblCard('OVERDUE','12',['BOOK','MEMBER','DUE','DAYS LATE','STATUS'],[['📕','DEEP WORK','red','ARUN P.','DEC 28','12 DAYS','overdue','OVERDUE'],['📙','PSYCHOLOGY 101','orange','RAVI M.','DEC 30','10 DAYS','overdue','OVERDUE'],['📓','THINK & GROW','orange','SUNIL K.','JAN 02','7 DAYS','overdue','OVERDUE']])}`}
-
-function paymentsPage(isG){return `
-<div class="page-actions"><button class="btn btn-primary btn-sm" onclick="showModal('collectPayment')"><i class="fas fa-plus"></i> RECORD PAYMENT</button></div>
-<div class="stats-row">${statCard('fas fa-rupee-sign','green',isG?'₹84,500':'₹45,200','THIS MONTH','+23%','up')}${statCard('fas fa-check-double','blue',isG?'142':'89','PAID','','up')}${statCard('fas fa-clock','orange',isG?'28':'15','PENDING','','down')}${statCard('fas fa-times','red',isG?'15':'8','OVERDUE','','down')}</div>
-${tblCard('PAYMENTS','185',['MEMBER','AMOUNT','DATE','METHOD','STATUS'],[['RS','RAHUL SHARMA','purple','₹8,999','JAN 05','UPI','paid','PAID'],['PP','PRIYA PATEL','pink','₹999','JAN 03','CASH','paid','PAID'],['AK','AMIT KUMAR','orange','₹999','DEC 28','—','unpaid','OVERDUE'],['SM','SANJAY MEHTA','green','₹8,999','JAN 01','CARD','paid','PAID']])}`}
-
-function analyticsPage(isG){return `
-<div class="stats-row">${statCard('fas fa-chart-line','purple',isG?'23%':'18%','GROWTH','+5%','up')}${statCard('fas fa-arrow-up','green',isG?'92%':'88%','RETENTION','','up')}${statCard('fas fa-users','blue',isG?'34':'52','NEW','','up')}${statCard('fas fa-star','orange',isG?'4.7':'4.5','RATING','','up')}</div>
-<div class="chart-row">
-${chartCard(isG?'MONTHLY REGISTRATIONS':'MONTHLY CIRCULATION',[{h:35,l:'JUL'},{h:48,l:'AUG',a:1},{h:55,l:'SEP'},{h:62,l:'OCT',a:1},{h:70,l:'NOV'},{h:78,l:'DEC',a:1},{h:85,l:'JAN'}])}
-${chartCard('REVENUE TREND',[{h:45,l:'JUL',c:'green'},{h:55,l:'AUG',c:'green'},{h:50,l:'SEP',c:'green'},{h:68,l:'OCT',c:'green'},{h:72,l:'NOV',c:'green'},{h:80,l:'DEC',c:'green'},{h:88,l:'JAN',c:'green'}])}
-</div>
-<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">${isG?'POPULAR TIMESLOTS':'POPULAR GENRES'}</span></div>
-<div class="info-grid">${isG?'<div class="info-item clay-sm"><div class="info-item-label">MORNING 6-9 AM</div><div class="info-item-value">38%</div></div><div class="info-item clay-sm"><div class="info-item-label">EVENING 5-8 PM</div><div class="info-item-value">45%</div></div><div class="info-item clay-sm"><div class="info-item-label">AFTERNOON</div><div class="info-item-value">12%</div></div><div class="info-item clay-sm"><div class="info-item-label">NIGHT</div><div class="info-item-value">5%</div></div>':'<div class="info-item clay-sm"><div class="info-item-label">FICTION</div><div class="info-item-value">32%</div></div><div class="info-item clay-sm"><div class="info-item-label">SELF-HELP</div><div class="info-item-value">28%</div></div><div class="info-item clay-sm"><div class="info-item-label">SCIENCE</div><div class="info-item-value">18%</div></div><div class="info-item clay-sm"><div class="info-item-label">HISTORY</div><div class="info-item-value">12%</div></div>'}</div></div>`}
-
-function settingsPage(){return `
-<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">BUSINESS PROFILE</span><button class="dash-card-action" onclick="showModal('editProfile')">EDIT</button></div>
-<div class="info-grid"><div class="info-item"><div class="info-item-label">BUSINESS</div><div class="info-item-value">${D.bizName.toUpperCase()}</div></div><div class="info-item"><div class="info-item-label">OWNER</div><div class="info-item-value">${D.ownerName.toUpperCase()}</div></div><div class="info-item"><div class="info-item-label">PHONE</div><div class="info-item-value">${D.bizPhone}</div></div><div class="info-item"><div class="info-item-label">CATEGORY</div><div class="info-item-value">${selectedCategory.toUpperCase()}</div></div></div></div>
-<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">PREFERENCES</span></div>
-<div style="display:flex;flex-direction:column">${sToggle('fa-bell','purple','NOTIFICATIONS','Receive alerts',true)}${sToggle('fa-envelope','blue','EMAIL REPORTS','Weekly summary',true)}${sToggle('fa-moon','pink','DARK MODE','Coming soon',false)}${sToggle('fa-lock','green','2FA','Extra security',false)}</div></div>
+function settingsPage(){return `<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">BUSINESS PROFILE</span><button class="dash-card-action" onclick="showModal('editProfile')">EDIT</button></div><div class="info-grid"><div class="info-item"><div class="info-item-label">BUSINESS</div><div class="info-item-value">${D.bizName.toUpperCase()}</div></div><div class="info-item"><div class="info-item-label">OWNER</div><div class="info-item-value">${D.ownerName.toUpperCase()}</div></div><div class="info-item"><div class="info-item-label">PHONE</div><div class="info-item-value">${D.bizPhone}</div></div><div class="info-item"><div class="info-item-label">CATEGORY</div><div class="info-item-value">${selectedCategory.toUpperCase()}</div></div></div></div>
+<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">APPEARANCE & PREFERENCES</span></div><div style="display:flex;flex-direction:column"><div class="settings-item"><div class="settings-item-left"><div class="settings-item-icon stat-icon purple"><i class="fas fa-moon"></i></div><div class="settings-item-text"><div class="settings-item-title">DARK MODE</div><div class="settings-item-desc">Switch between light and dark theme</div></div></div><label class="toggle-switch"><input type="checkbox" id="darkModeToggle" ${isDark?'checked':''} onchange="setTheme(this.checked)"><span class="toggle-slider"></span></label></div>${sToggle('fa-bell','blue','NOTIFICATIONS','Receive alerts',true)}${sToggle('fa-envelope','green','EMAIL REPORTS','Weekly summary',true)}${sToggle('fa-lock','orange','2FA','Extra security',false)}</div></div>
 <div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">DANGER ZONE</span></div><div style="display:flex;gap:.75rem;flex-wrap:wrap"><button class="btn btn-warning btn-sm"><i class="fas fa-download"></i> EXPORT</button><button class="btn btn-error btn-sm"><i class="fas fa-trash"></i> DELETE</button></div></div>`}
 
-// BUILDERS
 function statCard(ic,co,val,lab,tr,dir){return `<div class="stat-card clay"><div class="stat-card-header"><div class="stat-icon ${co}"><i class="${ic}"></i></div>${tr?`<span class="stat-trend ${dir}">${tr}</span>`:''}</div><div class="stat-value">${val}</div><div class="stat-label">${lab}</div></div>`}
 function quickAct(items){return `<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title"><span class="live-dot"></span>QUICK ACTIONS</span></div><div class="quick-actions">${items.map(i=>`<button class="quick-action-btn clay" onclick="${i.action}"><div class="quick-action-icon stat-icon ${i.color}"><i class="fas ${i.icon}"></i></div><span class="quick-action-label">${i.label}</span></button>`).join('')}</div></div>`}
 function chartCard(t,bars){return `<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">${t}</span></div><div class="chart-area"><div class="chart-bars">${bars.map(b=>`<div class="chart-bar-group"><div class="chart-bar${b.a?' accent':''}${b.c?' '+b.c:''}" data-height="${b.h}"></div><span class="chart-bar-label">${b.l}</span></div>`).join('')}</div></div></div>`}
@@ -736,28 +570,36 @@ function actCard(items){return `<div class="dash-card clay"><div class="dash-car
 function tblCard(t,cnt,h,rows){return `<div class="dash-card clay"><div class="dash-card-header"><span class="dash-card-title">${t}</span><button class="dash-card-action">ALL ${cnt}</button></div><div class="table-wrapper"><table class="data-table"><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>{let c='';c+=`<td><div class="member-cell"><div class="member-avatar" style="background:linear-gradient(135deg,var(${clr(r[2])}),rgba(255,255,255,.2))">${r[0]}</div><span>${r[1]}</span></div></td>`;for(let i=3;i<r.length-2;i++)c+=`<td>${r[i]}</td>`;c+=`<td><span class="status-badge status-${r[r.length-2]}">${r[r.length-1]}</span></td>`;return`<tr>${c}</tr>`}).join('')}</tbody></table></div></div>`}
 function sToggle(ic,co,t,d,ch){return `<div class="settings-item"><div class="settings-item-left"><div class="settings-item-icon stat-icon ${co}"><i class="fas ${ic}"></i></div><div class="settings-item-text"><div class="settings-item-title">${t}</div><div class="settings-item-desc">${d}</div></div></div><label class="toggle-switch"><input type="checkbox" ${ch?'checked':''}><span class="toggle-slider"></span></label></div>`}
 
-// MODAL
 function showModal(type){document.getElementById('modalContent').innerHTML=getModal(type);document.getElementById('modalOverlay').classList.add('show')}
 function closeModal(){document.getElementById('modalOverlay').classList.remove('show')}
 function mw(t,b,bc,bt){return `<div class="modal-header"><h3 class="modal-title gradient-text">${t}</h3><button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button></div><div class="modal-body">${b}<div class="modal-actions"><button class="btn btn-outline" onclick="closeModal()">CANCEL</button><button class="btn ${bc}" onclick="closeModal()">${bt}</button></div></div>`}
-function getModal(type){
-const isG=selectedCategory==='gym';
-const m={
+function getModal(type){const isG=selectedCategory==='gym';const m={
 addMember:mw('ADD MEMBER',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Full name"></div><div class="form-group"><label class="form-label">EMAIL</label><input class="form-input" type="email" placeholder="email@example.com"></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" type="tel" placeholder="+91 XXXXX"></div><div class="form-group"><label class="form-label">PLAN</label><select class="form-input"><option>MONTHLY</option><option>QUARTERLY</option><option>YEARLY</option></select></div><div class="form-group"><label class="form-label">FEE (₹)</label><input class="form-input" type="number" placeholder="999"></div>`,'btn-primary','ADD MEMBER'),
 editMember:mw('EDIT MEMBER',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Full name"></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" placeholder="+91 XXXXX"></div><div class="form-group"><label class="form-label">PLAN</label><select class="form-input"><option>MONTHLY</option><option>QUARTERLY</option><option>YEARLY</option></select></div>`,'btn-primary','SAVE'),
-collectPayment:mw('COLLECT PAYMENT',`<div class="form-group"><label class="form-label">MEMBER</label><input class="form-input" placeholder="Search member..."></div><div class="form-group"><label class="form-label">AMOUNT (₹)</label><input class="form-input" type="number" placeholder="0"></div><div class="form-group"><label class="form-label">METHOD</label><select class="form-input"><option>UPI</option><option>CASH</option><option>CARD</option><option>BANK TRANSFER</option></select></div><div class="form-group"><label class="form-label">NOTE</label><textarea class="form-input" placeholder="Payment note..."></textarea></div>`,'btn-success','CONFIRM PAYMENT'),
-checkin:mw('CHECK-IN',`<div class="form-group"><label class="form-label">MEMBER ID / NAME</label><input class="form-input" placeholder="Scan or type..."></div><div style="text-align:center;padding:2rem;color:var(--text-muted)"><i class="fas fa-qrcode" style="font-size:3rem;opacity:.3"></i><div style="margin-top:.75rem;font-size:.8rem;font-weight:700;font-family:var(--font-ui)">SCAN QR CODE</div></div>`,'btn-primary','CHECK IN'),
-addStaff:mw('ADD STAFF',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Full name"></div><div class="form-group"><label class="form-label">ROLE</label><select class="form-input">${isG?'<option>HEAD TRAINER</option><option>FITNESS TRAINER</option><option>YOGA INSTRUCTOR</option><option>RECEPTIONIST</option><option>HELPER</option><option>SWEEPER</option>':'<option>HEAD LIBRARIAN</option><option>ASST LIBRARIAN</option><option>CATALOGER</option><option>HELPER</option><option>SWEEPER</option>'}</select></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" type="tel" placeholder="+91 XXXXX"></div><div class="form-group"><label class="form-label">SALARY (₹)</label><input class="form-input" type="number" placeholder="15000"></div><div class="form-group"><label class="form-label">AADHAR / ID</label><input class="form-input" placeholder="XXXX-XXXX-XXXX"></div><div class="form-group"><label class="form-label">JOIN DATE</label><input class="form-input" type="date"></div>`,'btn-primary','ADD STAFF'),
-editStaff:mw('EDIT STAFF',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Name"></div><div class="form-group"><label class="form-label">ROLE</label><select class="form-input"><option>HEAD TRAINER</option><option>HELPER</option><option>SWEEPER</option></select></div><div class="form-group"><label class="form-label">SALARY (₹)</label><input class="form-input" type="number"></div>`,'btn-primary','SAVE'),
-paySalary:mw('PAY SALARY',`<div class="form-group"><label class="form-label">STAFF</label><select class="form-input"><option>SELECT...</option><option>RAJESH - ₹35,000</option><option>PRIYA - ₹25,000</option><option>AMIT - ₹8,000 DUE</option><option>RAVI - ₹12,000 UNPAID</option></select></div><div class="form-group"><label class="form-label">AMOUNT (₹)</label><input class="form-input" type="number" placeholder="Amount"></div><div class="form-group"><label class="form-label">METHOD</label><select class="form-input"><option>BANK TRANSFER</option><option>UPI</option><option>CASH</option></select></div><div class="form-group"><label class="form-label">MONTH</label><select class="form-input"><option>JANUARY 2025</option><option>DECEMBER 2024</option></select></div>`,'btn-success','PAY NOW'),
-staffAtt:mw('MARK ATTENDANCE',`<div class="form-group"><label class="form-label">DATE</label><input class="form-input" type="date"></div><div class="form-group"><label class="form-label">STAFF</label><select class="form-input"><option>ALL STAFF</option><option>RAJESH KUMAR</option><option>PRIYA SHARMA</option></select></div><div class="form-group"><label class="form-label">STATUS</label><select class="form-input"><option>PRESENT</option><option>ABSENT</option><option>HALF DAY</option><option>LEAVE</option></select></div>`,'btn-primary','MARK'),
+collectPayment:mw('COLLECT PAYMENT',`<div class="form-group"><label class="form-label">MEMBER</label><input class="form-input" placeholder="Search member..."></div><div class="form-group"><label class="form-label">AMOUNT (₹)</label><input class="form-input" type="number" placeholder="0"></div><div class="form-group"><label class="form-label">METHOD</label><select class="form-input"><option>UPI</option><option>CASH</option><option>CARD</option><option>BANK TRANSFER</option></select></div><div class="form-group"><label class="form-label">NOTE</label><textarea class="form-input" placeholder="Payment note..."></textarea></div>`,'btn-success','CONFIRM'),
+checkin:mw('CHECK-IN',`<div class="form-group"><label class="form-label">MEMBER ID / NAME</label><input class="form-input" placeholder="Scan or type..."></div><div style="text-align:center;padding:2rem;color:var(--text-muted)"><i class="fas fa-qrcode" style="font-size:3rem;opacity:.3"></i><div style="margin-top:.75rem;font-size:.8rem;font-weight:700">SCAN QR CODE</div></div>`,'btn-primary','CHECK IN'),
+addStaff:mw('ADD STAFF',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Full name"></div><div class="form-group"><label class="form-label">ROLE</label><select class="form-input">${isG?'<option>HEAD TRAINER</option><option>FITNESS TRAINER</option><option>YOGA INSTRUCTOR</option><option>RECEPTIONIST</option><option>HELPER</option><option>SWEEPER</option>':'<option>HEAD LIBRARIAN</option><option>ASST LIBRARIAN</option><option>CATALOGER</option><option>HELPER</option><option>SWEEPER</option>'}</select></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" type="tel" placeholder="+91 XXXXX"></div><div class="form-group"><label class="form-label">SALARY (₹)</label><input class="form-input" type="number" placeholder="15000"></div>`,'btn-primary','ADD STAFF'),
+editStaff:mw('EDIT STAFF',`<div class="form-group"><label class="form-label">NAME</label><input class="form-input" placeholder="Name"></div><div class="form-group"><label class="form-label">ROLE</label><select class="form-input"><option>HEAD TRAINER</option><option>HELPER</option></select></div><div class="form-group"><label class="form-label">SALARY (₹)</label><input class="form-input" type="number"></div>`,'btn-primary','SAVE'),
+paySalary:mw('PAY SALARY',`<div class="form-group"><label class="form-label">STAFF</label><select class="form-input"><option>SELECT...</option><option>RAJESH - ₹35,000</option><option>PRIYA - ₹25,000</option></select></div><div class="form-group"><label class="form-label">AMOUNT (₹)</label><input class="form-input" type="number" placeholder="Amount"></div><div class="form-group"><label class="form-label">METHOD</label><select class="form-input"><option>BANK TRANSFER</option><option>UPI</option><option>CASH</option></select></div>`,'btn-success','PAY NOW'),
+staffAtt:mw('MARK ATTENDANCE',`<div class="form-group"><label class="form-label">DATE</label><input class="form-input" type="date"></div><div class="form-group"><label class="form-label">STATUS</label><select class="form-input"><option>PRESENT</option><option>ABSENT</option><option>HALF DAY</option></select></div>`,'btn-primary','MARK'),
 issueBook:mw('ISSUE BOOK',`<div class="form-group"><label class="form-label">BOOK</label><input class="form-input" placeholder="Search book..."></div><div class="form-group"><label class="form-label">MEMBER</label><input class="form-input" placeholder="Search member..."></div><div class="form-group"><label class="form-label">DUE DATE</label><input class="form-input" type="date"></div>`,'btn-primary','ISSUE'),
-returnBook:mw('RETURN BOOK',`<div class="form-group"><label class="form-label">BOOK</label><input class="form-input" placeholder="Search issued book..."></div><div class="form-group"><label class="form-label">CONDITION</label><select class="form-input"><option>GOOD</option><option>FAIR</option><option>DAMAGED</option></select></div><div class="form-group"><label class="form-label">FINE (₹)</label><input class="form-input" type="number" placeholder="0"></div>`,'btn-success','RETURN'),
-addBook:mw('ADD BOOK',`<div class="form-group"><label class="form-label">TITLE</label><input class="form-input" placeholder="Book title"></div><div class="form-group"><label class="form-label">AUTHOR</label><input class="form-input" placeholder="Author"></div><div class="form-group"><label class="form-label">ISBN</label><input class="form-input" placeholder="978-XXX"></div><div class="form-group"><label class="form-label">CATEGORY</label><select class="form-input"><option>FICTION</option><option>NON-FICTION</option><option>SCIENCE</option><option>HISTORY</option></select></div>`,'btn-primary','ADD'),
+returnBook:mw('RETURN BOOK',`<div class="form-group"><label class="form-label">BOOK</label><input class="form-input" placeholder="Search..."></div><div class="form-group"><label class="form-label">CONDITION</label><select class="form-input"><option>GOOD</option><option>FAIR</option><option>DAMAGED</option></select></div><div class="form-group"><label class="form-label">FINE (₹)</label><input class="form-input" type="number" placeholder="0"></div>`,'btn-success','RETURN'),
+addBook:mw('ADD BOOK',`<div class="form-group"><label class="form-label">TITLE</label><input class="form-input" placeholder="Book title"></div><div class="form-group"><label class="form-label">AUTHOR</label><input class="form-input" placeholder="Author"></div><div class="form-group"><label class="form-label">ISBN</label><input class="form-input" placeholder="978-XXX"></div>`,'btn-primary','ADD'),
 editProfile:mw('EDIT PROFILE',`<div class="form-group"><label class="form-label">BUSINESS NAME</label><input class="form-input" value="${D.bizName}"></div><div class="form-group"><label class="form-label">OWNER</label><input class="form-input" value="${D.ownerName}"></div><div class="form-group"><label class="form-label">PHONE</label><input class="form-input" value="${D.bizPhone}"></div>`,'btn-primary','SAVE'),
+sendReminder:mw('SEND REMINDERS',`<div style="text-align:center;padding:1rem"><div class="stat-icon orange" style="width:56px;height:56px;margin:0 auto .75rem;font-size:1.5rem"><i class="fas fa-bell"></i></div><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">SEND PAYMENT REMINDERS</div><div style="font-size:.75rem;color:var(--text-secondary);text-transform:none">Notify all members with pending payments via SMS and email.</div></div>`,'btn-warning','SEND TO ALL'),
+viewReceipt:mw('PAYMENT RECEIPT',`<div style="text-align:center;padding:.75rem"><div class="stat-icon green" style="width:56px;height:56px;margin:0 auto .75rem;font-size:1.5rem"><i class="fas fa-check"></i></div><div style="font-size:1.5rem;font-weight:700;font-family:var(--font-mono);color:var(--success)">₹8,999</div><div style="font-size:.7rem;color:var(--text-muted);margin-top:.25rem">PAYMENT SUCCESSFUL</div></div><div class="summary-container clay-inset" style="padding:1rem"><div class="summary-row"><span class="summary-label">MEMBER</span><span class="summary-val">RAHUL SHARMA</span></div><div class="summary-row"><span class="summary-label">METHOD</span><span class="summary-val">UPI</span></div><div class="summary-row"><span class="summary-label">DATE</span><span class="summary-val">JAN 05, 2025</span></div></div>`,'btn-outline','DOWNLOAD'),
+paymentHistory:mw('PAYMENT HISTORY',`<div class="activity-feed"><div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text">₹8,999 PAID VIA UPI</div><div class="activity-time">JAN 05, 2025</div></div></div><div class="activity-item"><div class="activity-dot green"></div><div><div class="activity-text">₹8,999 PAID VIA CARD</div><div class="activity-time">JAN 05, 2024</div></div></div><div class="activity-item"><div class="activity-dot orange"></div><div><div class="activity-text">REMINDER SENT</div><div class="activity-time">DEC 28, 2023</div></div></div></div>`,'btn-primary','CLOSE'),
 };return m[type]||m.addMember}
 
-function runAnims(){document.querySelectorAll('.chart-bar').forEach((b,i)=>{const h=b.dataset.height;b.style.height='4px';setTimeout(()=>b.style.height=h+'%',200+i*100)});document.querySelectorAll('.prog-bar-fill').forEach((b,i)=>{const w=b.dataset.width;b.style.width='0%';setTimeout(()=>b.style.width=w+'%',300+i*80)});document.querySelectorAll('.stat-card,.person-card').forEach((c,i)=>{c.style.animation='none';c.offsetHeight;c.style.animation=`cardUp .5s ease-out ${i*.06}s both`})}
+function runAnims(){
+// Reset and animate chart bars
+document.querySelectorAll('.chart-bar').forEach((b,i)=>{const h=b.dataset.height;if(!h)return;b.style.height='4px';setTimeout(()=>{b.style.height=h+'%'},100+i*80)});
+// Reset and animate progress bars with stagger per card
+document.querySelectorAll('.prog-bar-fill[data-width]').forEach((b,i)=>{const w=b.dataset.width;b.style.transition='none';b.style.width='0%';b.offsetHeight;// force reflow
+b.style.transition='width 1s cubic-bezier(.25,.8,.25,1)';setTimeout(()=>{b.style.width=w+'%'},200+i*60)});
+// Reset and animate cards
+document.querySelectorAll('.stat-card,.person-card').forEach((c,i)=>{c.style.animation='none';c.offsetHeight;c.style.animation=`cardUp .5s ease-out ${i*.06}s both`})}
+
 function closeSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('show')}
 </script>
 </body>
