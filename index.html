@@ -83,11 +83,9 @@ h1, h2, h3, .form-title, .brand-text { font-family: var(--font-display); letter-
 }
 
 /* ===== Views Management ===== */
-.view-container { display: flex; height: 100%; width: 100%; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 1; transition: opacity 0.4s ease, visibility 0.4s ease; }
+.view-container { display: flex; flex-direction: column; height: 100%; width: 100%; justify-content: center; align-items: center; position: absolute; top: 0; left: 0; z-index: 1; transition: opacity 0.4s ease, visibility 0.4s ease; }
 .view-container.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-.view-wrapper { width: 100%; max-width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: 100%; overflow-y: auto; padding: 1.5rem 1rem 1rem; position: relative; justify-content: flex-start; z-index: 2; }
-/* Lock body scroll in all views to let internal grids scroll smoothly */
-.view-wrapper { overflow-y: hidden; }
+.view-wrapper { width: 100%; max-width: 100%; margin: 0 auto; display: flex; flex-direction: column; height: 100%; overflow-y: hidden; padding: 1.5rem 1rem 1rem; position: relative; justify-content: flex-start; z-index: 2; }
 
 /* Base Form Elements */
 .mobile-brand { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center; flex-shrink: 0; }
@@ -103,9 +101,7 @@ h1, h2, h3, .form-title, .brand-text { font-family: var(--font-display); letter-
 .form-cols { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
 .form-label { font-size: 0.75rem; font-weight: 700; color: var(--text); letter-spacing: 0.5px; }
-.form-input:placeholder-shown + .password-toggle {
-    display: none;
-}
+
 /* Inner scrolling hide scrollbars */
 .form-grid::-webkit-scrollbar, .summary-container::-webkit-scrollbar { display: none; }
 .form-grid, .summary-container { -ms-overflow-style: none; scrollbar-width: none; }
@@ -119,6 +115,23 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 .input-icon { position: absolute; left: 0.75rem; top: 0; bottom: 0; display: flex; align-items: center; color: var(--text-secondary); pointer-events: none; }
 .input-icon svg { width: 16px; height: 16px; }
 .input-wrapper .form-input { padding-left: 2.5rem; }
+
+/* Hide Password Toggle when empty */
+.form-input:placeholder-shown + .password-toggle { display: none; }
+
+/* Password Strength Meter */
+.password-strength { display: none; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem; padding: 0 0.25rem; }
+.password-strength.active { display: flex; animation: fadeIn 0.3s ease; }
+.strength-bar-bg { height: 4px; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); overflow: hidden; box-shadow: inset 1px 1px 3px rgba(166,180,200,0.4); }
+.strength-bar-fill { height: 100%; width: 0%; border-radius: var(--radius); transition: width 0.4s ease, background-color 0.4s ease; }
+.strength-text { font-size: 0.65rem; font-weight: 700; font-family: var(--font-ui); text-align: right; transition: color 0.4s ease; }
+
+.strength-weak { background-color: var(--error); }
+.strength-medium { background-color: var(--warning); }
+.strength-strong { background-color: var(--success); }
+.text-weak { color: var(--error); }
+.text-medium { color: var(--warning); }
+.text-strong { color: var(--success); }
 
 /* Buttons */
 .btn { width: 100%; padding: 0.75rem 1rem; border: none; border-radius: var(--radius); font-size: 0.875rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; font-family: var(--font-ui); }
@@ -136,6 +149,9 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 @keyframes shake{0%,100%{transform:translateX(0)}10%,30%,50%,70%,90%{transform:translateX(-4px)}20%,40%,60%,80%{transform:translateX(4px)}}
 .btn-shake{animation:shake 0.5s ease-in-out}
 .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite;display:inline-block}
+
+/* Large Spinner for Loading Screen */
+.large-spinner { width: 56px; height: 56px; border: 4px solid rgba(124, 58, 237, 0.2); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s ease-in-out infinite; margin-bottom: 1.5rem; }
 
 /* ===== Auth Specific ===== */
 .slider-tabs { display: flex; position: relative; border-radius: var(--radius); padding: 0.3rem; margin-bottom: 1.5rem; flex-shrink: 0; }
@@ -179,10 +195,10 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 .progress-text { text-align: center; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; margin-top: 0.75rem; }
 
 .steps-container { order: 2; flex: 1; overflow: hidden; position: relative; min-height: 0; display: flex; flex-direction: column; }
-.step { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; opacity: 0; transform: translateX(30px); transition: opacity 0.4s ease, transform 0.4s ease; overflow: hidden; padding: 0; }
-.step.active { opacity: 1; transform: translateX(0); z-index: 5; }
-.step.slide-left { transform: translateX(-30px); z-index: 1; }
-.step.slide-right { transform: translateX(30px); z-index: 1; }
+
+/* FADE ANIMATION ONLY (No sliding) */
+.step { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; overflow: hidden; padding: 0; z-index: 1; }
+.step.active { opacity: 1; visibility: visible; z-index: 5; }
 
 /* Uniform Static Sized Icons for all steps */
 .step-icon, .completion-icon { width: 56px; height: 56px; margin: 0 auto 0.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -198,7 +214,7 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 .nav-buttons { display: flex; gap: 0.75rem; margin-top: auto; padding-top: 0.5rem; flex-shrink: 0; position: relative; z-index: 10; }
 .nav-buttons .btn { flex: 1; }
 
-/* Plan Cards (Stacked on small screens) */
+/* Plan Cards */
 .plans-container { display: grid; grid-template-columns: 1fr; gap: 0.75rem; margin-top: 0.25rem; }
 .plan-card { background: linear-gradient(145deg, #ffffff, #e8eeff); border-radius: var(--radius); box-shadow: 4px 4px 12px rgba(166,180,200,0.5), -4px -4px 12px rgba(255,255,255,0.9); padding: 1rem; border: 2px solid transparent; transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; gap: 0.5rem; }
 .plan-card:hover { transform: translateY(-2px); }
@@ -209,7 +225,7 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 .plan-features { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .plan-feature { font-size: 0.65rem; padding: 0.25rem 0.5rem; background: linear-gradient(145deg, #dde4f6, #f5f8ff); border-radius: var(--radius); color: var(--text-secondary); }
 
-/* Summary Grid (Inner scrollable) */
+/* Summary Grid */
 .summary-container { display: flex; flex-direction: column; gap: 0.75rem; padding: 1.25rem; margin-bottom: 0.5rem; text-align: left; flex: 1; overflow-y: auto; min-height: 0; }
 .summary-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; border-bottom: 1px solid rgba(166,180,200,0.4); padding-bottom: 0.5rem; flex-shrink: 0; }
 .summary-row:last-child { border-bottom: none; padding-bottom: 0; }
@@ -238,7 +254,6 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
     .plans-container { grid-template-columns: 1fr 1fr; }
 }
 @media(min-width:768px){
-    /* Widened Desktop Container */
     .view-wrapper { width: 100%; max-width: 680px; padding: 2.5rem 3.5rem; background: transparent; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; }
     
     .progress-container { order: 2; margin: 3px 0 1.5rem !important; }
@@ -261,7 +276,6 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
 }
 
 @media(min-width:1024px){
-    /* Further widened for large desktop */
     .view-wrapper { padding: 3rem 4rem; max-width: 760px; }
     .mobile-brand h1 { font-size: 2.5rem; }
     .mobile-brand h1 svg { width: 40px; height: 40px; }
@@ -321,7 +335,18 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                 <div class="form-grid">
                     <div class="form-group"><label class="form-label">EMAIL</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/></svg></span><input type="email" class="form-input" id="signupEmail" placeholder="Name@business.com" required></div></div>
                     
-                    <div class="form-group"><label class="form-label">PASSWORD</label><div class="input-wrapper"><span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span><input type="password" class="form-input" id="signupPass" placeholder="Min 8 characters" required minlength="8"><button type="button" class="password-toggle" onclick="togglePassword('signupPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button></div></div>
+                    <div class="form-group">
+                        <label class="form-label">PASSWORD</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg></span>
+                            <input type="password" class="form-input" id="signupPass" placeholder="Min 8 characters" required minlength="8">
+                            <button type="button" class="password-toggle" onclick="togglePassword('signupPass')"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></button>
+                        </div>
+                        <div class="password-strength" id="strengthContainer">
+                            <div class="strength-bar-bg"><div class="strength-bar-fill" id="strengthBar"></div></div>
+                            <span class="strength-text" id="strengthText"></span>
+                        </div>
+                    </div>
                     
                     <button type="submit" class="btn btn-primary btn-text" id="signupBtn"><span>CREATE ACCOUNT</span></button>
                 </div>
@@ -334,6 +359,11 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
             </form>
         </div>
     </div>
+</div>
+
+<div class="view-container hidden" id="loadingView">
+    <div class="large-spinner"></div>
+    <h2 class="gradient-text" style="font-family: var(--font-display); letter-spacing: 1px; font-size: 1.5rem;">PREPARING WORKSPACE...</h2>
 </div>
 
 <div class="view-container hidden" id="onboardingView">
@@ -420,7 +450,7 @@ textarea.form-input { min-height: 80px; resize: none; padding: 0.75rem 1rem; }
                     <div class="form-group">
                         <label class="form-label">CHOOSE A DEFAULT PLAN (OPTIONAL)</label>
                         <div class="plans-container" id="plansContainer">
-                            <div class="plan-card" data-plan="MONTHLY (₹199)">
+                            <div class="plan-card" data-plan="MONTHLY (₹999)">
                                 <div class="plan-header"><span class="plan-name">MONTHLY</span><span class="plan-price">₹999</span></div>
                                 <div class="plan-features"><span class="plan-feature">30 DAYS</span></div>
                             </div>
@@ -470,6 +500,53 @@ const icons={spinner:'<div class="spinner"></div>',check:'<svg viewBox="0 0 20 2
 
 // ================= AUTH LOGIC =================
 let isResetMode = false;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const signupPassInput = document.getElementById('signupPass');
+    if (signupPassInput) {
+        signupPassInput.addEventListener('input', checkPasswordStrength);
+    }
+});
+
+function checkPasswordStrength(e) {
+    const val = e.target.value;
+    const container = document.getElementById('strengthContainer');
+    const bar = document.getElementById('strengthBar');
+    const text = document.getElementById('strengthText');
+    
+    if (!val) {
+        container.classList.remove('active');
+        return;
+    }
+    container.classList.add('active');
+    
+    let strength = 0;
+    if (val.length >= 8) strength += 1;
+    if (val.match(/[A-Z]/) && val.match(/[a-z]/)) strength += 1;
+    if (val.match(/[0-9]/)) strength += 1;
+    if (val.match(/[^A-Za-z0-9]/)) strength += 1;
+    
+    bar.className = 'strength-bar-fill';
+    text.className = 'strength-text';
+    
+    if (strength <= 1 || val.length < 6) {
+        bar.style.width = '33%';
+        bar.classList.add('strength-weak');
+        text.textContent = 'WEAK';
+        text.classList.add('text-weak');
+    } else if (strength === 2 || strength === 3) {
+        bar.style.width = '66%';
+        bar.classList.add('strength-medium');
+        text.textContent = 'MEDIUM';
+        text.classList.add('text-medium');
+    } else if (strength === 4) {
+        bar.style.width = '100%';
+        bar.classList.add('strength-strong');
+        text.textContent = 'STRONG';
+        text.classList.add('text-strong');
+    }
+}
+
 function toggleResetMode() {
     isResetMode = !isResetMode;
     const passGroup = document.getElementById('passwordGroup'), loginBtn = document.getElementById('loginBtn'), forgotLink = document.getElementById('forgotLink'), formTitle = document.getElementById('loginHeaderTitle'), loginPass = document.getElementById('loginPass');
@@ -492,22 +569,47 @@ function setButtonState(btn,state,text,isGoogle=false){
 }
 function resetButtons(){ setButtonState(document.getElementById('loginBtn'), 'idle', isResetMode ? 'RESET' : 'SIGN IN'); setButtonState(document.getElementById('signupBtn'),'idle','CREATE ACCOUNT'); setButtonState(document.getElementById('googleLoginBtn'),'idle','CONTINUE WITH GOOGLE',true); setButtonState(document.getElementById('googleSignupBtn'),'idle','CONTINUE WITH GOOGLE',true); }
 function markInputError(ids){ ids.forEach(id=>{ const el=document.getElementById(id); if(el){ el.classList.add('input-error'); el.addEventListener('input',()=>el.classList.remove('input-error'),{once:true}) } }) }
+
 function handleLogin(e){
     e.preventDefault(); const btn=document.getElementById('loginBtn'), email=document.getElementById('loginEmail').value;
     if (isResetMode) { if(!email){ setButtonState(btn,'error','ENTER EMAIL'); markInputError(['loginEmail']); setTimeout(()=>setButtonState(btn,'idle','RESET'),2000); return; } setButtonState(btn,'loading','SENDING...'); setTimeout(()=>{ setButtonState(btn,'success','LINK SENT!'); setTimeout(() => { toggleResetMode(); document.getElementById('loginEmail').value = ''; }, 1500); },1200); return; }
     const pass=document.getElementById('loginPass').value; setButtonState(btn,'loading','SIGNING IN...');
-    setTimeout(()=>{ setButtonState(btn,'success','LOGIN SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1500); },1200)
+    setTimeout(()=>{ setButtonState(btn,'success','LOGIN SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1000); },1000)
 }
-function handleSignup(e){ e.preventDefault(); const btn=document.getElementById('signupBtn'); setButtonState(btn,'loading','CREATING ACCOUNT...'); setTimeout(()=>{ setButtonState(btn,'success','ACCOUNT CREATED!'); setTimeout(()=>transitionToOnboarding(),1500); },1200) }
-function handleGoogleAuth(type){ const btn=document.getElementById(type==='login'?'googleLoginBtn':'googleSignupBtn'); setButtonState(btn,'loading','CONNECTING...'); setTimeout(()=>{ setButtonState(btn,'success','AUTH SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1500); },1500) }
+function handleSignup(e){ e.preventDefault(); const btn=document.getElementById('signupBtn'); setButtonState(btn,'loading','CREATING ACCOUNT...'); setTimeout(()=>{ setButtonState(btn,'success','ACCOUNT CREATED!'); setTimeout(()=>transitionToOnboarding(),1000); },1000) }
+function handleGoogleAuth(type){ const btn=document.getElementById(type==='login'?'googleLoginBtn':'googleSignupBtn'); setButtonState(btn,'loading','CONNECTING...'); setTimeout(()=>{ setButtonState(btn,'success','AUTH SUCCESSFUL!'); setTimeout(()=>transitionToOnboarding(),1000); },1000) }
 
 function transitionToOnboarding() {
-    const authView = document.getElementById('authView'), onbView = document.getElementById('onboardingView');
+    const authView = document.getElementById('authView');
+    const loadingView = document.getElementById('loadingView');
+    const onbView = document.getElementById('onboardingView');
+    
+    // Fade out Auth View
     authView.style.opacity = '0';
+    
     setTimeout(() => {
-        authView.classList.add('hidden'); onbView.classList.remove('hidden');
-        setTimeout(() => onbView.style.opacity = '1', 50); goToStep(1);
-    }, 400);
+        authView.classList.add('hidden');
+        
+        // Fade in Loading View
+        loadingView.classList.remove('hidden');
+        setTimeout(() => loadingView.style.opacity = '1', 50);
+        
+        // Show Loading Screen for exactly 2 seconds
+        setTimeout(() => {
+            // Fade out Loading View
+            loadingView.style.opacity = '0';
+            
+            setTimeout(() => {
+                loadingView.classList.add('hidden');
+                
+                // Fade in Onboarding View
+                onbView.classList.remove('hidden');
+                setTimeout(() => onbView.style.opacity = '1', 50);
+                goToStep(1); // Ensure it starts on step 1
+            }, 400); // Wait for Loading view to fade out
+        }, 2000);
+        
+    }, 400); // Wait for Auth view to fade out
 }
 
 // ================= ONBOARDING LOGIC =================
@@ -556,12 +658,18 @@ function goToStep(stepNum) {
     
     if (stepNum === 3) populateSummary();
     
-    const currentStepEl = document.querySelector('.step.active'), newStepEl = document.querySelector(`.step[data-step="${stepNum}"]`);
+    const currentStepEl = document.querySelector('.step.active');
+    const newStepEl = document.querySelector(`.step[data-step="${stepNum}"]`);
     if (!currentStepEl || !newStepEl) return;
     
-    const direction = stepNum > currentStep ? 'slide-left' : 'slide-right';
-    currentStepEl.classList.remove('active'); currentStepEl.classList.add(direction); currentStep = stepNum;
-    setTimeout(() => { currentStepEl.classList.remove('slide-left', 'slide-right'); newStepEl.classList.add('active'); updateProgress(); }, 50);
+    // Smooth Fade Transition
+    currentStepEl.classList.remove('active');
+    currentStep = stepNum;
+    
+    setTimeout(() => { 
+        newStepEl.classList.add('active'); 
+        updateProgress(); 
+    }, 50); // Slight delay for smoother DOM paint during opacity transition
 }
 
 function updateProgress() {
